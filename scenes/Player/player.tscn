@@ -7,7 +7,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_d6ca8"]
 size = Vector3(0.936523, 3.3479, 2.24463)
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.148053, 0)
 script = ExtResource("1_60rij")
 

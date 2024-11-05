@@ -1,9 +1,11 @@
 extends Node
 
 @export var initial_state: EnemyState
+@export var nameplate: Label;
 
 var current_state: EnemyState
 var states: Dictionary = {}
+var _nameplate: Label
 
 func _ready() -> void:
 	# Loop through all children of the StateMachine node
@@ -15,6 +17,7 @@ func _ready() -> void:
 	if initial_state:
 		initial_state.enter()
 		current_state = initial_state
+		nameplate.text = current_state.name
 
 func _process(delta: float) -> void:
 	if current_state:
@@ -38,3 +41,4 @@ func on_child_transition(state: EnemyState, new_state_name: String) -> void:
 	new_state.enter()
 	
 	current_state = new_state
+	nameplate.text = current_state.name
