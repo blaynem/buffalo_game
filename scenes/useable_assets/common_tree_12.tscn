@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://de233rfwfw2on"]
+
+[ext_resource type="PackedScene" uid="uid://dckugs45ax78t" path="res://assets/stylized nature/CommonTree_1.gltf" id="1_xsi8b"]
+
+[node name="CommonTree_12" instance=ExtResource("1_xsi8b")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)

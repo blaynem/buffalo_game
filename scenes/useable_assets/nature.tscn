@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://cigvwut2dryfp"]
+
+[ext_resource type="PackedScene" uid="uid://c08u583sy1g3h" path="res://scenes/useable_assets/bush_common_2.tscn" id="1_bgx5b"]
+[ext_resource type="PackedScene" uid="uid://b3s53c8ipe813" path="res://scenes/useable_assets/bush_common_flowers_2.tscn" id="2_8e7u3"]
+[ext_resource type="PackedScene" uid="uid://jbay43n2ukw3" path="res://scenes/useable_assets/clover_12.tscn" id="3_8wlf3"]
+[ext_resource type="PackedScene" uid="uid://de233rfwfw2on" path="res://scenes/useable_assets/common_tree_12.tscn" id="4_qhhj2"]
+[ext_resource type="PackedScene" uid="uid://bdmsaj4rle2i3" path="res://scenes/useable_assets/pebble_round_12.tscn" id="5_6o7eh"]
+
+[node name="Nature" type="Node3D"]
+
+[node name="CommonTree_12" parent="." instance=ExtResource("1_bgx5b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6721, 0, 1.39351)
+
+[node name="Bush_Common_Flowers2" parent="." instance=ExtResource("2_8e7u3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1013, 0, 1.39351)
+
+[node name="Clover_12" parent="." instance=ExtResource("3_8wlf3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.06285, 0, 1.39351)
+
+[node name="CommonTree_13" parent="." instance=ExtResource("4_qhhj2")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 4.70675, 0, 1.39351)
+
+[node name="Pebble_Round_12" parent="." instance=ExtResource("5_6o7eh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.954141, 0, 3.49409)

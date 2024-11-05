@@ -1,0 +1,67 @@
+[gd_scene load_steps=13 format=3 uid="uid://do7ksivvif5cj"]
+
+[ext_resource type="Texture2D" uid="uid://c6i4qs03rki1o" path="res://assets/textures/rocky_terrain_02_diff_1k.jpg" id="1_4v6rc"]
+[ext_resource type="Texture2D" uid="uid://bb17nqnqy3e0v" path="res://assets/textures/rocky_terrain_02_nor_gl_1k.jpg" id="2_fb2p6"]
+[ext_resource type="Texture2D" uid="uid://bf7hb61i6h5xc" path="res://assets/textures/rocky_terrain_02_spec_1k.jpg" id="3_ctaa5"]
+[ext_resource type="PackedScene" uid="uid://bssar0rc56o5q" path="res://scenes/Player/player.tscn" id="4_mkff5"]
+[ext_resource type="MeshLibrary" uid="uid://bcspsyxj5w8hk" path="res://scenes/useable_assets/nature.tres" id="5_r0ytx"]
+[ext_resource type="PackedScene" uid="uid://bj76d5gx1dthn" path="res://scenes/Enemy/enemy.tscn" id="6_8tsi8"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g5u20"]
+size = Vector3(100, 1, 100)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qst3p"]
+size = Vector2(100, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h5g30"]
+albedo_texture = ExtResource("1_4v6rc")
+roughness = 0.69
+roughness_texture = ExtResource("3_ctaa5")
+normal_enabled = true
+normal_texture = ExtResource("2_fb2p6")
+uv1_scale = Vector3(10, 10, 1)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uhobw"]
+sky_top_color = Color(0.392157, 0.643137, 0.780392, 1)
+sky_horizon_color = Color(0.752941, 0.878431, 0.980392, 1)
+ground_bottom_color = Color(0.239216, 0.533333, 0.831373, 1)
+ground_horizon_color = Color(0.662745, 0.843137, 1, 1)
+
+[sub_resource type="Sky" id="Sky_oyb3q"]
+sky_material = SubResource("ProceduralSkyMaterial_uhobw")
+
+[sub_resource type="Environment" id="Environment_ofnn7"]
+background_mode = 2
+sky = SubResource("Sky_oyb3q")
+
+[node name="World" type="Node3D"]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.001, -0.505, 0.003)
+shape = SubResource("BoxShape3D_g5u20")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("PlaneMesh_qst3p")
+surface_material_override/0 = SubResource("StandardMaterial3D_h5g30")
+
+[node name="GridMap" type="GridMap" parent="Floor"]
+mesh_library = ExtResource("5_r0ytx")
+cell_size = Vector3(0.5, 0.5, 0.5)
+data = {
+"cells": PackedInt32Array(65515, 65526, 0, 65526, 65515, 0, 7, 65509, 0, 19, 65512, 0, 3, 65523, 0, 10, 65529, 0, 3, 65532, 1048576)
+}
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ofnn7")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.479427, 0.877582, 0, -0.877582, -0.479427, 0, 4.5159, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("4_mkff5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.193956, 5.68524)
+
+[node name="Enemy" parent="." instance=ExtResource("6_8tsi8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.784, 1.37212, 0.466007)

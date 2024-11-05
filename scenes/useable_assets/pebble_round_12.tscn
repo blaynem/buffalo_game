@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdmsaj4rle2i3"]
+
+[ext_resource type="PackedScene" uid="uid://bupnjlgc8x4c6" path="res://assets/stylized nature/Pebble_Round_1.gltf" id="1_gpujw"]
+
+[node name="Pebble_Round_12" instance=ExtResource("1_gpujw")]

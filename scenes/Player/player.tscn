@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://bssar0rc56o5q"]
+
+[ext_resource type="Script" path="res://scripts/Player/player.gd" id="1_60rij"]
+[ext_resource type="Script" path="res://scripts/Player/player_camera.gd" id="2_pav4x"]
+[ext_resource type="PackedScene" uid="uid://br7hhufd42w8n" path="res://scenes/useable_assets/bison.tscn" id="2_sbhqv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d6ca8"]
+size = Vector3(0.936523, 3.3479, 2.24463)
+
+[node name="Player" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.148053, 0)
+script = ExtResource("1_60rij")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0317383, 1.13374, -0.135)
+shape = SubResource("BoxShape3D_d6ca8")
+
+[node name="Bison" parent="." instance=ExtResource("2_sbhqv")]
+transform = Transform3D(-100, 1.50996e-05, 6.60024e-13, 0, -4.37114e-06, 100, 1.50996e-05, 100, 4.37114e-06, 0, 0, 0)
+
+[node name="CameraController" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.988567, 0.150777, 0, -0.150777, 0.988567, 0, 2.99464, 2.68811)
+
+[node name="CameraTarget" type="Node3D" parent="CameraController"]
+
+[node name="Camera3D" type="Camera3D" parent="CameraController/CameraTarget" node_paths=PackedStringArray("_player")]
+script = ExtResource("2_pav4x")
+_player = NodePath("../../..")

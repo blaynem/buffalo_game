@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://jbay43n2ukw3"]
+
+[ext_resource type="PackedScene" uid="uid://blmau43ng3y0j" path="res://assets/stylized nature/Clover_1.gltf" id="1_ljxim"]
+
+[node name="Clover_12" instance=ExtResource("1_ljxim")]

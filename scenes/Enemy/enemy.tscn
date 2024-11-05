@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3 uid="uid://bj76d5gx1dthn"]
+
+[ext_resource type="Script" path="res://scripts/Enemy/state_machine.gd" id="1_0jcr3"]
+[ext_resource type="Script" path="res://scripts/Enemy/States/EnemyIdle.gd" id="2_4igqc"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l457s"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_cw0nl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_thuae"]
+albedo_color = Color(0.928226, 0.286227, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bleng"]
+
+[node name="Enemy" type="CharacterBody3D"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_l457s")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_cw0nl")
+surface_material_override/0 = SubResource("StandardMaterial3D_thuae")
+
+[node name="Face" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, -4.37114e-09, -0.1, 0, 0.1, -4.37114e-09, 0, 0.611307, 0.53187)
+mesh = SubResource("CapsuleMesh_bleng")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("1_0jcr3")
+initial_state = NodePath("EnemyIdle")
+
+[node name="EnemyIdle" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy")]
+script = ExtResource("2_4igqc")
+enemy = NodePath("../..")

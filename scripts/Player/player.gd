@@ -1,0 +1,33 @@
+extends CharacterBody3D
+
+class_name Player
+
+var keymap := KeyMap.new()
+
+@export var WALK_SPEED := 10.0
+@export var RUN_SPEED := 15.0
+@export var JUMP_VELOCITY := 3
+
+func _physics_process(delta: float) -> void:
+	# Add the gravity.
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+
+	# Handle jump.
+	if Input.is_action_just_pressed(keymap.jump) and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Get the input direction and handle the movement/deceleration.
+	var input_dir := Input.get_vector(keymap.left, keymap.right, keymap.forward, keymap.backward)
+	# The camera alters the players basis
+	var direction := (basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var speed := RUN_SPEED if Input.is_action_pressed(keymap.run) else WALK_SPEED
+	
+	if direction:
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
+	else:
+		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.z = move_toward(velocity.z, 0, speed)
+
+	move_and_slide()

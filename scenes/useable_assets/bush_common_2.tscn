@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://c08u583sy1g3h"]
+
+[ext_resource type="PackedScene" uid="uid://dckugs45ax78t" path="res://assets/stylized nature/CommonTree_1.gltf" id="1_b8c6a"]
+
+[node name="CommonTree_12" instance=ExtResource("1_b8c6a")]
