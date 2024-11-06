@@ -1,29 +1,30 @@
 class_name EnemyFollow
 extends EnemyState
 
-var groups := GroupMap.new()
-
 # This is the enemy character
-@export var enemy: CharacterBody3D
-@export var move_speed := 5.0
-@export var chase_radius := 5.0;
+@onready var enemy: Enemy = get_owner()
 
 var player: Player;
-var move_direction: Vector3
-var wander_time: float
 
 func enter() -> void:
 	player = get_tree().get_first_node_in_group(groups.player)
-	
+
 func update(delta: float) -> void:
 	pass;
 
 func physics_update(delta: float) -> void:
 	var direction := player.global_position - enemy.global_position
+	var distance := direction.length();
 	
-	if direction.length() > chase_radius:
-		enemy.velocity = direction.normalized() * move_speed
-	else:
+	# If the player is farther away than the chase, we go back to idle.
+	if distance > enemy.chase_radius:
+		Transitioned.emit(self, enemy_states.idle)
+		return;
+	
+	# Move towards the player
+	enemy.velocity = direction.normalized() * enemy.move_speed
+	# Stop following once we're within the radius
+	if distance <= enemy.follow_radius:
 		enemy.velocity = Vector3.ZERO
-		
+	
 	enemy.move_and_slide()

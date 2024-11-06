@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://bj76d5gx1dthn"]
+[gd_scene load_steps=11 format=3 uid="uid://bj76d5gx1dthn"]
 
 [ext_resource type="Script" path="res://scripts/Enemy/state_machine.gd" id="1_0jcr3"]
 [ext_resource type="Script" path="res://scripts/Enemy/enemy.gd" id="1_g7dug"]
 [ext_resource type="Script" path="res://scripts/Enemy/States/EnemyIdle.gd" id="2_4igqc"]
 [ext_resource type="Script" path="res://scripts/Enemy/States/EnemyFollow.gd" id="4_qj5e3"]
+[ext_resource type="Script" path="res://scripts/Enemy/States/EnemyAttemptGoal.gd" id="5_ccmpx"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_rq7vi"]
 font_size = 24
@@ -50,13 +51,14 @@ mesh = SubResource("CapsuleMesh_bleng")
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state", "nameplate")]
 script = ExtResource("1_0jcr3")
-initial_state = NodePath("Follow")
+initial_state = NodePath("EnemyAttemptGoal")
 nameplate = NodePath("../Nameplate")
 
-[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy")]
+[node name="EnemyIdle" type="Node" parent="StateMachine"]
 script = ExtResource("2_4igqc")
-enemy = NodePath("../..")
 
-[node name="Follow" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy")]
+[node name="EnemyFollow" type="Node" parent="StateMachine"]
 script = ExtResource("4_qj5e3")
-enemy = NodePath("../..")
+
+[node name="EnemyAttemptGoal" type="Node" parent="StateMachine"]
+script = ExtResource("5_ccmpx")

@@ -1,7 +1,10 @@
 class_name EnemyState;
 extends Node
 
-signal Transitioned
+signal Transitioned(current: EnemyState, new: String)
+
+var groups := GroupMap.new()
+var enemy_states := EnemyStateMap.new()
 
 func enter() -> void:
 	pass

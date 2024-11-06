@@ -15,9 +15,7 @@ func _ready() -> void:
 			child.Transitioned.connect(on_child_transition)
 	
 	if initial_state:
-		initial_state.enter()
-		current_state = initial_state
-		nameplate.text = current_state.name
+		handle_enter_state(initial_state)
 
 func _process(delta: float) -> void:
 	if current_state:
@@ -26,6 +24,12 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if current_state:
 		current_state.physics_update(delta);
+
+# On entering a new state we do all of these.
+func handle_enter_state(new_state: EnemyState) -> void:
+	new_state.enter()
+	current_state = new_state
+	nameplate.text = new_state.name
 
 func on_child_transition(state: EnemyState, new_state_name: String) -> void:
 	if state != current_state:
@@ -38,7 +42,4 @@ func on_child_transition(state: EnemyState, new_state_name: String) -> void:
 	if current_state:
 		current_state.exit()
 	
-	new_state.enter()
-	
-	current_state = new_state
-	nameplate.text = current_state.name
+	handle_enter_state(new_state)
