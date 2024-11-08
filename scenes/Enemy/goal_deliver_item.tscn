@@ -1,0 +1,17 @@
+[gd_scene load_steps=5 format=3 uid="uid://bthc412bi6v37"]
+
+[ext_resource type="Script" path="res://scripts/Enemy/Goals/EnemyGoal_DeliverItem.gd" id="1_7vdek"]
+[ext_resource type="PackedScene" uid="uid://sbemyimn5kep" path="res://scenes/Items/BoxItem.tscn" id="2_puc20"]
+[ext_resource type="Script" path="res://scripts/Enemy/Goals/EnemyGoal_DropOffItem.gd" id="3_kwa0x"]
+[ext_resource type="Script" path="res://scripts/Enemy/Goals/EnemyGoal_PickupItem.gd" id="4_6i5wq"]
+
+[node name="Goal_DeliverItem" type="Node3D"]
+script = ExtResource("1_7vdek")
+
+[node name="GoalItem" parent="." instance=ExtResource("2_puc20")]
+
+[node name="EnemyGoalDropOffItem" type="Node3D" parent="."]
+script = ExtResource("3_kwa0x")
+
+[node name="EnemyGoalPickupItem" type="Node3D" parent="."]
+script = ExtResource("4_6i5wq")

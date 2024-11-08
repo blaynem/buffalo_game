@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://do7ksivvif5cj"]
+[gd_scene load_steps=15 format=3 uid="uid://do7ksivvif5cj"]
 
 [ext_resource type="Texture2D" uid="uid://c6i4qs03rki1o" path="res://assets/textures/rocky_terrain_02_diff_1k.jpg" id="1_4v6rc"]
 [ext_resource type="Texture2D" uid="uid://bb17nqnqy3e0v" path="res://assets/textures/rocky_terrain_02_nor_gl_1k.jpg" id="2_fb2p6"]
@@ -7,10 +7,7 @@
 [ext_resource type="MeshLibrary" uid="uid://bcspsyxj5w8hk" path="res://scenes/useable_assets/nature.tres" id="5_r0ytx"]
 [ext_resource type="PackedScene" uid="uid://bj76d5gx1dthn" path="res://scenes/Enemy/enemy.tscn" id="6_8tsi8"]
 [ext_resource type="Script" path="res://scripts/Enemy/Goals/EnemyGoalManager.gd" id="7_dx1bd"]
-[ext_resource type="PackedScene" uid="uid://sbemyimn5kep" path="res://scenes/Items/BoxItem.tscn" id="7_h3wlr"]
-[ext_resource type="Script" path="res://scripts/Enemy/Goals/EnemyGoal_DeliverItem.gd" id="7_qcors"]
-[ext_resource type="Script" path="res://scripts/Enemy/Goals/EnemyGoal_DropOffItem.gd" id="8_kj0vl"]
-[ext_resource type="Script" path="res://scripts/Enemy/Goals/EnemyGoal_PickupItem.gd" id="9_wwc1s"]
+[ext_resource type="PackedScene" uid="uid://bthc412bi6v37" path="res://scenes/Enemy/goal_deliver_item.tscn" id="8_d3pb4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g5u20"]
 size = Vector3(100, 1, 100)
@@ -74,15 +71,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.784, 1.37212, 0.466007)
 [node name="GoalManager" type="Node" parent="Enemy"]
 script = ExtResource("7_dx1bd")
 
-[node name="Goal_DeliverItem" type="Node3D" parent="Enemy/GoalManager"]
-script = ExtResource("7_qcors")
+[node name="Goal_DeliverItem2" parent="Enemy/GoalManager" node_paths=PackedStringArray("dropoff_marker", "item_marker") instance=ExtResource("8_d3pb4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.04459)
+dropoff_marker = NodePath("Dropoff Marker2")
+item_marker = NodePath("Item Marker2")
+item_color = Color(0.0611461, 0.610909, 0.471456, 1)
 
-[node name="GoalItem" parent="Enemy/GoalManager/Goal_DeliverItem" instance=ExtResource("7_h3wlr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.57896, 0.5, 3.31063)
+[node name="Dropoff Marker2" type="Marker3D" parent="Enemy/GoalManager/Goal_DeliverItem2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.48166, 0, 2.48887)
 
-[node name="EnemyGoalDropOffItem" type="Node3D" parent="Enemy/GoalManager/Goal_DeliverItem"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.60363, 0, 5.29616)
-script = ExtResource("8_kj0vl")
+[node name="Item Marker2" type="Marker3D" parent="Enemy/GoalManager/Goal_DeliverItem2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2643, 0, -0.836821)
 
-[node name="EnemyGoalPickupItem" type="Node3D" parent="Enemy/GoalManager/Goal_DeliverItem"]
-script = ExtResource("9_wwc1s")
+[node name="Goal_DeliverItem" parent="Enemy/GoalManager" node_paths=PackedStringArray("dropoff_marker", "item_marker") instance=ExtResource("8_d3pb4")]
+dropoff_marker = NodePath("Dropoff Marker")
+item_marker = NodePath("Item Marker")
+item_color = Color(0.818585, 0.402684, 0, 1)
+
+[node name="Dropoff Marker" type="Marker3D" parent="Enemy/GoalManager/Goal_DeliverItem"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3985, 0, 1.90658)
+
+[node name="Item Marker" type="Marker3D" parent="Enemy/GoalManager/Goal_DeliverItem"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.92394, 0, -0.15783)
