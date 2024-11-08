@@ -1,10 +1,9 @@
 class_name EnemyState;
 extends Node
 
-signal Transitioned(current: EnemyState, new: String)
-
-var groups := GroupMap.new()
 var enemy_states := EnemyStateMap.new()
+# The dictionary here is {name, class} from enemy_states
+signal Transitioned(current: EnemyState, new: Dictionary)
 
 func enter() -> void:
 	pass
@@ -15,5 +14,5 @@ func exit() -> void:
 func update(_delta: float) -> void:
 	pass
 
-func physics_update(delta: float) -> void:
+func physics_update(_delta: float) -> void:
 	pass

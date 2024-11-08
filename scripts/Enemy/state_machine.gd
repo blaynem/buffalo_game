@@ -5,7 +5,6 @@ extends Node
 
 var current_state: EnemyState
 var states: Dictionary = {}
-var _nameplate: Label
 
 func _ready() -> void:
 	# Loop through all children of the StateMachine node
@@ -31,15 +30,16 @@ func handle_enter_state(new_state: EnemyState) -> void:
 	current_state = new_state
 	nameplate.text = new_state.name
 
-func on_child_transition(state: EnemyState, new_state_name: String) -> void:
+# This is the connect method of Transitioned, the new_state is a Dictionary of {name, class}
+func on_child_transition(state: EnemyState, new_state: Dictionary) -> void:
 	if state != current_state:
 		return;
 		
-	var new_state := states.get(new_state_name.to_lower()) as EnemyState
-	if !new_state:
+	var _new_state := states.get(new_state.name.to_lower()) as EnemyState
+	if !_new_state:
 		return
 		
 	if current_state:
 		current_state.exit()
 	
-	handle_enter_state(new_state)
+	handle_enter_state(_new_state)

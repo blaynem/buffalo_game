@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://do7ksivvif5cj"]
+[gd_scene load_steps=16 format=3 uid="uid://do7ksivvif5cj"]
 
 [ext_resource type="Texture2D" uid="uid://c6i4qs03rki1o" path="res://assets/textures/rocky_terrain_02_diff_1k.jpg" id="1_4v6rc"]
 [ext_resource type="Texture2D" uid="uid://bb17nqnqy3e0v" path="res://assets/textures/rocky_terrain_02_nor_gl_1k.jpg" id="2_fb2p6"]
@@ -7,6 +7,8 @@
 [ext_resource type="MeshLibrary" uid="uid://bcspsyxj5w8hk" path="res://scenes/useable_assets/nature.tres" id="5_r0ytx"]
 [ext_resource type="PackedScene" uid="uid://bj76d5gx1dthn" path="res://scenes/Enemy/enemy.tscn" id="6_8tsi8"]
 [ext_resource type="PackedScene" uid="uid://sbemyimn5kep" path="res://scenes/Items/BoxItem.tscn" id="7_h3wlr"]
+[ext_resource type="Script" path="res://scripts/Enemy/Goals/EnemyGoal_DropOffItem.gd" id="8_kj0vl"]
+[ext_resource type="Script" path="res://scripts/Enemy/Goals/EnemyGoal_PickupItem.gd" id="9_wwc1s"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g5u20"]
 size = Vector3(100, 1, 100)
@@ -64,8 +66,18 @@ shadow_enabled = true
 [node name="Player" parent="." instance=ExtResource("4_mkff5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.193956, 25.1733)
 
-[node name="Enemy" parent="." instance=ExtResource("6_8tsi8")]
+[node name="Enemy" parent="." node_paths=PackedStringArray("all_goals") instance=ExtResource("6_8tsi8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.784, 1.37212, 0.466007)
+all_goals = [NodePath("../EnemyGoalPickupItem"), NodePath("../EnemyGoalDropOffItem")]
 
-[node name="BoxItem" parent="." instance=ExtResource("7_h3wlr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5267, 0.5, 4.5662)
+[node name="GoalItem" parent="." instance=ExtResource("7_h3wlr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.57896, 0.5, 3.31063)
+
+[node name="EnemyGoalDropOffItem" type="Node3D" parent="." node_paths=PackedStringArray("goal_item")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.60363, 0, 5.29616)
+script = ExtResource("8_kj0vl")
+goal_item = NodePath("../GoalItem")
+
+[node name="EnemyGoalPickupItem" type="Node3D" parent="." node_paths=PackedStringArray("goal_item")]
+script = ExtResource("9_wwc1s")
+goal_item = NodePath("../GoalItem")

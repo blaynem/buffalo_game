@@ -1,5 +1,4 @@
-extends Resource
-class_name KeyMap
+extends Node
 
 # Keymap of potential movements so we keep them tracked easier.
 

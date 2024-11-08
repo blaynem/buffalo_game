@@ -1,8 +1,7 @@
+class_name Player
 extends CharacterBody3D
 
-class_name Player
-
-var keymap := KeyMap.new()
+@onready var item_hold_position: Marker3D = $CarryObjetMarker
 
 @export var WALK_SPEED := 10.0
 @export var RUN_SPEED := 15.0
@@ -14,14 +13,14 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 	# Handle jump.
-	if Input.is_action_just_pressed(keymap.jump) and is_on_floor():
+	if Input.is_action_just_pressed(KeyMap.jump) and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
 	# Get the input direction and handle the movement/deceleration.
-	var input_dir := Input.get_vector(keymap.left, keymap.right, keymap.forward, keymap.backward)
+	var input_dir := Input.get_vector(KeyMap.left, KeyMap.right, KeyMap.forward, KeyMap.backward)
 	# The camera alters the players basis
 	var direction := (basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	var speed := RUN_SPEED if Input.is_action_pressed(keymap.run) else WALK_SPEED
+	var speed := RUN_SPEED if Input.is_action_pressed(KeyMap.run) else WALK_SPEED
 	
 	if direction:
 		velocity.x = direction.x * speed

@@ -7,7 +7,7 @@ extends EnemyState
 var player: Player;
 
 func enter() -> void:
-	player = get_tree().get_first_node_in_group(groups.player)
+	player = GroupMap.get_player_from_scene()
 
 func update(delta: float) -> void:
 	pass;

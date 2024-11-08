@@ -1,2 +1,4 @@
 class_name GoalItem
-extends Node3D
+extends RigidBody3D
+
+@export var pickup_range := 3.0

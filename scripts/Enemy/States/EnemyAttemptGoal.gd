@@ -4,28 +4,46 @@ extends EnemyState
 # This is the enemy character
 @onready var enemy: Enemy = get_owner()
 
-var player: Player;
-var goalItem: GoalItem;
-var pickupRange := 3.0
-
 func enter() -> void:
-	player = get_tree().get_first_node_in_group(groups.player)
-	goalItem = get_tree().get_first_node_in_group(groups.goalItem)
+	pass;
 
 func update(delta: float) -> void:
 	pass;
 
 func physics_update(delta: float) -> void:
-	var playerDirection := player.global_position - enemy.global_position;
-	# If player is nearby, then we want to break out of the Goal.
-	if playerDirection.length() <= enemy.detection_radius:
-		Transitioned.emit(self, enemy_states.follow)
+	var current_goal := enemy.get_current_goal()
+	if !current_goal:
+		Transitioned.emit(self, enemy_states.idle)
+		return;
+
+	# If goal is a to pick up an item
+	if current_goal is EnemyGoalPickupItem:
+		handle_pickup_goal(current_goal)
+		return;
+
+	# If goal is a drop of item
+	if current_goal is EnemyGoalDropOffItem:
+		handle_dropoff_goal(current_goal);
 		return;
 	
-	var goalDirection := goalItem.global_position - enemy.global_position;
+	# Otherwise we want to move towards the goal.
+	move_to_goal(enemy.get_current_goal().global_position)
+
+func handle_pickup_goal(pickup_goal: EnemyGoalPickupItem) -> void:
+	# todo: If enemy is not the one holding logic
+	if pickup_goal.within_interaction_range(enemy):
+		pickup_goal.interact_with_goal_item(enemy);
+		return;
+	move_to_goal(pickup_goal.get_item_location())
+
+func handle_dropoff_goal(dropoff_goal: EnemyGoalDropOffItem) -> void:
+	if dropoff_goal.within_dropoff_range(enemy):
+		dropoff_goal.drop_off_item_at_goal()
+		return;
+	move_to_goal(dropoff_goal.get_dropoff_location())
+
+func move_to_goal(location: Vector3) -> void:
+	var goalDirection := location - enemy.global_position;
+	
 	enemy.velocity = goalDirection.normalized() * enemy.move_speed
 	enemy.move_and_slide()
-		
-	# If within pickup range, attempt to pick up.
-	if goalDirection.length() <= pickupRange:
-		print("Close enough????")

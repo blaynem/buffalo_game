@@ -15,6 +15,12 @@ run/main_scene="res://scenes/World.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SignalBus="*res://scripts/Singletons/SignalBus.gd"
+GroupMap="*res://scripts/Singletons/GroupMap.gd"
+KeyMap="*res://scripts/Singletons/KeyMap.gd"
+
 [debug]
 
 gdscript/warnings/untyped_declaration=2

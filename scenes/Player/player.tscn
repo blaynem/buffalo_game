@@ -16,7 +16,6 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0317
 shape = SubResource("BoxShape3D_d6ca8")
 
 [node name="Bison" parent="." instance=ExtResource("2_sbhqv")]
-transform = Transform3D(-100, 1.50996e-05, 6.60024e-13, 0, -4.37114e-06, 100, 1.50996e-05, 100, 4.37114e-06, 0, 0, 0)
 
 [node name="CameraController" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.988567, 0.150777, 0, -0.150777, 0.988567, 0, 2.99464, 2.68811)
@@ -26,3 +25,6 @@ transform = Transform3D(1, 0, 0, 0, 0.988567, 0.150777, 0, -0.150777, 0.988567, 
 [node name="Camera3D" type="Camera3D" parent="CameraController/CameraTarget" node_paths=PackedStringArray("_player")]
 script = ExtResource("2_pav4x")
 _player = NodePath("../../..")
+
+[node name="CarryObjetMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.32895, -2.54163)

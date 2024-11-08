@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://sbemyimn5kep"]
+[gd_scene load_steps=6 format=3 uid="uid://sbemyimn5kep"]
 
-[ext_resource type="Script" path="res://scripts/Items/GoalItem.gd" id="1_ttq3r"]
+[ext_resource type="Script" path="res://scripts/Items/CarriableEnemyGoalItem.gd" id="1_6xpfy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fk5ye"]
 
@@ -9,15 +9,21 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c585t"]
 albedo_color = Color(0.180392, 0.729412, 1, 1)
 
-[node name="Node3D" type="Node3D" groups=["GoalItem"]]
-script = ExtResource("1_ttq3r")
+[sub_resource type="BoxShape3D" id="BoxShape3D_wejev"]
 
-[node name="BoxItem" type="StaticBody3D" parent="."]
+[node name="BoxItem" type="RigidBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("1_6xpfy")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BoxItem"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
 shape = SubResource("BoxShape3D_fk5ye")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BoxItem"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_r7anu")
 surface_material_override/0 = SubResource("StandardMaterial3D_c585t")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_wejev")
