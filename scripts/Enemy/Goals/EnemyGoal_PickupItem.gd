@@ -1,7 +1,7 @@
 class_name EnemyGoalPickupItem
 extends EnemyGoal
 
-@export var goal_item: CarriableEnemyGoalItem
+var goal_item: CarriableEnemyGoalItem
 
 # If the carrier is the Enemy, then the goal is completed as we wanted to grab the item.
 func interact_with_goal_item(entity: Object) -> void:

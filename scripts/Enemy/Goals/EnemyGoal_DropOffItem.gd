@@ -1,10 +1,9 @@
 class_name EnemyGoalDropOffItem
 extends EnemyGoal
 
-# This is the enemy character
-@export var goal_item: CarriableEnemyGoalItem
-
 @export var dropoff_range := 3.0
+var goal_item: CarriableEnemyGoalItem
+
 # Distance the entity is from the goal.
 func _distance_from_goal(entity: Node3D) -> float:
 	# TODO: This should be distance from the collision layer, not the global position.
