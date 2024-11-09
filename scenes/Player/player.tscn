@@ -8,7 +8,7 @@
 size = Vector3(0.936523, 3.3479, 2.24463)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_x2fcb"]
-height = 5.49052
+height = 3.0
 radius = 1.0
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
@@ -35,8 +35,8 @@ _player = NodePath("../../..")
 [node name="CarryObjetMarker" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.32895, -2.54163)
 
-[node name="InteractionArea" type="Area3D" parent="."]
+[node name="ItemInteractionArea" type="Area3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.10039, -0.771577)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ItemInteractionArea"]
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 0.864153, -2.54509)
 shape = SubResource("CylinderShape3D_x2fcb")

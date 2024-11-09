@@ -1,4 +1,4 @@
-class_name InteractionArea
+class_name ItemInteractionArea
 extends Area3D
 
 ## The string that shows up when within interaction range.
@@ -7,8 +7,8 @@ extends Area3D
 var interact: Callable;
 
 func _ready() -> void:
-	self.body_entered.connect(_on_body_entered)
-	self.body_exited.connect(_on_body_exited)
+	self.area_entered.connect(_on_area_entered)
+	self.area_exited.connect(_on_area_exited)
 	set_collisions()
 	
 func set_collisions() -> void:
@@ -17,8 +17,8 @@ func set_collisions() -> void:
 		CollisionMap.enemy, # enemy can interact
 	])
 
-func _on_body_entered(_body: Node3D) -> void:
+func _on_area_entered(_area: Area3D) -> void:
 	InteractionManager.register_area(self)
 
-func _on_body_exited(_body: Node3D) -> void:
+func _on_area_exited(_area: Area3D) -> void:
 	InteractionManager.unregister_area(self)

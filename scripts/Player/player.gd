@@ -2,7 +2,7 @@ class_name Player
 extends CharacterBody3D
 
 @onready var item_hold_position: Marker3D = $CarryObjetMarker
-@onready var interaction_area: Area3D = $InteractionArea
+@onready var interaction_area: Area3D = $ItemInteractionArea
 
 @export var WALK_SPEED := 10.0
 @export var RUN_SPEED := 15.0
@@ -12,10 +12,13 @@ func _ready() -> void:
 	set_collisions()
 	
 func set_collisions() -> void:
+	# Collision on ourselves
 	CollisionMap.set_collisions(self, [CollisionMap.player], [
+		# We don't include the items as a mask, as that stop the items from getting physics by player.
 		CollisionMap.world, # dont fall through world
 		CollisionMap.enemy, # run into enemy
 	])
+	# Collisions for the interaction area
 	CollisionMap.set_collisions(interaction_area, [CollisionMap.player], [
 		CollisionMap.item_interactable, # allow clicking interactable items
 	])

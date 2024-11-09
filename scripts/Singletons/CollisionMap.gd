@@ -2,11 +2,12 @@ extends Node
 
 """
 For collisions, they're a bit confusing to conceptualize.
+(ty blessed redditor Vickera)
 
 Layers = "what i am"
 Mask = "what i touch"
 
-Examples (ty blessed redditor Vickera):
+Examples:
 	For Tilemaps, "I am environment, I touch nothing"*
 	For player, "I am player, I touch environment"
 	For enemy, "I am enemy, I touch environment"
@@ -34,7 +35,7 @@ func set_collisions(entity: CollisionObject3D, layers: Array[int], masks: Array[
 	_clear_collisions(entity)
 	
 	for layer in layers:
-		entity.set_collision_mask_value(layer, true)
+		entity.set_collision_layer_value(layer, true)
 	
 	for mask in masks:
 		entity.set_collision_mask_value(mask, true)

@@ -5,6 +5,7 @@ var goal_item: CarriableEnemyGoalItem
 
 # If the carrier is the Enemy, then the goal is completed as we wanted to grab the item.
 func interact_with_goal_item(entity: Object) -> void:
+	# TODO: What if the enemy is attempting to interact while the player is holding the item?
 	if entity is Enemy:
 		goal_item.set_item_holder(entity)
 		set_goal_completed(true)
@@ -25,7 +26,7 @@ func get_item_location() -> Vector3:
 
 # Distance the entity is from the goal.
 func _distance_from_goal(entity: Node3D) -> float:
-	# TODO: This should be distance from the collision layer, not the global position.
+	# TODO: This should if entity is within InteractionArea layer, not the global position.
 	return (goal_item.global_position - entity.global_position).length()
 
 # If the entity is within pickup range of item

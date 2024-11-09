@@ -3,7 +3,7 @@ extends GoalItem
 
 @onready var collision_shape := %CollisionShape3D
 @onready var mesh := %MeshInstance3D
-@onready var interactible_area := %Area3D
+@onready var interactible_area := %InteractionArea
 # This can be either the Player marker, Enemy marker, or null.
 var carry_object_marker: Marker3D = null;
 var carrier: CharacterBody3D = null;

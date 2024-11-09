@@ -6,6 +6,5 @@
 script = ExtResource("1_cwy6k")
 
 [node name="Label" type="Label3D" parent="."]
-pixel_size = 3.0
 billboard = 1
 text = "[E] To Interact"
