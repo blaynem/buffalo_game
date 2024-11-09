@@ -3,13 +3,9 @@
 [ext_resource type="Script" path="res://scripts/Enemy/state_machine.gd" id="1_0jcr3"]
 [ext_resource type="Script" path="res://scripts/Enemy/enemy.gd" id="1_g7dug"]
 [ext_resource type="Script" path="res://scripts/Enemy/States/EnemyIdle.gd" id="2_4igqc"]
+[ext_resource type="Script" path="res://scripts/nameplates.gd" id="2_lsxn7"]
 [ext_resource type="Script" path="res://scripts/Enemy/States/EnemyFollow.gd" id="4_qj5e3"]
 [ext_resource type="Script" path="res://scripts/Enemy/States/EnemyAttemptGoal.gd" id="5_ccmpx"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_rq7vi"]
-font_size = 24
-shadow_size = 4
-shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l457s"]
 
@@ -21,22 +17,14 @@ albedo_color = Color(0.928226, 0.286227, 0, 1)
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bleng"]
 
 [node name="Enemy" type="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_g7dug")
 
-[node name="Nameplate" type="Label" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -576.0
-offset_top = -324.0
-offset_right = -487.0
-offset_bottom = -290.0
-grow_horizontal = 2
-grow_vertical = 2
-label_settings = SubResource("LabelSettings_rq7vi")
+[node name="Nameplate" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38111, 0)
+text = "Trent"
+font_size = 70
+script = ExtResource("2_lsxn7")
+default_font_size = 69
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_l457s")
@@ -49,10 +37,10 @@ surface_material_override/0 = SubResource("StandardMaterial3D_thuae")
 transform = Transform3D(-8.74228e-09, 0.1, -4.37114e-09, 0, -4.37114e-09, -0.1, -0.2, -4.37114e-09, 1.91069e-16, 0.441858, 0.611307, 0.0693238)
 mesh = SubResource("CapsuleMesh_bleng")
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state", "nameplate")]
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+unique_name_in_owner = true
 script = ExtResource("1_0jcr3")
 initial_state = NodePath("EnemyAttemptGoal")
-nameplate = NodePath("../Nameplate")
 
 [node name="EnemyIdle" type="Node" parent="StateMachine"]
 script = ExtResource("2_4igqc")

@@ -8,4 +8,4 @@ func is_goal_completed() -> bool:
 
 func set_goal_completed(status: bool) -> void:
 	_goal_completed = status;
-	SignalBus.EnemyGoalStatusChange.emit(get_instance_id(), status)
+	SignalBus.EnemyGoalStatusChange.emit(get_instance_id(), status, name)

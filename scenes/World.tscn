@@ -63,13 +63,25 @@ transform = Transform3D(1, 0, 0, 0, -0.479427, 0.877582, 0, -0.877582, -0.479427
 shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("4_mkff5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.193956, 25.1733)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.50531, 0.193956, 9.4887)
 
 [node name="Enemy" parent="." instance=ExtResource("6_8tsi8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.784, 1.37212, 0.466007)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.99151, 1.00858, 0)
+enemy_can_move = true
 
 [node name="GoalManager" type="Node" parent="Enemy"]
 script = ExtResource("7_dx1bd")
+
+[node name="Goal_DeliverItem" parent="Enemy/GoalManager" node_paths=PackedStringArray("dropoff_marker", "item_marker") instance=ExtResource("8_d3pb4")]
+dropoff_marker = NodePath("Dropoff Marker")
+item_marker = NodePath("Item Marker")
+item_color = Color(0.818585, 0.402684, 0, 1)
+
+[node name="Dropoff Marker" type="Marker3D" parent="Enemy/GoalManager/Goal_DeliverItem"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3985, 0, 1.90658)
+
+[node name="Item Marker" type="Marker3D" parent="Enemy/GoalManager/Goal_DeliverItem"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9239, 0, 2.84217)
 
 [node name="Goal_DeliverItem2" parent="Enemy/GoalManager" node_paths=PackedStringArray("dropoff_marker", "item_marker") instance=ExtResource("8_d3pb4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.04459)
@@ -81,15 +93,4 @@ item_color = Color(0.0611461, 0.610909, 0.471456, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.48166, 0, 2.48887)
 
 [node name="Item Marker2" type="Marker3D" parent="Enemy/GoalManager/Goal_DeliverItem2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2643, 0, -0.836821)
-
-[node name="Goal_DeliverItem" parent="Enemy/GoalManager" node_paths=PackedStringArray("dropoff_marker", "item_marker") instance=ExtResource("8_d3pb4")]
-dropoff_marker = NodePath("Dropoff Marker")
-item_marker = NodePath("Item Marker")
-item_color = Color(0.818585, 0.402684, 0, 1)
-
-[node name="Dropoff Marker" type="Marker3D" parent="Enemy/GoalManager/Goal_DeliverItem"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3985, 0, 1.90658)
-
-[node name="Item Marker" type="Marker3D" parent="Enemy/GoalManager/Goal_DeliverItem"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.92394, 0, -0.15783)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2643, 0, -0.594293)

@@ -3,9 +3,31 @@ extends GoalItem
 
 @onready var collision_shape := %CollisionShape3D
 @onready var mesh := %MeshInstance3D
+@onready var interactible_area := %Area3D
 # This can be either the Player marker, Enemy marker, or null.
 var carry_object_marker: Marker3D = null;
 var carrier: CharacterBody3D = null;
+
+func _ready() -> void:
+	set_collisions();
+
+func set_collisions() -> void:
+	# Collisions for self
+	CollisionMap.set_collisions(self, [
+		CollisionMap.items, # is an item
+	], [
+		CollisionMap.world, # dont fall through world
+		CollisionMap.player, # get pushed by player
+		CollisionMap.items, # get pushed by other items
+		CollisionMap.enemy # get pushed by enemy
+	])
+	# Collisions for interactable area
+	CollisionMap.set_collisions(interactible_area, [
+		CollisionMap.item_interactable # is an interactable area
+	], [
+		CollisionMap.player, # get pushed by player
+		CollisionMap.enemy # get pushed by enemy
+	])
 
 func set_item_holder(interactor: Object) -> void:
 	if interactor is Enemy:

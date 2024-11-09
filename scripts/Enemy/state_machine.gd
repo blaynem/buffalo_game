@@ -1,7 +1,7 @@
+class_name EnemyStateMachine
 extends Node
 
 @export var initial_state: EnemyState
-@export var nameplate: Label;
 
 var current_state: EnemyState
 var states: Dictionary = {}
@@ -28,7 +28,6 @@ func _physics_process(delta: float) -> void:
 func handle_enter_state(new_state: EnemyState) -> void:
 	new_state.enter()
 	current_state = new_state
-	nameplate.text = new_state.name
 
 # This is the connect method of Transitioned, the new_state is a Dictionary of {name, class}
 func on_child_transition(state: EnemyState, new_state: Dictionary) -> void:

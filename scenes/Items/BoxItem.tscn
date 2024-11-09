@@ -1,12 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://sbemyimn5kep"]
+[gd_scene load_steps=5 format=3 uid="uid://sbemyimn5kep"]
 
 [ext_resource type="Script" path="res://scripts/Items/CarriableEnemyGoalItem.gd" id="1_6xpfy"]
+[ext_resource type="Script" path="res://scripts/Items/InteractionArea.gd" id="2_14na1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fk5ye"]
+size = Vector3(1.1, 1.1, 1.1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_5tld0"]
 
 [node name="BoxItem" type="RigidBody3D"]
+collision_layer = 4
 script = ExtResource("1_6xpfy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -16,3 +19,10 @@ shape = SubResource("BoxShape3D_fk5ye")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
 mesh = SubResource("BoxMesh_5tld0")
+
+[node name="Area3D" type="Area3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_14na1")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_fk5ye")
