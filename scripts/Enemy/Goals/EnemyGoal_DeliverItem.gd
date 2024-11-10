@@ -2,8 +2,8 @@ class_name EnemyGoalDeliverItem
 extends EnemyGoal
 
 var item: CarriableEnemyGoalItem;
-var dropoff: EnemyGoalDropOffItem
-var pickup: EnemyGoalPickupItem
+var dropoff_goal: EnemyGoalDropOffItem
+var pickup_goal: EnemyGoalPickupItem
 @export var dropoff_marker: Marker3D
 @export var item_marker: Marker3D
 @export var item_color: Color = Color.BLUE
@@ -13,25 +13,29 @@ func _ready() -> void:
 		if child is CarriableEnemyGoalItem:
 			item = child
 		if child is EnemyGoalDropOffItem:
-			dropoff = child
+			dropoff_goal = child
 		if child is EnemyGoalPickupItem:
-			pickup = child
+			pickup_goal = child
 	
-	# Set the item for the pickup and dropoff goals.
-	pickup.goal_item = item;
-	dropoff.goal_item = item;
 	# Set the locations of the item and dropoff
-	set_item_spawn(item_marker.global_position)
-	set_dropoff_location(dropoff_marker.global_position)
+	set_item_spawn()
+	setup_pickup_goal()
+	setup_dropoff_goal()
 	# Set item color
 	item.change_mesh_color(item_color)
 
 # TODO: Find a better way than this??
 func get_sub_goal_order() -> Array[EnemyGoal]:
-	return [pickup, dropoff]
+	return [pickup_goal, dropoff_goal]
 
-func set_item_spawn(location: Vector3) -> void:
-	item.global_position = location
+func set_item_spawn() -> void:
+	item.global_position = item_marker.global_position
 
-func set_dropoff_location(location: Vector3) -> void:
-	dropoff.global_position = location
+func setup_pickup_goal() -> void:
+	# Set the item for the pickup and dropoff goals.
+	pickup_goal.goal_item = item;
+
+func setup_dropoff_goal() -> void:
+	dropoff_goal.goal_item = item;
+	dropoff_goal.dropoff_marker = dropoff_marker
+	

@@ -15,16 +15,11 @@ Current types:
 We must first complete all of the subgoals before moving on to the next one.
 """
 
-## Who these goals belong to
-var goals_owner: Enemy;
-
 var all_goals: Array[EnemyGoal];
 var current_goal_index: int = 0;
 
 func _ready() -> void:
-	goals_owner = get_parent()
-	goals_owner.set_goal_manager(self)
-	SignalBus.EnemyGoalStatusChange.connect(handle_enemy_goal_status_change)
+	SignalBus.EnemyGoalStatusChange.connect(_handle_enemy_goal_status_change)
 	# loop through the Goal Managers' children, only the top nodes.
 	for child in get_children():
 		if child is EnemyGoalDeliverItem:
@@ -32,11 +27,14 @@ func _ready() -> void:
 			for goal in subgoals:
 				all_goals.push_back(goal)
 
-func handle_enemy_goal_status_change(goal_id: int, new_status: bool, _text: String) -> void:
+func _handle_enemy_goal_status_change(goal_id: int, new_status: bool, _text: String) -> void:
+	update_current_goal();
+
+func update_current_goal() -> void:
 	"""
-	When a goals status is changed, the enemy should check through its list and see what should be
-	completed next. Then update the current_goal_index. For example, if the goal is to
-	obtain an object and deliver it, the enemy must first pick up the object,
+	Whenever a goal is added or updated, the enemy should check through its list and see what should be
+	completed next. Then update the current_goal_index.
+	For example, if the goal is to obtain an object and deliver it, the enemy must first pick up the object,
 	then move towards the delivery zone. If they drop the object, they must obtain it once more.
 	"""
 	for i in all_goals.size():
@@ -46,9 +44,12 @@ func handle_enemy_goal_status_change(goal_id: int, new_status: bool, _text: Stri
 			current_goal_index = i;
 			return
 	current_goal_index = -1;
-	pass;
 
 func get_current_goal() -> EnemyGoal:
 	if current_goal_index < 0:
 		return null;
 	return all_goals[current_goal_index]
+
+func add_goal(new_goal: EnemyGoal) -> void:
+	all_goals.append(new_goal);
+	update_current_goal();

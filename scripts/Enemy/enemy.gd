@@ -9,6 +9,7 @@ extends CharacterBody3D
 @export var move_speed := 3.0
 @export var enemy_can_move := false
 @export var nameplate_name := "Trent"
+@export var goal_manager: EnemyGoalManager;
 
 @export_group("Vision Ranges")
 ## Radius before the enemy stops chasing the player.
@@ -18,8 +19,6 @@ extends CharacterBody3D
 @export var detection_radius := 20.0;
 ## Radius in which the enemy will no longer move closer to the Player.
 @export var follow_radius := 5.0;
-
-var goal_manager: EnemyGoalManager
 
 func _ready() -> void:
 	set_collisions();
@@ -40,9 +39,6 @@ func set_collisions() -> void:
 	CollisionMap.set_collisions(enemy_item_interaction_area, [CollisionMap.enemy], [
 		CollisionMap.item_interactable, # allow clicking interactable items
 	])
-
-func set_goal_manager(_goal_manager: EnemyGoalManager) -> void:
-	goal_manager = _goal_manager
 
 func get_current_goal() -> EnemyGoal:
 	if goal_manager:

@@ -65,9 +65,10 @@ shadow_enabled = true
 [node name="Player" parent="." instance=ExtResource("4_mkff5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.50531, 0.193956, 9.4887)
 
-[node name="Enemy" parent="." instance=ExtResource("6_8tsi8")]
+[node name="Enemy" parent="." node_paths=PackedStringArray("goal_manager") instance=ExtResource("6_8tsi8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.99151, 1.00858, 0)
 enemy_can_move = true
+goal_manager = NodePath("GoalManager")
 
 [node name="GoalManager" type="Node" parent="Enemy"]
 script = ExtResource("7_dx1bd")
@@ -84,7 +85,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3985, 0, 1.90658)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9239, 0, 2.84217)
 
 [node name="Goal_DeliverItem2" parent="Enemy/GoalManager" node_paths=PackedStringArray("dropoff_marker", "item_marker") instance=ExtResource("8_d3pb4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.04459)
 dropoff_marker = NodePath("Dropoff Marker2")
 item_marker = NodePath("Item Marker2")
 item_color = Color(0.0611461, 0.610909, 0.471456, 1)

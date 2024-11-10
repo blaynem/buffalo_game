@@ -1,5 +1,5 @@
 class_name EnemyGoal
-extends Node3D
+extends Node
 
 var _goal_completed := false;
 
