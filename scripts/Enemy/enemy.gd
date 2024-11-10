@@ -6,6 +6,7 @@ extends CharacterBody3D
 @onready var state_machine: EnemyStateMachine = %StateMachine
 @onready var enemy_item_interaction_area: Area3D = %EnemyItemInteractionArea
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
+@onready var animation_player: AnimationPlayer = $model/AnimationPlayer
 
 @export var enemy_can_move: bool = true
 @export var goal_manager: EnemyGoalManager;
@@ -18,7 +19,7 @@ var target_location: Vector3;
 var nav_map_ready := false;
 
 func _ready() -> void:
-	display_name = personality.display_name;
+	display_name = personality.display_name
 	update_nameplate()
 	set_collisions();
 	NavigationServer3D.map_changed.connect(_on_navigation_map_ready)
