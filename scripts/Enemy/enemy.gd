@@ -69,5 +69,10 @@ func _physics_process(delta: float) -> void:
 		nav_agent.target_position = target_location
 		direction = (nav_agent.get_next_path_position() - global_position).normalized()
 		velocity = velocity.lerp(direction * personality.move_speed, personality.acceleration * delta)
+		
+		# Rotate to face the movement direction
+		if direction != Vector3.ZERO:
+			var target_rotation_y := atan2(direction.x, direction.z)
+			rotation.y = lerp_angle(rotation.y, target_rotation_y, 0.1)
 	
 		move_and_slide()

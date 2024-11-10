@@ -26,6 +26,8 @@ follow_radius = 5.0
 albedo_color = Color(0.928226, 0.286227, 0, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bleng"]
+radius = 0.05
+height = 0.2
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5s3t1"]
 radius = 1.0
@@ -52,7 +54,7 @@ mesh = SubResource("CapsuleMesh_cw0nl")
 surface_material_override/0 = SubResource("StandardMaterial3D_thuae")
 
 [node name="Face" type="MeshInstance3D" parent="."]
-transform = Transform3D(-8.74228e-09, 0.1, -4.37114e-09, 0, -4.37114e-09, -0.1, -0.2, -4.37114e-09, 1.91069e-16, 0.441858, 0.611307, 0.0693238)
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0.00160772, 0.611307, 0.515575)
 mesh = SubResource("CapsuleMesh_bleng")
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
