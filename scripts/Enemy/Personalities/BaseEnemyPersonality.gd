@@ -1,7 +1,11 @@
 class_name EnemyPersonality extends Resource
 
 @export var display_name: String = "Trent"
+## How fast direction is changed
+@export var acceleration: float = 10.0;
+## How quickly the enemy walks
 @export var move_speed: float = 3.0
+## How quickly the enemy runs
 @export var run_speed: float = 5.0
 
 @export_group("Vision Ranges")

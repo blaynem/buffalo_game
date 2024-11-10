@@ -11,6 +11,7 @@
 [sub_resource type="Resource" id="Resource_b14bq"]
 script = ExtResource("2_3i54j")
 display_name = "Trent"
+acceleration = 10.0
 move_speed = 3.0
 run_speed = 5.0
 chase_radius = 20.0
@@ -37,6 +38,8 @@ height = 2.2
 [node name="Enemy" type="CharacterBody3D"]
 script = ExtResource("1_g7dug")
 personality = SubResource("Resource_b14bq")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 
 [node name="Nameplate" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38111, 0)

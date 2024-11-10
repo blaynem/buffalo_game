@@ -1,17 +1,15 @@
 class_name EnemyGoalDeliverItem
 extends EnemyGoal
 
-var item: CarriableEnemyGoalItem;
 var dropoff_goal: EnemyGoalDropOffItem
 var pickup_goal: EnemyGoalPickupItem
+@export var item: CarriableEnemyGoalItem;
 @export var dropoff_marker: Marker3D
 @export var item_marker: Marker3D
 @export var item_color: Color = Color.BLUE
 
 func _ready() -> void:
 	for child in get_children():
-		if child is CarriableEnemyGoalItem:
-			item = child
 		if child is EnemyGoalDropOffItem:
 			dropoff_goal = child
 		if child is EnemyGoalPickupItem:

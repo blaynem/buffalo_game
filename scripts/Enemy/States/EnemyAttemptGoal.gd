@@ -27,17 +27,17 @@ func physics_update(delta: float) -> void:
 		return;
 	
 	# Otherwise we want to move towards the goal.
-	enemy.move_towards_location(enemy.get_current_goal().global_position)
+	enemy.set_target_location(enemy.get_current_goal().global_position)
 
 func handle_pickup_goal(pickup_goal: EnemyGoalPickupItem) -> void:
 	var carrying_item := pickup_goal.goal_item.carrier == enemy;
 	if !carrying_item and pickup_goal.within_interaction_range(enemy):
 		pickup_goal.goal_item.enemy_interacted(enemy)
 		return;
-	enemy.move_towards_location(pickup_goal.get_item_location())
+	enemy.set_target_location(pickup_goal.get_item_location())
 
 func handle_dropoff_goal(dropoff_goal: EnemyGoalDropOffItem) -> void:
 	if dropoff_goal.within_dropoff_range(enemy):
 		dropoff_goal.drop_off_item_at_goal()
 		return;
-	enemy.move_towards_location(dropoff_goal.get_dropoff_location())
+	enemy.set_target_location(dropoff_goal.get_dropoff_location())

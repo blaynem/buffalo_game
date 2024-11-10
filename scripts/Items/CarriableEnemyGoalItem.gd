@@ -5,7 +5,6 @@ extends GoalItem
 
 @onready var player: Player = get_tree().get_first_node_in_group(GroupMap.player)
 @onready var collision_shape: CollisionShape3D = %CollisionShape3D
-@onready var mesh: MeshInstance3D = %MeshInstance3D
 @onready var interactible_area: ItemInteractionArea = %InteractionArea
 @onready var enemy_pickup_timer: Timer = $EnemyPickupTimer
 # This can be either the Player marker, Enemy marker, or null.
@@ -75,6 +74,7 @@ func place_item_at_goal() -> void:
 	queue_free()
 
 func change_mesh_color(new_color: Color) -> void:
+	var mesh := get_node("MeshInstance3D") as MeshInstance3D
 	var new_material := StandardMaterial3D.new()
 	new_material.albedo_color = new_color
 	# If we use the same material, it will be reused for all isntances of the box.

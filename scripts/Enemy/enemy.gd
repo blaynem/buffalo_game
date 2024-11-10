@@ -5,6 +5,7 @@ extends CharacterBody3D
 @onready var item_hold_position: Marker3D = $CarryObjetMarker
 @onready var state_machine: EnemyStateMachine = %StateMachine
 @onready var enemy_item_interaction_area: Area3D = %EnemyItemInteractionArea
+@onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 
 @export var enemy_can_move: bool = true
 @export var goal_manager: EnemyGoalManager;
@@ -12,15 +13,22 @@ extends CharacterBody3D
 
 var display_name: String
 var display_status: String;
+var target_location: Vector3;
+# Only use nav when the map is ready
+var nav_map_ready := false;
 
 func _ready() -> void:
 	display_name = personality.display_name;
 	update_nameplate()
 	set_collisions();
-	state_machine.initial_state.Transitioned.connect(on_child_transition)
+	NavigationServer3D.map_changed.connect(_on_navigation_map_ready)
+	state_machine.initial_state.Transitioned.connect(_on_child_transition)
+
+func _on_navigation_map_ready(_map: RID) -> void:
+	nav_map_ready = true;
 
 # This is the connect method of Transitioned, the new_state is a Dictionary of {name, class}
-func on_child_transition(state: EnemyState, new_state: Dictionary) -> void:
+func _on_child_transition(state: EnemyState, new_state: Dictionary) -> void:
 	display_status = new_state.name
 	update_nameplate()
 	pass;
@@ -48,15 +56,18 @@ func get_current_goal() -> EnemyGoal:
 		return current_goal
 	return null;
 
-func move_towards_location(location: Vector3) -> void:
-	if enemy_can_move:
-		var goalDirection := location - global_position;
-		
-		velocity = goalDirection.normalized() * personality.move_speed
-		move_and_slide()
+func set_target_location(location: Vector3) -> void:
+	target_location = location
 
 func _process(delta: float) -> void:
 	pass;
 
 func _physics_process(delta: float) -> void:
-	pass;
+	if enemy_can_move && nav_map_ready:
+		var direction := Vector3()
+		
+		nav_agent.target_position = target_location
+		direction = (nav_agent.get_next_path_position() - global_position).normalized()
+		velocity = velocity.lerp(direction * personality.move_speed, personality.acceleration * delta)
+	
+		move_and_slide()
