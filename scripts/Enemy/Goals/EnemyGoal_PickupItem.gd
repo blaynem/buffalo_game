@@ -7,7 +7,8 @@ func _ready() -> void:
 	SignalBus.GoalItemHolderChange.connect(_on_goal_item_holder_change)
 
 func _on_goal_item_holder_change(item_id: int, holder: PhysicsBody3D, new_holder: PhysicsBody3D) -> void:
-	if item_id == goal_item.get_instance_id():
+	# In case the goal has been queue_freed we need to check the valid instance.
+	if is_instance_valid(goal_item) && item_id == goal_item.get_instance_id():
 		if new_holder is Player:
 			set_goal_completed(false)
 		if new_holder is Enemy:
@@ -23,4 +24,6 @@ func _distance_from_goal(entity: Node3D) -> float:
 
 # If the entity is within pickup range of item
 func within_interaction_range(entity: Node3D) -> bool:
-	return _distance_from_goal(entity) <= goal_item.pickup_range
+	if entity is Enemy:
+		return goal_item.interactible_area.overlaps_area(entity.enemy_item_interaction_area);
+	return false

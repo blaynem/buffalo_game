@@ -14,7 +14,12 @@ var held_item: CarriableEnemyGoalItem = null:
 
 func _ready() -> void:
 	set_collisions()
+	SignalBus.GoalItemHolderChange.connect(_on_goal_item_holder_change)
 	
+func _on_goal_item_holder_change(item_id: int, holder: PhysicsBody3D, new_holder: PhysicsBody3D) -> void:
+	if held_item && item_id == held_item.get_instance_id() && new_holder != self:
+		held_item = null;
+
 func set_collisions() -> void:
 	# Collision on ourselves
 	CollisionMap.set_collisions(self, [CollisionMap.player], [

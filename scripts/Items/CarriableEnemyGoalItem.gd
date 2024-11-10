@@ -61,7 +61,6 @@ func enemy_interacted(enemy: Enemy) -> void:
 	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), old_carrier, carrier)
 
 func drop_item() -> void:
-	print("drop called")
 	# If the enemy dropped the item, we start a timer.
 	if carrier is Enemy:
 		enemy_pickup_timer.start()
@@ -73,6 +72,7 @@ func drop_item() -> void:
 func place_item_at_goal() -> void:
 	carry_object_marker = null;
 	carrier = null;
+	queue_free()
 
 func change_mesh_color(new_color: Color) -> void:
 	var new_material := StandardMaterial3D.new()

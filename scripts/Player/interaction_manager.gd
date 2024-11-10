@@ -39,7 +39,6 @@ func _process(delta: float) -> void:
 		label.hide()
 
 func fire_interact(item: ItemInteractionArea) -> void:
-	var previous_held_item := player.held_item
 	# On press of interact, we want to hide the label for a few ms
 	can_interact = false
 	label.hide()
@@ -47,6 +46,8 @@ func fire_interact(item: ItemInteractionArea) -> void:
 	unregister_area(item)
 	# Interact will both drop the old item and pick up a new one if there was one.
 	await item.interact.call()
+	
+	var previous_held_item := player.held_item
 	if previous_held_item:
 		# Register the interactible_area of the item.
 		register_area(previous_held_item.interactible_area)

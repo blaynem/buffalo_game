@@ -21,7 +21,11 @@ func set_collisions() -> void:
 	])
 
 func _on_area_entered(_area: Area3D) -> void:
-	InteractionManager.register_area(self)
+	var parent := _area.get_parent()
+	if parent is Player:
+		InteractionManager.register_area(self)
 
 func _on_area_exited(_area: Area3D) -> void:
-	InteractionManager.unregister_area(self)
+	var parent := _area.get_parent()
+	if parent is Player:
+		InteractionManager.unregister_area(self)

@@ -4,6 +4,7 @@ extends CharacterBody3D
 @onready var nameplate: Nameplate = $Nameplate
 @onready var item_hold_position: Marker3D = $CarryObjetMarker
 @onready var state_machine: EnemyStateMachine = %StateMachine
+@onready var enemy_item_interaction_area: Area3D = %EnemyItemInteractionArea
 
 @export var move_speed := 3.0
 @export var enemy_can_move := false
@@ -34,6 +35,9 @@ func set_collisions() -> void:
 		CollisionMap.world, # dont fall through world
 		CollisionMap.player, # run into player
 		CollisionMap.enemy, # run into enemy
+		CollisionMap.item_interactable, # allow clicking interactable items
+	])
+	CollisionMap.set_collisions(enemy_item_interaction_area, [CollisionMap.enemy], [
 		CollisionMap.item_interactable, # allow clicking interactable items
 	])
 
