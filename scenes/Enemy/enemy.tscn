@@ -1,11 +1,21 @@
-[gd_scene load_steps=13 format=3 uid="uid://bj76d5gx1dthn"]
+[gd_scene load_steps=15 format=3 uid="uid://bj76d5gx1dthn"]
 
 [ext_resource type="Script" path="res://scripts/Enemy/state_machine.gd" id="1_0jcr3"]
 [ext_resource type="Script" path="res://scripts/Enemy/enemy.gd" id="1_g7dug"]
+[ext_resource type="Script" path="res://scripts/Enemy/Personalities/Brave.gd" id="2_3i54j"]
 [ext_resource type="Script" path="res://scripts/Enemy/States/EnemyIdle.gd" id="2_4igqc"]
 [ext_resource type="Script" path="res://scripts/nameplates.gd" id="2_lsxn7"]
 [ext_resource type="Script" path="res://scripts/Enemy/States/EnemyFollow.gd" id="4_qj5e3"]
 [ext_resource type="Script" path="res://scripts/Enemy/States/EnemyAttemptGoal.gd" id="5_ccmpx"]
+
+[sub_resource type="Resource" id="Resource_b14bq"]
+script = ExtResource("2_3i54j")
+display_name = "Trent"
+move_speed = 3.0
+run_speed = 5.0
+chase_radius = 20.0
+detection_radius = 20.0
+follow_radius = 5.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l457s"]
 
@@ -26,6 +36,7 @@ height = 2.2
 
 [node name="Enemy" type="CharacterBody3D"]
 script = ExtResource("1_g7dug")
+personality = SubResource("Resource_b14bq")
 
 [node name="Nameplate" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38111, 0)
@@ -33,7 +44,6 @@ billboard = 1
 text = "Trent"
 font_size = 70
 script = ExtResource("2_lsxn7")
-default_font_size = 69
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_l457s")
