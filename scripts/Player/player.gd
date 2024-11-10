@@ -8,6 +8,10 @@ extends CharacterBody3D
 @export var RUN_SPEED := 15.0
 @export var JUMP_VELOCITY := 3
 
+var held_item: CarriableEnemyGoalItem = null:
+	set(item):
+		held_item = item;
+
 func _ready() -> void:
 	set_collisions()
 	

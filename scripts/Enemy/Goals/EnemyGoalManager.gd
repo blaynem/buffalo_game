@@ -32,10 +32,10 @@ func _ready() -> void:
 			for goal in subgoals:
 				all_goals.push_back(goal)
 
-func handle_enemy_goal_status_change(goal_id: int, status: bool, _text: String) -> void:
+func handle_enemy_goal_status_change(goal_id: int, new_status: bool, _text: String) -> void:
 	# When a goals status is changed, the enemy should check through its list and see what should be completed next. Then update the current_goal_index.
 	# For example, if the goal is to obtain an object and deliver it, the enemy must first pick up the object, then move towards the delivery zone. If they drop the object, they must obtain it once more.
-	print("--handle enemy: ", goal_id, status)
+	print("--handle enemy: ", goal_id, new_status)
 	for i in all_goals.size():
 		var goal := all_goals[i];
 		

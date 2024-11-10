@@ -3,23 +3,15 @@ extends EnemyGoal
 
 var goal_item: CarriableEnemyGoalItem
 
-# If the carrier is the Enemy, then the goal is completed as we wanted to grab the item.
-func interact_with_goal_item(entity: Object) -> void:
-	# TODO: What if the enemy is attempting to interact while the player is holding the item?
-	if entity is Enemy:
-		goal_item.set_item_holder(entity)
-		set_goal_completed(true)
-		return;
-	# The goal isn't considered completed unless the Enemy has picked the item up.
-	if entity is Player:
-		goal_item.set_item_holder(entity)
-		set_goal_completed(false)
+func _ready() -> void:
+	SignalBus.GoalItemHolderChange.connect(_on_goal_item_holder_change)
 
-func dropped() -> void:
-	set_goal_completed(false)
-
-func placed() -> void:
-	set_goal_completed(true)
+func _on_goal_item_holder_change(item_id: int, holder: PhysicsBody3D, new_holder: PhysicsBody3D) -> void:
+	if item_id == goal_item.get_instance_id():
+		if new_holder is Player:
+			set_goal_completed(false)
+		if new_holder is Enemy:
+			set_goal_completed(true)
 
 func get_item_location() -> Vector3:
 	return goal_item.global_position;

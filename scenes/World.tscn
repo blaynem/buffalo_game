@@ -67,6 +67,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.50531, 0.193956, 9.4887)
 
 [node name="Enemy" parent="." instance=ExtResource("6_8tsi8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.99151, 1.00858, 0)
+enemy_can_move = true
 
 [node name="GoalManager" type="Node" parent="Enemy"]
 script = ExtResource("7_dx1bd")

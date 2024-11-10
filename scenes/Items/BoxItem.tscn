@@ -26,3 +26,5 @@ script = ExtResource("2_14na1")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
 shape = SubResource("BoxShape3D_fk5ye")
+
+[node name="EnemyPickupTimer" type="Timer" parent="."]

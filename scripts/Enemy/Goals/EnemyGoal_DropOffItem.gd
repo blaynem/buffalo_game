@@ -17,5 +17,5 @@ func get_dropoff_location() -> Vector3:
 	return global_position;
 
 func drop_off_item_at_goal() -> void:
-	goal_item.drop_item()
+	goal_item.place_item_at_goal()
 	set_goal_completed(true)

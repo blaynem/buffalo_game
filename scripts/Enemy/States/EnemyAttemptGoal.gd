@@ -30,9 +30,9 @@ func physics_update(delta: float) -> void:
 	enemy.move_towards_location(enemy.get_current_goal().global_position)
 
 func handle_pickup_goal(pickup_goal: EnemyGoalPickupItem) -> void:
-	# todo: If enemy is not the one holding logic
-	if pickup_goal.within_interaction_range(enemy):
-		pickup_goal.interact_with_goal_item(enemy);
+	var carrying_item := pickup_goal.goal_item.carrier == enemy;
+	if !carrying_item and pickup_goal.within_interaction_range(enemy):
+		pickup_goal.goal_item.enemy_interacted(enemy)
 		return;
 	enemy.move_towards_location(pickup_goal.get_item_location())
 

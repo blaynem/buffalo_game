@@ -6,11 +6,14 @@ extends Area3D
 
 var interact: Callable;
 
+func set_interact_fn(_fn: Callable) -> void:
+	interact = _fn
+
 func _ready() -> void:
 	self.area_entered.connect(_on_area_entered)
 	self.area_exited.connect(_on_area_exited)
 	set_collisions()
-	
+
 func set_collisions() -> void:
 	CollisionMap.set_collisions(self, [CollisionMap.item_interactable], [
 		CollisionMap.player, # player can interact
