@@ -22,6 +22,7 @@ GroupMap="*res://scripts/Singletons/GroupMap.gd"
 KeyMap="*res://scripts/Singletons/KeyMap.gd"
 CollisionMap="*res://scripts/Singletons/CollisionMap.gd"
 InteractionManager="*res://scenes/Singletons/interaction_manager.tscn"
+Animations="*res://scripts/Singletons/Animations.gd"
 
 [debug]
 

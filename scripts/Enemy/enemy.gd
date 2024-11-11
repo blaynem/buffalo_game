@@ -6,11 +6,12 @@ extends CharacterBody3D
 @onready var state_machine: EnemyStateMachine = %StateMachine
 @onready var enemy_item_interaction_area: Area3D = %EnemyItemInteractionArea
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
-@onready var animation_player: AnimationPlayer = $model/AnimationPlayer
+@onready var model: BaseEnemyModel = $BaseEnemyModel
 
 @export var enemy_can_move: bool = true
 @export var goal_manager: EnemyGoalManager;
 @export var personality: EnemyPersonality;
+@export var default_animation: Animations.Human = Animations.Human.IDLE
 
 var display_name: String
 var display_status: String;
@@ -19,11 +20,20 @@ var target_location: Vector3;
 var nav_map_ready := false;
 
 func _ready() -> void:
-	display_name = personality.display_name
-	update_nameplate()
-	set_collisions();
+	# Set personality before everything.
+	_setup_personality()
+	
+	_update_nameplate()
+	_set_collisions();
+	_setup_model();
 	NavigationServer3D.map_changed.connect(_on_navigation_map_ready)
 	state_machine.initial_state.Transitioned.connect(_on_child_transition)
+
+func _setup_personality() -> void:
+	display_name = personality.display_name
+
+func _setup_model() -> void:
+	model.play_human_animation(default_animation)
 
 func _on_navigation_map_ready(_map: RID) -> void:
 	nav_map_ready = true;
@@ -31,14 +41,14 @@ func _on_navigation_map_ready(_map: RID) -> void:
 # This is the connect method of Transitioned, the new_state is a Dictionary of {name, class}
 func _on_child_transition(state: EnemyState, new_state: Dictionary) -> void:
 	display_status = new_state.name
-	update_nameplate()
+	_update_nameplate()
 	pass;
 
-func update_nameplate() -> void:
+func _update_nameplate() -> void:
 	nameplate.update_content(display_name)
 	nameplate.update_sub_content(display_status)
 
-func set_collisions() -> void:
+func _set_collisions() -> void:
 	CollisionMap.set_collisions(self, [CollisionMap.enemy], [
 		CollisionMap.world, # dont fall through world
 		CollisionMap.player, # run into player
