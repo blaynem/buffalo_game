@@ -7,7 +7,6 @@ extends EnemyState
 var player: Player;
 
 func enter() -> void:
-	print("following")
 	player = GroupMap.get_player_from_scene()
 
 func update(delta: float) -> void:
@@ -19,7 +18,6 @@ func physics_update(delta: float) -> void:
 	
 	# If the player is farther away than the chase, we go back to idle.
 	if distance > enemy.personality.chase_radius:
-		print("to idle")
 		SignalBus.EnemyStateMachineTransitioned.emit(enemy.get_instance_id(), self, enemy_states.idle)
 		return;
 	

@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bssar0rc56o5q"]
+[gd_scene load_steps=8 format=3 uid="uid://bssar0rc56o5q"]
 
 [ext_resource type="Script" path="res://scripts/Player/player.gd" id="1_60rij"]
 [ext_resource type="Script" path="res://scripts/Player/player_camera.gd" id="2_pav4x"]
 [ext_resource type="PackedScene" uid="uid://br7hhufd42w8n" path="res://scenes/useable_assets/bison.tscn" id="2_sbhqv"]
+[ext_resource type="Script" path="res://scripts/Player/ragdoll_zone.gd" id="4_6qpy0"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d6ca8"]
 size = Vector3(0.936523, 3.3479, 2.24463)
@@ -10,6 +11,9 @@ size = Vector3(0.936523, 3.3479, 2.24463)
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_x2fcb"]
 height = 3.0
 radius = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_el64m"]
+size = Vector3(1.137, 3.348, 2.245)
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.148053, 0)
@@ -40,3 +44,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.32895, -2.54163)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ItemInteractionArea"]
 transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 0.864153, -2.54509)
 shape = SubResource("CylinderShape3D_x2fcb")
+
+[node name="RagdollZone" type="Area3D" parent="."]
+script = ExtResource("4_6qpy0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RagdollZone"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0317383, 1.13374, -0.135)
+shape = SubResource("BoxShape3D_el64m")

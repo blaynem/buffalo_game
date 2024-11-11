@@ -7,6 +7,7 @@ extends CharacterBody3D
 @onready var enemy_item_interaction_area: Area3D = %EnemyItemInteractionArea
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var model: EnemyBaseModel = $BoneManModel
+@onready var ragdoll_handler: EnemyRagdollHandler = $Node
 
 @export var enemy_can_move: bool = true
 @export var goal_manager: EnemyGoalManager;
@@ -30,14 +31,6 @@ func get_current_goal() -> EnemyGoal:
 func set_target_location(location: Vector3) -> void:
 	target_location = location
 
-func enable_ragdoll() -> void:
-	if model.is_ragdoll:
-		model.enable_ragdoll()
-
-func disable_ragdoll() -> void:
-	if model.is_ragdoll:
-		model.disable_ragdoll()
-
 func _ready() -> void:
 	# Set personality before everything.
 	_setup_personality()
@@ -45,8 +38,12 @@ func _ready() -> void:
 	_update_nameplate()
 	_set_collisions();
 	_setup_model();
+	_setup_signals();
+
+func _setup_signals() -> void:
 	NavigationServer3D.map_changed.connect(_on_navigation_map_ready)
 	SignalBus.EnemyStateMachineTransitioned.connect(_on_child_transition)
+	ragdoll_handler.RagdollChange.connect(_handle_ragdoll_change)
 
 func _setup_personality() -> void:
 	display_name = personality.display_name
@@ -56,6 +53,10 @@ func _setup_model() -> void:
 
 func _on_navigation_map_ready(_map: RID) -> void:
 	nav_map_ready = true;
+
+func _handle_ragdoll_change(is_ragdolled: bool) -> void:
+	if !is_ragdolled:
+		model.play_human_animation(Animations.Human.WALK)
 
 # This is the connect method of Transitioned, the new_state is a Dictionary of {name, class}
 func _on_child_transition(enemy_id: int, state: EnemyState, new_state: Dictionary) -> void:
@@ -82,7 +83,7 @@ func _process(delta: float) -> void:
 	pass;
 
 func _physics_process(delta: float) -> void:
-	if enemy_can_move && nav_map_ready:
+	if enemy_can_move && nav_map_ready && !ragdoll_handler.is_ragdolled:
 		var direction := Vector3()
 		
 		nav_agent.target_position = target_location

@@ -23,3 +23,6 @@ func _setup_physics_bone_collisions() -> void:
 				CollisionMap.enemy, # run into enemy
 				CollisionMap.item_interactable, # allow clicking interactable items
 			])
+			# If we set these joints in the inspector, then the 3D view has annoying squares.
+			# We still want this type, we just don't want the squares yet.
+			bone.joint_type = PhysicalBone3D.JOINT_TYPE_6DOF;
