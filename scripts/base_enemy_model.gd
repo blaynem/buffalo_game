@@ -4,7 +4,6 @@ extends Node3D
 @onready var skeleton: Skeleton3D = $Armature/Skeleton3D
 @onready var mesh: MeshInstance3D = $Armature/Skeleton3D/MeshInstance3D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-@onready var physical_bone_simulator: PhysicalBoneSimulator3D = $Armature/Skeleton3D/PhysicalBoneSimulator3D
 
 @export var default_animation := Animations.Human.T_POSE
 
@@ -13,6 +12,12 @@ func _ready() -> void:
 	_setup_collisions();
 
 func _setup_collisions() -> void:
+	# Only setup the collisions if we have the bones!
+	if find_child("PhysicalBoneSimulator3D"):
+		_setup_physics_bone_collisions()
+
+func _setup_physics_bone_collisions() -> void:
+	var physical_bone_simulator: PhysicalBoneSimulator3D = $Armature/Skeleton3D/PhysicalBoneSimulator3D
 	if physical_bone_simulator:
 		for _bone in physical_bone_simulator.get_children():
 			var bone: PhysicalBone3D = _bone;
