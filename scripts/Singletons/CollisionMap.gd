@@ -24,6 +24,7 @@ var enemy: int = 4;
 # When within this layer, an item can be interacted with. 
 # kinda like "press 'e' to interact"
 var item_interactable: int = 5;
+var bones: int = 6;
 
 # Clears the default collision layers / masks.
 func _clear_collisions(entity: CollisionObject3D) -> void:
