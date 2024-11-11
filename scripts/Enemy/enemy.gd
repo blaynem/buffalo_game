@@ -6,18 +6,37 @@ extends CharacterBody3D
 @onready var state_machine: EnemyStateMachine = %StateMachine
 @onready var enemy_item_interaction_area: Area3D = %EnemyItemInteractionArea
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
-@onready var model: BaseEnemyModel = $BaseEnemyModel
+@onready var model: EnemyBaseModel = $BoneManModel
 
 @export var enemy_can_move: bool = true
 @export var goal_manager: EnemyGoalManager;
 @export var personality: EnemyPersonality;
-@export var default_animation: Animations.Human = Animations.Human.IDLE
+@export var default_animation: Animations.Human = Animations.Human.T_POSE
 
 var display_name: String
 var display_status: String;
 var target_location: Vector3;
 # Only use nav when the map is ready
 var nav_map_ready := false;
+
+func get_current_goal() -> EnemyGoal:
+	if goal_manager:
+		var current_goal := goal_manager.get_current_goal();
+		if current_goal:
+			nameplate.update_sub_content(current_goal.name)
+		return current_goal
+	return null;
+
+func set_target_location(location: Vector3) -> void:
+	target_location = location
+
+func enable_ragdoll() -> void:
+	if model.is_ragdoll:
+		model.enable_ragdoll()
+
+func disable_ragdoll() -> void:
+	if model.is_ragdoll:
+		model.disable_ragdoll()
 
 func _ready() -> void:
 	# Set personality before everything.
@@ -27,7 +46,7 @@ func _ready() -> void:
 	_set_collisions();
 	_setup_model();
 	NavigationServer3D.map_changed.connect(_on_navigation_map_ready)
-	state_machine.initial_state.Transitioned.connect(_on_child_transition)
+	SignalBus.EnemyStateMachineTransitioned.connect(_on_child_transition)
 
 func _setup_personality() -> void:
 	display_name = personality.display_name
@@ -39,10 +58,10 @@ func _on_navigation_map_ready(_map: RID) -> void:
 	nav_map_ready = true;
 
 # This is the connect method of Transitioned, the new_state is a Dictionary of {name, class}
-func _on_child_transition(state: EnemyState, new_state: Dictionary) -> void:
-	display_status = new_state.name
-	_update_nameplate()
-	pass;
+func _on_child_transition(enemy_id: int, state: EnemyState, new_state: Dictionary) -> void:
+	if enemy_id == get_instance_id():
+		display_status = new_state.name
+		_update_nameplate()
 
 func _update_nameplate() -> void:
 	nameplate.update_content(display_name)
@@ -58,17 +77,6 @@ func _set_collisions() -> void:
 	CollisionMap.set_collisions(enemy_item_interaction_area, [CollisionMap.enemy], [
 		CollisionMap.item_interactable, # allow clicking interactable items
 	])
-
-func get_current_goal() -> EnemyGoal:
-	if goal_manager:
-		var current_goal := goal_manager.get_current_goal();
-		if current_goal:
-			nameplate.update_sub_content(current_goal.name)
-		return current_goal
-	return null;
-
-func set_target_location(location: Vector3) -> void:
-	target_location = location
 
 func _process(delta: float) -> void:
 	pass;
@@ -86,4 +94,10 @@ func _physics_process(delta: float) -> void:
 			var target_rotation_y := atan2(direction.x, direction.z)
 			rotation.y = lerp_angle(rotation.y, target_rotation_y, 0.1)
 	
+		# If the goal is to follow a player, enemy doesn't get too close
+		var _dist := (target_location - global_position).length()
+		if state_machine.current_state is EnemyFollow:
+			if _dist <= personality.move_closer_radius:
+				return;
+		
 		move_and_slide()

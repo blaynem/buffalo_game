@@ -13,7 +13,7 @@ func update(delta: float) -> void:
 func physics_update(delta: float) -> void:
 	var current_goal := enemy.get_current_goal()
 	if !current_goal:
-		Transitioned.emit(self, enemy_states.idle)
+		SignalBus.EnemyStateMachineTransitioned.emit(self.get_instance_id(), self, enemy_states.idle)
 		return;
 
 	# If goal is a to pick up an item

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://do7ksivvif5cj"]
+[gd_scene load_steps=23 format=3 uid="uid://do7ksivvif5cj"]
 
 [ext_resource type="Texture2D" uid="uid://c6i4qs03rki1o" path="res://assets/textures/rocky_terrain_02_diff_1k.jpg" id="1_4v6rc"]
 [ext_resource type="Texture2D" uid="uid://bb17nqnqy3e0v" path="res://assets/textures/rocky_terrain_02_nor_gl_1k.jpg" id="2_fb2p6"]
@@ -11,6 +11,8 @@
 [ext_resource type="Script" path="res://scripts/Enemy/Personalities/Brave.gd" id="8_hskdc"]
 [ext_resource type="Script" path="res://scripts/Enemy/Personalities/Scared.gd" id="9_4rejd"]
 [ext_resource type="PackedScene" uid="uid://sbemyimn5kep" path="res://scenes/Items/BoxItem.tscn" id="10_8np3j"]
+[ext_resource type="PackedScene" uid="uid://ckxi86nbcosmn" path="res://scenes/Enemy/BoneMan.tscn" id="12_vklv8"]
+[ext_resource type="PackedScene" uid="uid://c0mjdb8ttb7sq" path="res://scenes/Enemy/BonelessMan.tscn" id="13_kr4o6"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_dtql6"]
 vertices = PackedVector3Array(-10.75, 0.02, -6, -10, 0.02, -6, -6, 0.02, -10, -6, 0.02, -10.75, -5, 0.02, -49.5, -49.5, 0.02, -49.5, -49.5, 0.02, -4.75, -5, 0.02, -11.5, -11.5, 0.02, -4.75, -4.5, 0.02, -11.5, 2.5, 0.02, -13, 2.5, 0.02, -13.75, 3.75, 0.02, -14.5, 3.75, 0.02, -49.5, 5, 0.02, -13.75, 5, 0.02, -13, 8.75, 0.02, -12.5, 10, 0.02, -13, 10, 0.02, -49.5, 11, 0.02, -11.75, 49.5, 0.02, -11.75, 49.5, 0.02, -49.5, 1.25, 0.02, -7.5, 2, 0.02, -7.5, 3.5, 0.02, -12, -3.5, 0.02, -10.75, -3.5, 0.02, -9.75, -4.25, 0.02, -9, 0.5, 0.02, -6.5, 3, 0.02, -2, 4.25, 0.02, -2.5, 4, 0.02, -3.75, 3, 0.02, -5.75, 1.75, 0.02, -5, 1.75, 0.02, -3, 8.5, 0.02, -11.25, 4.25, 0.02, -12, 3, 0.02, -6.75, 5.75, 0.02, -4.5, 9.5, 0.02, -10.5, 4.75, 0.02, -4.5, 6.5, 0.02, -3.5, 3, 0.02, -1.25, 5.75, 0.02, -2, 6.5, 0.02, -2.75, 1.75, 0.02, -0.5, 1.75, 0.02, 49.5, 49.5, 0.02, 49.5, 10.25, 0.02, -10.5, 0.5, 0.02, -5.75, 0.5, 0.02, -2, -5.25, 0.02, -9, -9, 0.02, -5.25, -9, 0.02, -4.25, -10, 0.02, -3.5, -11.5, 0.02, -4.25, -10.25, 0.02, -3.5, -49.5, 0.02, 49.5, -10.25, 0.02, 49.5, 0.5, 0.02, -1.25)
@@ -81,7 +83,7 @@ transform = Transform3D(1, 0, 0, 0, -0.479427, 0.877582, 0, -0.877582, -0.479427
 shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("4_mkff5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.50531, 0.193956, 9.4887)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.06262, 0.193956, 14.8752)
 
 [node name="GoalItems" type="Node" parent="."]
 
@@ -160,3 +162,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.48166, 0, 2.48887)
 
 [node name="Item Marker2" type="Marker3D" parent="Enemies/Enemy2/GoalManager/Goal_DeliverItem2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2643, 0, -12.3148)
+
+[node name="Ragdoll Test" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.94497, 0, 7.84496)
+
+[node name="BoneManModel" parent="Ragdoll Test" instance=ExtResource("12_vklv8")]
+
+[node name="BonelessManModel" parent="Ragdoll Test" instance=ExtResource("13_kr4o6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.912721, 0, 0)
+
+[node name="Enemy" parent="Ragdoll Test" instance=ExtResource("6_8tsi8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.68001, 0, 0)

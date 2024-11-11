@@ -11,8 +11,8 @@ var run_speed: float = 5.0
 @export_group("Vision Ranges")
 ## Radius before the enemy stops chasing the player.
 ## Essentially the "tether" range.
-var chase_radius: float = 20.0;
+var chase_radius: float = 15.0;
 ## The radius in which the enemy will detect the player.
-var detection_radius: float = 20.0;
+var detection_radius: float = 7.0;
 ## Radius in which the enemy will no longer move closer to the Player.
-var follow_radius: float = 5.0;
+var move_closer_radius: float = 3.0;

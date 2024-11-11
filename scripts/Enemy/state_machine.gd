@@ -1,20 +1,26 @@
 class_name EnemyStateMachine
 extends Node
 
-@export var initial_state: EnemyState
-
+@onready var enemy: Enemy = get_parent()
 var current_state: EnemyState
 var states: Dictionary = {}
+var potential_states := EnemyStateMap.new()
 
 func _ready() -> void:
 	# Loop through all children of the StateMachine node
 	for child in get_children():
 		if child is EnemyState:
 			states[child.name.to_lower()] = child
-			child.Transitioned.connect(on_child_transition)
 	
-	if initial_state:
-		handle_enter_state(initial_state)
+	SignalBus.EnemyStateMachineTransitioned.connect(on_child_transition)
+	var init_state: String = potential_states.idle.name;
+	var s := states.get(init_state.to_lower()) as EnemyState
+	handle_enter_state(s)
+	_stupid_status_display_hack_pls_delete(init_state)
+
+# TODO: This is hack to set the status to the initial
+func _stupid_status_display_hack_pls_delete(_status: String) -> void:
+	enemy.display_status = _status
 
 func _process(delta: float) -> void:
 	if current_state:
@@ -30,15 +36,16 @@ func handle_enter_state(new_state: EnemyState) -> void:
 	current_state = new_state
 
 # This is the connect method of Transitioned, the new_state is a Dictionary of {name, class}
-func on_child_transition(state: EnemyState, new_state: Dictionary) -> void:
-	if state != current_state:
-		return;
+func on_child_transition(enemy_id: int, state: EnemyState, new_state: Dictionary) -> void:
+	if enemy_id == enemy.get_instance_id():
+		if state != current_state:
+			return;
+			
+		var _new_state := states.get(new_state.name.to_lower()) as EnemyState
+		if !_new_state:
+			return
+			
+		if current_state:
+			current_state.exit()
 		
-	var _new_state := states.get(new_state.name.to_lower()) as EnemyState
-	if !_new_state:
-		return
-		
-	if current_state:
-		current_state.exit()
-	
-	handle_enter_state(_new_state)
+		handle_enter_state(_new_state)

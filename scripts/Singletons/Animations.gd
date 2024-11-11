@@ -22,7 +22,7 @@ var locomotion_base := "people_locomotion_pack/"
 
 # Dictionary to map enum values to StringNames
 var animation_names: Dictionary = {
-	Human.T_POSE: "t_pose",
+	Human.T_POSE: "t_pose/t_pose",
 	Human.IDLE: locomotion_base + "idle",
 	Human.RUN: locomotion_base + "running",
 	Human.WALK: locomotion_base + "walking",

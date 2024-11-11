@@ -13,12 +13,13 @@ func randomize_wander() -> void:
 	wander_time = randf_range(1, 3)
 
 func enter() -> void:
+	print("idling")
 	player = GroupMap.get_player_from_scene()
 	randomize_wander()
 	
 func update(delta: float) -> void:
 	if enemy.get_current_goal():
-		Transitioned.emit(self, enemy_states.goal)
+		SignalBus.EnemyStateMachineTransitioned.emit(enemy.get_instance_id(), self, enemy_states.goal)
 	if wander_time > 0:
 		wander_time -= delta
 		
@@ -26,11 +27,9 @@ func update(delta: float) -> void:
 		randomize_wander()
 
 func physics_update(delta: float) -> void:
-	enemy.velocity = move_direction * enemy.move_speed
-	enemy.move_and_slide()
-		
 	var playerDirection := player.global_position - enemy.global_position;
-	if playerDirection.length() <= enemy.detection_radius:
-		Transitioned.emit(self, enemy_states.follow)
-	
-	
+	if playerDirection.length() <= enemy.personality.detection_radius:
+		print("to follow")
+		SignalBus.EnemyStateMachineTransitioned.emit(enemy.get_instance_id(), self, enemy_states.follow)
+		
+	enemy.set_target_location(move_direction)

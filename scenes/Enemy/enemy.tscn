@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://scripts/Enemy/Personalities/BaseEnemyPersonality.gd" id="2_uxg2i"]
 [ext_resource type="Script" path="res://scripts/Enemy/States/EnemyFollow.gd" id="4_qj5e3"]
 [ext_resource type="Script" path="res://scripts/Enemy/States/EnemyAttemptGoal.gd" id="5_ccmpx"]
-[ext_resource type="PackedScene" uid="uid://c0mjdb8ttb7sq" path="res://scenes/Enemy/BaseEnemyModel.tscn" id="8_8g34r"]
+[ext_resource type="PackedScene" uid="uid://ckxi86nbcosmn" path="res://scenes/Enemy/BoneMan.tscn" id="8_3qhcl"]
 
 [sub_resource type="Resource" id="Resource_mer7q"]
 script = ExtResource("2_uxg2i")
@@ -32,10 +32,9 @@ script = ExtResource("2_lsxn7")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_481g0")
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+[node name="StateMachine" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_0jcr3")
-initial_state = NodePath("EnemyAttemptGoal")
 
 [node name="EnemyIdle" type="Node" parent="StateMachine"]
 script = ExtResource("2_4igqc")
@@ -57,4 +56,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.680446, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.319554, 0)
 shape = SubResource("CapsuleShape3D_481g0")
 
-[node name="BaseEnemyModel" parent="." instance=ExtResource("8_8g34r")]
+[node name="BoneManModel" parent="." instance=ExtResource("8_3qhcl")]
