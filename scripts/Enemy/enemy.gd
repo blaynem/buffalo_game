@@ -7,7 +7,7 @@ extends CharacterBody3D
 @onready var enemy_item_interaction_area: Area3D = %EnemyItemInteractionArea
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var model: EnemyBaseModel = $BoneManModel
-@onready var ragdoll_handler: EnemyRagdollHandler = $Node
+@onready var ragdoll_handler: EnemyRagdollHandler = $RagdollHandler
 
 @export var enemy_can_move: bool = true
 @export var goal_manager: EnemyGoalManager;

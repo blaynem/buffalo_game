@@ -19,9 +19,6 @@ func _setup_physics_bone_collisions() -> void:
 			# If the collisions for the bones are set to enemy, some weird stuff happens.
 			CollisionMap.set_collisions(bone, [CollisionMap.bones], [
 				CollisionMap.world, # dont fall through world
-				CollisionMap.player, # run into player
-				CollisionMap.enemy, # run into enemy
-				CollisionMap.item_interactable, # allow clicking interactable items
 			])
 			# If we set these joints in the inspector, then the 3D view has annoying squares.
 			# We still want this type, we just don't want the squares yet.

@@ -4,15 +4,17 @@ extends Node
 signal RagdollChange(status: bool)
 
 @onready var model: EnemyBaseModel = $"../BoneManModel"
+@export var ragdoll_cd: float = 3;
 
 var is_ragdolled := false;
 
+# TODO: Do we need to disable certain collisions
 func enable_ragdoll() -> void:
 	if model.can_ragdoll && !is_ragdolled:
 		is_ragdolled = true;
 		RagdollChange.emit(true)
 		model.bone_sim.physical_bones_start_simulation()
-		ragdoll_timeout(1)
+		ragdoll_timeout(ragdoll_cd)
 
 func disable_ragdoll() -> void:
 	if model.can_ragdoll:

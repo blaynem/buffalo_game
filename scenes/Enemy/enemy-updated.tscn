@@ -1,22 +1,22 @@
-[gd_scene load_steps=12 format=3 uid="uid://bj76d5gx1dthn"]
+[gd_scene load_steps=12 format=3 uid="uid://bi2deoefus7m"]
 
-[ext_resource type="Script" path="res://scripts/Enemy/state_machine.gd" id="1_0jcr3"]
-[ext_resource type="Script" path="res://scripts/Enemy/enemy.gd" id="1_g7dug"]
-[ext_resource type="Script" path="res://scripts/Enemy/States/EnemyIdle.gd" id="2_4igqc"]
-[ext_resource type="Script" path="res://scripts/nameplates.gd" id="2_lsxn7"]
-[ext_resource type="Script" path="res://scripts/Enemy/Personalities/BaseEnemyPersonality.gd" id="2_uxg2i"]
-[ext_resource type="Script" path="res://scripts/Enemy/States/EnemyFollow.gd" id="4_qj5e3"]
-[ext_resource type="Script" path="res://scripts/Enemy/States/EnemyAttemptGoal.gd" id="5_ccmpx"]
-[ext_resource type="PackedScene" uid="uid://ckxi86nbcosmn" path="res://scenes/Enemy/BoneMan.tscn" id="8_3qhcl"]
-[ext_resource type="Script" path="res://scripts/Enemy/enemy_ragdoll_handler.gd" id="9_uswoj"]
+[ext_resource type="Script" path="res://scripts/Enemy/enemy.gd" id="1_fem8e"]
+[ext_resource type="Script" path="res://scripts/Enemy/Personalities/BaseEnemyPersonality.gd" id="2_gjn11"]
+[ext_resource type="Script" path="res://scripts/nameplates.gd" id="3_5vi67"]
+[ext_resource type="Script" path="res://scripts/Enemy/state_machine.gd" id="4_k5bjl"]
+[ext_resource type="Script" path="res://scripts/Enemy/States/EnemyIdle.gd" id="5_ik58w"]
+[ext_resource type="Script" path="res://scripts/Enemy/States/EnemyFollow.gd" id="6_pvfrk"]
+[ext_resource type="Script" path="res://scripts/Enemy/States/EnemyAttemptGoal.gd" id="7_pdrgq"]
+[ext_resource type="Script" path="res://scripts/Enemy/enemy_ragdoll_handler.gd" id="9_4ocsm"]
+[ext_resource type="PackedScene" uid="uid://5l68tr5ukfvy" path="res://scenes/Enemy/BoneManUpdated.tscn" id="9_5og6i"]
 
 [sub_resource type="Resource" id="Resource_mer7q"]
-script = ExtResource("2_uxg2i")
+script = ExtResource("2_gjn11")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_481g0"]
 
 [node name="Enemy" type="CharacterBody3D"]
-script = ExtResource("1_g7dug")
+script = ExtResource("1_fem8e")
 personality = SubResource("Resource_mer7q")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
@@ -27,7 +27,7 @@ billboard = 1
 text = "Text
 <Bottom Text>"
 font_size = 70
-script = ExtResource("2_lsxn7")
+script = ExtResource("3_5vi67")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -35,16 +35,16 @@ shape = SubResource("CapsuleShape3D_481g0")
 
 [node name="StateMachine" type="Node" parent="."]
 unique_name_in_owner = true
-script = ExtResource("1_0jcr3")
+script = ExtResource("4_k5bjl")
 
 [node name="EnemyIdle" type="Node" parent="StateMachine"]
-script = ExtResource("2_4igqc")
+script = ExtResource("5_ik58w")
 
 [node name="EnemyFollow" type="Node" parent="StateMachine"]
-script = ExtResource("4_qj5e3")
+script = ExtResource("6_pvfrk")
 
 [node name="EnemyAttemptGoal" type="Node" parent="StateMachine"]
-script = ExtResource("5_ccmpx")
+script = ExtResource("7_pdrgq")
 
 [node name="CarryObjetMarker" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00974742, 1.01588, 0.475056)
@@ -57,7 +57,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.680446, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.319554, 0)
 shape = SubResource("CapsuleShape3D_481g0")
 
-[node name="BoneManModel" parent="." instance=ExtResource("8_3qhcl")]
+[node name="Node" type="Node" parent="."]
+script = ExtResource("9_4ocsm")
 
-[node name="RagdollHandler" type="Node" parent="."]
-script = ExtResource("9_uswoj")
+[node name="BoneManModel" parent="." instance=ExtResource("9_5og6i")]
