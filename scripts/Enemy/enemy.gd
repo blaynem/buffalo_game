@@ -8,9 +8,10 @@ extends CharacterBody3D
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var model: EnemyBaseModel = $BoneManModel
 @onready var ragdoll_handler: EnemyRagdollHandler = $RagdollHandler
+@onready var inventory_manager: InventoryManager = $InventoryManager
 
-@export var enemy_can_move: bool = true
 @export var goal_manager: EnemyGoalManager;
+@export var enemy_can_move: bool = true
 @export var personality: EnemyPersonality;
 @export var default_animation: Animations.Human = Animations.Human.T_POSE
 
@@ -19,6 +20,7 @@ var display_status: String;
 var target_location: Vector3;
 # Only use nav when the map is ready
 var nav_map_ready := false;
+var held_item: CarriableEnemyGoalItem = null;
 
 func get_current_goal() -> EnemyGoal:
 	if goal_manager:
@@ -35,6 +37,7 @@ func _ready() -> void:
 	# Set personality before everything.
 	_setup_personality()
 	
+	inventory_manager.setup_inventory(self)
 	_update_nameplate()
 	_set_collisions();
 	_setup_model();
@@ -55,7 +58,12 @@ func _on_navigation_map_ready(_map: RID) -> void:
 	nav_map_ready = true;
 
 func _handle_ragdoll_change(is_ragdolled: bool) -> void:
-	if !is_ragdolled:
+	# Note: This does make it so we can just run through the enemy
+	var coll: CollisionShape3D = $CollisionShape3D
+	if is_ragdolled:
+		coll.disabled = true
+	else:
+		coll.disabled = false
 		model.play_human_animation(Animations.Human.WALK)
 
 # This is the connect method of Transitioned, the new_state is a Dictionary of {name, class}
@@ -78,9 +86,6 @@ func _set_collisions() -> void:
 	CollisionMap.set_collisions(enemy_item_interaction_area, [CollisionMap.enemy], [
 		CollisionMap.item_interactable, # allow clicking interactable items
 	])
-
-func _process(delta: float) -> void:
-	pass;
 
 func _physics_process(delta: float) -> void:
 	if enemy_can_move && nav_map_ready && !ragdoll_handler.is_ragdolled:

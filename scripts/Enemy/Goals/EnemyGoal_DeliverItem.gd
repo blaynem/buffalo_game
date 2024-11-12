@@ -36,4 +36,3 @@ func setup_pickup_goal() -> void:
 func setup_dropoff_goal() -> void:
 	dropoff_goal.goal_item = item;
 	dropoff_goal.dropoff_marker = dropoff_marker
-	

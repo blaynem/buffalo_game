@@ -3,6 +3,7 @@ extends Node
 
 @export var default_animation := Animations.Human.IDLE
 
+@onready var bones: BoneManSetup = $Armature
 @onready var _animation_player: AnimationPlayer = $AnimationPlayer
 
 var can_ragdoll := false;

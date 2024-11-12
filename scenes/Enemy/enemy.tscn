@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bj76d5gx1dthn"]
+[gd_scene load_steps=13 format=3 uid="uid://bj76d5gx1dthn"]
 
 [ext_resource type="Script" path="res://scripts/Enemy/state_machine.gd" id="1_0jcr3"]
 [ext_resource type="Script" path="res://scripts/Enemy/enemy.gd" id="1_g7dug"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/Enemy/States/EnemyAttemptGoal.gd" id="5_ccmpx"]
 [ext_resource type="PackedScene" uid="uid://ckxi86nbcosmn" path="res://scenes/Enemy/BoneMan.tscn" id="8_3qhcl"]
 [ext_resource type="Script" path="res://scripts/Enemy/enemy_ragdoll_handler.gd" id="9_uswoj"]
+[ext_resource type="PackedScene" uid="uid://cvesph78riowk" path="res://scenes/Items/inventory_manager.tscn" id="10_bxnew"]
 
 [sub_resource type="Resource" id="Resource_mer7q"]
 script = ExtResource("2_uxg2i")
@@ -61,3 +62,5 @@ shape = SubResource("CapsuleShape3D_481g0")
 
 [node name="RagdollHandler" type="Node" parent="."]
 script = ExtResource("9_uswoj")
+
+[node name="InventoryManager" parent="." instance=ExtResource("10_bxnew")]

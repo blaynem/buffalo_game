@@ -7,9 +7,8 @@ extends GoalItem
 @onready var collision_shape: CollisionShape3D = %CollisionShape3D
 @onready var interactible_area: ItemInteractionArea = %InteractionArea
 @onready var enemy_pickup_timer: Timer = $EnemyPickupTimer
-# This can be either the Player marker, Enemy marker, or null.
-var carry_object_marker: Marker3D = null;
-var carrier: PhysicsBody3D = null;
+
+var holder: PhysicsBody3D = null;
 
 func _ready() -> void:
 	set_collisions();
@@ -37,41 +36,36 @@ func set_collisions() -> void:
 	])
 
 func player_interacted() -> void:
-	if carrier == player:
+	if holder == player:
 		return; # no changes happened.
-	var old_carrier := carrier;
 	# If we're currently holding an item, drop it to pick up the other.
-	if player.held_item:
-		player.held_item.drop_item()
+	player.inventory_manager.drop_item()
 	# New item is placed on player
-	player.held_item = self
-	carrier = player
-	carry_object_marker = player.item_hold_position
+	holder = player
 	enemy_pickup_timer.start()
-	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), old_carrier, carrier)
+	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), holder)
 
 func enemy_interacted(enemy: Enemy) -> void:
 	# Enemy cannot pick up if the timer 
-	if carrier == enemy or !enemy_pickup_timer.is_stopped():
+	if holder == enemy or !enemy_pickup_timer.is_stopped():
 		return; # no changes happened.
-	var old_carrier := carrier;
-	carrier = enemy
-	carry_object_marker = enemy.item_hold_position
-	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), old_carrier, carrier)
+	holder = enemy
+	enemy.inventory_manager.pickup_item(self)
+	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), holder)
 
 func drop_item() -> void:
 	# If the enemy dropped the item, we start a timer.
-	if carrier is Enemy:
+	if holder is Enemy:
 		enemy_pickup_timer.start()
 
-	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), carrier, null)
-	carry_object_marker = null;
-	carrier = null;
+	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), null)
+	holder = null;
 
+# Player can't place at goal.
 func place_item_at_goal() -> void:
-	carry_object_marker = null;
-	carrier = null;
-	queue_free()
+	if holder is Enemy:
+		holder = null;
+		queue_free()
 
 func change_mesh_color(new_color: Color) -> void:
 	var mesh := get_node("MeshInstance3D") as MeshInstance3D
@@ -81,8 +75,11 @@ func change_mesh_color(new_color: Color) -> void:
 	mesh.set_surface_override_material(0, new_material)
 
 func _physics_process(delta: float) -> void:
-	if carrier == null:
+	if !holder:
 		collision_shape.disabled = false
-	else:
-		self.global_position = carry_object_marker.global_position
-		collision_shape.disabled = true
+		return;
+	if holder is Enemy:
+		self.global_position = holder.inventory_manager.carry_position.global_position
+	if holder is Player:	
+		self.global_position = holder.inventory_manager.carry_position.global_position
+	collision_shape.disabled = true

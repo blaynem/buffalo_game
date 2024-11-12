@@ -8,18 +8,10 @@ func _ready() -> void:
 		CollisionMap.enemy # run into enemy
 	])
 	area_entered.connect(_on_area_entered)
-	body_entered.connect(_on_body_entered)
 
 func _on_area_entered(area: Area3D) -> void:
 	var enemy: Enemy = _ensure_is_enemy_bones(area);
 	if enemy:
-		print("in area")
-		_enable_ragdoll(enemy)
-
-func _on_body_entered(body: Node3D) -> void:
-	var enemy: Enemy = _ensure_is_enemy_bones(body);
-	if enemy:
-		print("in body")
 		_enable_ragdoll(enemy)
 
 # Checks to ensure that it's the enemies BONES we're hitting.
@@ -35,3 +27,4 @@ func _ensure_is_enemy_bones(target: Node3D) -> Enemy:
 
 func _enable_ragdoll(enemy: Enemy) -> void:
 	enemy.ragdoll_handler.enable_ragdoll()
+	enemy.inventory_manager.drop_item()

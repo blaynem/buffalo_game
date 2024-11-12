@@ -3,15 +3,17 @@ extends Node3D
 
 @onready var skeleton: Skeleton3D = $Skeleton3D
 
+var _bones_list: Array[PhysicalBone3D] = [];
+
 func _ready() -> void:
 	_setup_collisions();
 
 func _setup_collisions() -> void:
 	# Only setup the collisions if we have the bones!
 	if find_child("PhysicalBoneSimulator3D"):
-		_setup_physics_bone_collisions()
+		_setup_bones()
 
-func _setup_physics_bone_collisions() -> void:
+func _setup_bones() -> void:
 	var physical_bone_simulator: PhysicalBoneSimulator3D = $Skeleton3D/PhysicalBoneSimulator3D
 	if physical_bone_simulator:
 		for _bone in physical_bone_simulator.get_children():
@@ -23,3 +25,4 @@ func _setup_physics_bone_collisions() -> void:
 			# If we set these joints in the inspector, then the 3D view has annoying squares.
 			# We still want this type, we just don't want the squares yet.
 			bone.joint_type = PhysicalBone3D.JOINT_TYPE_6DOF;
+			_bones_list.append(bone)

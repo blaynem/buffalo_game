@@ -6,13 +6,10 @@ var goal_item: CarriableEnemyGoalItem
 func _ready() -> void:
 	SignalBus.GoalItemHolderChange.connect(_on_goal_item_holder_change)
 
-func _on_goal_item_holder_change(item_id: int, holder: PhysicsBody3D, new_holder: PhysicsBody3D) -> void:
+func _on_goal_item_holder_change(item_id: int, new_holder: PhysicsBody3D) -> void:
 	# In case the goal has been queue_freed we need to check the valid instance.
 	if is_instance_valid(goal_item) && item_id == goal_item.get_instance_id():
-		if new_holder is Player:
-			set_goal_completed(false)
-		if new_holder is Enemy:
-			set_goal_completed(true)
+		set_goal_completed(new_holder is Enemy)
 
 func get_item_location() -> Vector3:
 	return goal_item.global_position;

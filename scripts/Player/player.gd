@@ -3,22 +3,15 @@ extends CharacterBody3D
 
 @onready var item_hold_position: Marker3D = $CarryObjetMarker
 @onready var interaction_area: Area3D = $ItemInteractionArea
+@onready var inventory_manager: InventoryManager = $InventoryManager
 
 @export var WALK_SPEED := 10.0
 @export var RUN_SPEED := 15.0
 @export var JUMP_VELOCITY := 3
 
-var held_item: CarriableEnemyGoalItem = null:
-	set(item):
-		held_item = item;
-
 func _ready() -> void:
 	set_collisions()
-	SignalBus.GoalItemHolderChange.connect(_on_goal_item_holder_change)
-	
-func _on_goal_item_holder_change(item_id: int, holder: PhysicsBody3D, new_holder: PhysicsBody3D) -> void:
-	if held_item && item_id == held_item.get_instance_id() && new_holder != self:
-		held_item = null;
+	inventory_manager.setup_inventory(self)
 
 func set_collisions() -> void:
 	# Collision on ourselves
