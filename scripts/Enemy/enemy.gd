@@ -11,7 +11,8 @@ extends CharacterBody3D
 @onready var inventory_manager: InventoryManager = $InventoryManager
 
 @export var goal_manager: EnemyGoalManager;
-@export var enemy_can_move: bool = true
+## If true, the enemy can not take any actions.
+@export var is_stunned: bool = true
 @export var personality: EnemyPersonality;
 @export var default_animation: Animations.Human = Animations.Human.T_POSE
 
@@ -61,8 +62,14 @@ func _handle_ragdoll_change(is_ragdolled: bool) -> void:
 	# Note: This does make it so we can just run through the enemy
 	var coll: CollisionShape3D = $CollisionShape3D
 	if is_ragdolled:
+		is_stunned = true;
 		coll.disabled = true
+		var held_item := inventory_manager.held_item;
+		if held_item:
+			held_item.drop_item()
+			inventory_manager.drop_item()
 	else:
+		is_stunned = false
 		coll.disabled = false
 		model.play_human_animation(Animations.Human.WALK)
 
@@ -88,7 +95,9 @@ func _set_collisions() -> void:
 	])
 
 func _physics_process(delta: float) -> void:
-	if enemy_can_move && nav_map_ready && !ragdoll_handler.is_ragdolled:
+	if is_stunned:
+		return;
+	if nav_map_ready && !ragdoll_handler.is_ragdolled:
 		var direction := Vector3()
 		
 		nav_agent.target_position = target_location

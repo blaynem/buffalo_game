@@ -17,14 +17,17 @@ We must first complete all of the subgoals before moving on to the next one.
 
 var all_goals: Array[EnemyGoal];
 var current_goal_index: int = 0;
+var goal_manager_owner: Enemy;
 
 func _ready() -> void:
+	goal_manager_owner = get_parent()
 	SignalBus.EnemyGoalStatusChange.connect(_handle_enemy_goal_status_change)
 	# loop through the Goal Managers' children, only the top nodes.
 	for child in get_children():
 		if child is EnemyGoalDeliverItem:
 			var subgoals: Array[EnemyGoal] = child.get_sub_goal_order()
 			for goal in subgoals:
+				goal.set_goal_owner(goal_manager_owner)
 				all_goals.push_back(goal)
 
 func _handle_enemy_goal_status_change(goal_id: int, new_status: bool, _text: String) -> void:

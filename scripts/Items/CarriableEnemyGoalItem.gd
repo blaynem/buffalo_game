@@ -13,7 +13,7 @@ var holder: PhysicsBody3D = null;
 func _ready() -> void:
 	set_collisions();
 	# When item is interacted with
-	interactible_area.set_interact_fn(player_interacted)
+	interactible_area.set_interact_fn(player_interact)
 	enemy_pickup_timer.wait_time = enemy_pickup_cd
 	enemy_pickup_timer.one_shot = true
 
@@ -35,17 +35,16 @@ func set_collisions() -> void:
 		CollisionMap.enemy # get pushed by enemy
 	])
 
-func player_interacted() -> void:
+func player_interact() -> void:
 	if holder == player:
 		return; # no changes happened.
-	# If we're currently holding an item, drop it to pick up the other.
-	player.inventory_manager.drop_item()
 	# New item is placed on player
+	player.inventory_manager.pickup_item(self)
 	holder = player
 	enemy_pickup_timer.start()
 	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), holder)
 
-func enemy_interacted(enemy: Enemy) -> void:
+func enemy_interact(enemy: Enemy) -> void:
 	# Enemy cannot pick up if the timer 
 	if holder == enemy or !enemy_pickup_timer.is_stopped():
 		return; # no changes happened.
@@ -54,9 +53,12 @@ func enemy_interacted(enemy: Enemy) -> void:
 	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), holder)
 
 func drop_item() -> void:
-	# If the enemy dropped the item, we start a timer.
 	if holder is Enemy:
+		# If the enemy dropped the item, we start a timer.
 		enemy_pickup_timer.start()
+		holder.inventory_manager.drop_item();
+	if holder is Player:
+		holder.inventory_manager.drop_item();
 
 	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), null)
 	holder = null;
@@ -64,6 +66,7 @@ func drop_item() -> void:
 # Player can't place at goal.
 func place_item_at_goal() -> void:
 	if holder is Enemy:
+		holder.inventory_manager.held_item = null
 		holder = null;
 		queue_free()
 

@@ -30,9 +30,10 @@ func set_item_spawn() -> void:
 	item.global_position = item_marker.global_position
 
 func setup_pickup_goal() -> void:
-	# Set the item for the pickup and dropoff goals.
-	pickup_goal.goal_item = item;
+	pickup_goal.set_goal_owner(goal_owner)
+	pickup_goal.set_goal_item(item)
 
 func setup_dropoff_goal() -> void:
-	dropoff_goal.goal_item = item;
-	dropoff_goal.dropoff_marker = dropoff_marker
+	pickup_goal.set_goal_owner(goal_owner)
+	dropoff_goal.set_goal_item(item);
+	dropoff_goal.set_goal_location(dropoff_marker.global_position)

@@ -98,6 +98,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.06262, 0.193956, 14.8752)
 [node name="Enemy" parent="Enemies" node_paths=PackedStringArray("goal_manager") instance=ExtResource("6_8tsi8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.992, 0, 0)
 goal_manager = NodePath("GoalManager")
+is_stunned = false
 personality = SubResource("Resource_cckkx")
 default_animation = 2
 
@@ -131,6 +132,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.9466, 0, -6.93782)
 [node name="Enemy2" parent="Enemies" node_paths=PackedStringArray("goal_manager") instance=ExtResource("6_8tsi8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.911, 0, -0.548)
 goal_manager = NodePath("GoalManager")
+is_stunned = false
 personality = SubResource("Resource_nebru")
 default_animation = 3
 

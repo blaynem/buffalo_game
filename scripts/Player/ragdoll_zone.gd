@@ -27,4 +27,3 @@ func _ensure_is_enemy_bones(target: Node3D) -> Enemy:
 
 func _enable_ragdoll(enemy: Enemy) -> void:
 	enemy.ragdoll_handler.enable_ragdoll()
-	enemy.inventory_manager.drop_item()
