@@ -1,13 +1,14 @@
-[gd_scene load_steps=21 format=3 uid="uid://do7ksivvif5cj"]
+[gd_scene load_steps=22 format=3 uid="uid://do7ksivvif5cj"]
 
 [ext_resource type="Texture2D" uid="uid://c6i4qs03rki1o" path="res://assets/textures/rocky_terrain_02_diff_1k.jpg" id="1_4v6rc"]
+[ext_resource type="Script" path="res://scenes/world.gd" id="1_b62hf"]
 [ext_resource type="Texture2D" uid="uid://bb17nqnqy3e0v" path="res://assets/textures/rocky_terrain_02_nor_gl_1k.jpg" id="2_fb2p6"]
 [ext_resource type="Texture2D" uid="uid://bf7hb61i6h5xc" path="res://assets/textures/rocky_terrain_02_spec_1k.jpg" id="3_ctaa5"]
 [ext_resource type="PackedScene" uid="uid://bssar0rc56o5q" path="res://scenes/Player/player.tscn" id="4_mkff5"]
 [ext_resource type="MeshLibrary" uid="uid://bcspsyxj5w8hk" path="res://scenes/useable_assets/nature.tres" id="5_r0ytx"]
 [ext_resource type="PackedScene" uid="uid://bj76d5gx1dthn" path="res://scenes/Enemy/enemy.tscn" id="6_8tsi8"]
 [ext_resource type="Script" path="res://scripts/Enemy/Goals/EnemyGoalManager.gd" id="7_dx1bd"]
-[ext_resource type="PackedScene" uid="uid://bthc412bi6v37" path="res://scenes/Enemy/goal_deliver_item.tscn" id="8_d3pb4"]
+[ext_resource type="PackedScene" uid="uid://bthc412bi6v37" path="res://scenes/EnemyGoals/goal_deliver_item.tscn" id="8_d3pb4"]
 [ext_resource type="Script" path="res://scripts/Enemy/Personalities/Brave.gd" id="8_hskdc"]
 [ext_resource type="Script" path="res://scripts/Enemy/Personalities/Scared.gd" id="9_4rejd"]
 [ext_resource type="PackedScene" uid="uid://sbemyimn5kep" path="res://scenes/Items/BoxItem.tscn" id="10_8np3j"]
@@ -52,6 +53,7 @@ script = ExtResource("8_hskdc")
 script = ExtResource("9_4rejd")
 
 [node name="World" type="Node3D"]
+script = ExtResource("1_b62hf")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_dtql6")
@@ -105,10 +107,10 @@ default_animation = 2
 [node name="GoalManager" type="Node" parent="Enemies/Enemy"]
 script = ExtResource("7_dx1bd")
 
-[node name="Goal_DeliverItem" parent="Enemies/Enemy/GoalManager" node_paths=PackedStringArray("item", "dropoff_marker", "item_marker") instance=ExtResource("8_d3pb4")]
+[node name="Goal_DeliverItem" parent="Enemies/Enemy/GoalManager" node_paths=PackedStringArray("item", "dropoff_marker", "item_spawn_marker") instance=ExtResource("8_d3pb4")]
 item = NodePath("../../../../GoalItems/BoxItem")
 dropoff_marker = NodePath("Dropoff Marker")
-item_marker = NodePath("Item Marker")
+item_spawn_marker = NodePath("Item Marker")
 item_color = Color(0.818585, 0.402684, 0, 1)
 
 [node name="Dropoff Marker" type="Marker3D" parent="Enemies/Enemy/GoalManager/Goal_DeliverItem"]
@@ -117,10 +119,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3985, 0, 1.90658)
 [node name="Item Marker" type="Marker3D" parent="Enemies/Enemy/GoalManager/Goal_DeliverItem"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9239, 0, -12.1797)
 
-[node name="Goal_DeliverItem2" parent="Enemies/Enemy/GoalManager" node_paths=PackedStringArray("item", "dropoff_marker", "item_marker") instance=ExtResource("8_d3pb4")]
+[node name="Goal_DeliverItem2" parent="Enemies/Enemy/GoalManager" node_paths=PackedStringArray("item", "dropoff_marker", "item_spawn_marker") instance=ExtResource("8_d3pb4")]
 item = NodePath("../../../../GoalItems/BoxItem2")
 dropoff_marker = NodePath("Dropoff Marker2")
-item_marker = NodePath("Item Marker2")
+item_spawn_marker = NodePath("Item Marker2")
 item_color = Color(0.0611461, 0.610909, 0.471456, 1)
 
 [node name="Dropoff Marker2" type="Marker3D" parent="Enemies/Enemy/GoalManager/Goal_DeliverItem2"]
@@ -139,10 +141,10 @@ default_animation = 3
 [node name="GoalManager" type="Node" parent="Enemies/Enemy2"]
 script = ExtResource("7_dx1bd")
 
-[node name="Goal_DeliverItem" parent="Enemies/Enemy2/GoalManager" node_paths=PackedStringArray("item", "dropoff_marker", "item_marker") instance=ExtResource("8_d3pb4")]
+[node name="Goal_DeliverItem" parent="Enemies/Enemy2/GoalManager" node_paths=PackedStringArray("item", "dropoff_marker", "item_spawn_marker") instance=ExtResource("8_d3pb4")]
 item = NodePath("../../../../GoalItems/BoxItem3")
 dropoff_marker = NodePath("Dropoff Marker")
-item_marker = NodePath("Item Marker")
+item_spawn_marker = NodePath("Item Marker")
 item_color = Color(0.818585, 0.402684, 0, 1)
 
 [node name="Dropoff Marker" type="Marker3D" parent="Enemies/Enemy2/GoalManager/Goal_DeliverItem"]
@@ -151,10 +153,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3985, 0, 1.90658)
 [node name="Item Marker" type="Marker3D" parent="Enemies/Enemy2/GoalManager/Goal_DeliverItem"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.68565, 0, -21.1888)
 
-[node name="Goal_DeliverItem2" parent="Enemies/Enemy2/GoalManager" node_paths=PackedStringArray("item", "dropoff_marker", "item_marker") instance=ExtResource("8_d3pb4")]
+[node name="Goal_DeliverItem2" parent="Enemies/Enemy2/GoalManager" node_paths=PackedStringArray("item", "dropoff_marker", "item_spawn_marker") instance=ExtResource("8_d3pb4")]
 item = NodePath("../../../../GoalItems/BoxItem4")
 dropoff_marker = NodePath("Dropoff Marker2")
-item_marker = NodePath("Item Marker2")
+item_spawn_marker = NodePath("Item Marker2")
 item_color = Color(0.0611461, 0.610909, 0.471456, 1)
 
 [node name="Dropoff Marker2" type="Marker3D" parent="Enemies/Enemy2/GoalManager/Goal_DeliverItem2"]
@@ -162,9 +164,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.48166, 0, 2.48887)
 
 [node name="Item Marker2" type="Marker3D" parent="Enemies/Enemy2/GoalManager/Goal_DeliverItem2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2643, 0, -12.3148)
-
-[node name="Ragdoll Test" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.94497, 0, 7.84496)
-
-[node name="Enemy" parent="Ragdoll Test" instance=ExtResource("6_8tsi8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.68001, 0, 0)

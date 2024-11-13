@@ -1,5 +1,5 @@
 class_name CarriableEnemyGoalItem
-extends GoalItem
+extends RigidBody3D
 
 @export var enemy_pickup_cd: float = 1.0;
 

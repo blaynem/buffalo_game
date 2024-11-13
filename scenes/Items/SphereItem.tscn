@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://ykkvs1bhp1el"]
+
+[ext_resource type="Script" path="res://scripts/Items/CarriableEnemyGoalItem.gd" id="1_yf8ua"]
+[ext_resource type="Script" path="res://scripts/Items/ItemInteractionArea.gd" id="2_x1y2l"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fk5ye"]
+size = Vector3(1.1, 1.1, 1.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5tld0"]
+
+[node name="BoxItem" type="RigidBody3D"]
+collision_layer = 4
+script = ExtResource("1_yf8ua")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
+shape = SubResource("BoxShape3D_fk5ye")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+mesh = SubResource("BoxMesh_5tld0")
+
+[node name="InteractionArea" type="Area3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_x1y2l")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
+shape = SubResource("BoxShape3D_fk5ye")
+
+[node name="EnemyPickupTimer" type="Timer" parent="."]

@@ -5,7 +5,7 @@ var dropoff_goal: EnemyGoalDropOffItem
 var pickup_goal: EnemyGoalPickupItem
 @export var item: CarriableEnemyGoalItem;
 @export var dropoff_marker: Marker3D
-@export var item_marker: Marker3D
+@export var item_spawn_marker: Marker3D
 @export var item_color: Color = Color.BLUE
 
 func _ready() -> void:
@@ -27,7 +27,7 @@ func get_sub_goal_order() -> Array[EnemyGoal]:
 	return [pickup_goal, dropoff_goal]
 
 func set_item_spawn() -> void:
-	item.global_position = item_marker.global_position
+	item.global_position = item_spawn_marker.global_position
 
 func setup_pickup_goal() -> void:
 	pickup_goal.set_goal_owner(goal_owner)

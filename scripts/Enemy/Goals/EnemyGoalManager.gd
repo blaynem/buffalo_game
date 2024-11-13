@@ -25,6 +25,7 @@ func _ready() -> void:
 	# loop through the Goal Managers' children, only the top nodes.
 	for child in get_children():
 		if child is EnemyGoalDeliverItem:
+			child.set_goal_owner(goal_manager_owner)
 			var subgoals: Array[EnemyGoal] = child.get_sub_goal_order()
 			for goal in subgoals:
 				goal.set_goal_owner(goal_manager_owner)
