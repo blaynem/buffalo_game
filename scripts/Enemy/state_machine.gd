@@ -36,9 +36,11 @@ func handle_enter_state(new_state: EnemyState) -> void:
 	current_state = new_state
 
 # This is the connect method of Transitioned, the new_state is a Dictionary of {name, class}
-func on_child_transition(enemy_id: int, state: EnemyState, new_state: Dictionary) -> void:
+func on_child_transition(enemy_id: int, prev_state: EnemyState, new_state: Dictionary) -> void:
 	if enemy_id == enemy.get_instance_id():
-		if state != current_state:
+		# If the prev_state mismatches with the current_state,
+		# then something funky is going on so we ignore it.
+		if prev_state != current_state:
 			return;
 			
 		var _new_state := states.get(new_state.name.to_lower()) as EnemyState

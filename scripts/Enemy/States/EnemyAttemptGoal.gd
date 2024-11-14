@@ -13,7 +13,7 @@ func update(delta: float) -> void:
 func physics_update(delta: float) -> void:
 	var current_goal := enemy.get_current_goal()
 	if !current_goal:
-		SignalBus.EnemyStateMachineTransitioned.emit(self.get_instance_id(), self, enemy_states.idle)
+		SignalBus.EnemyStateMachineTransitioned.emit(enemy.get_instance_id(), self, enemy_states.idle)
 		return;
 
 	if current_goal.is_within_goal_range(enemy):
