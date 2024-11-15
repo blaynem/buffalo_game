@@ -18,7 +18,6 @@ func set_collisions() -> void:
 	CollisionMap.set_collisions(self, [CollisionMap.player], [
 		# We don't include the items as a mask, as that stop the items from getting physics by player.
 		CollisionMap.world, # dont fall through world
-		CollisionMap.enemy, # run into enemy
 	])
 	# Collisions for the interaction area
 	CollisionMap.set_collisions(interaction_area, [CollisionMap.player], [

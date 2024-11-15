@@ -63,14 +63,14 @@ func _handle_ragdoll_change(is_ragdolled: bool) -> void:
 	var coll: CollisionShape3D = $CollisionShape3D
 	if is_ragdolled:
 		is_stunned = true;
-		coll.disabled = true
+		self.set_collision_mask_value(CollisionMap.player, false)
 		var held_item := inventory_manager.held_item;
 		if held_item:
 			held_item.drop_item()
 			inventory_manager.drop_item()
 	else:
 		is_stunned = false
-		coll.disabled = false
+		self.set_collision_mask_value(CollisionMap.player, true)
 		model.play_human_animation(Animations.Human.WALK)
 
 # This is the connect method of Transitioned, the new_state is a Dictionary of {name, class}
@@ -95,9 +95,14 @@ func _set_collisions() -> void:
 	])
 
 func _physics_process(delta: float) -> void:
-	if is_stunned:
+	if !is_on_floor():
+		velocity.y += get_gravity().y * delta
+	# If ragdolled, we want to correctly move the position
+	if ragdoll_handler.is_ragdolled:
+		var new_root_transform := model.bones.hips.transform
+		global_transform.origin = global_transform.origin.lerp(new_root_transform.origin, 0.1)
 		return;
-	if nav_map_ready && !ragdoll_handler.is_ragdolled:
+	if nav_map_ready:
 		var direction := Vector3()
 		
 		nav_agent.target_position = target_location

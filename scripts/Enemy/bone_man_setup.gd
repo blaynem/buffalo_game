@@ -2,6 +2,7 @@ class_name BoneManSetup
 extends Node3D
 
 @onready var skeleton: Skeleton3D = $Skeleton3D
+@onready var hips: PhysicalBone3D = $"Skeleton3D/PhysicalBoneSimulator3D/Physical Bone mixamorig1_Hips"
 
 var _bones_list: Array[PhysicalBone3D] = [];
 

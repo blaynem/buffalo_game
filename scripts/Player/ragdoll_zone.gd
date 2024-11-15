@@ -11,7 +11,7 @@ func _ready() -> void:
 
 func _on_area_entered(area: Area3D) -> void:
 	var enemy: Enemy = _ensure_is_enemy_bones(area);
-	if enemy:
+	if enemy and !enemy.ragdoll_handler.is_ragdolled:
 		_enable_ragdoll(enemy)
 
 # Checks to ensure that it's the enemies BONES we're hitting.
@@ -27,3 +27,7 @@ func _ensure_is_enemy_bones(target: Node3D) -> Enemy:
 
 func _enable_ragdoll(enemy: Enemy) -> void:
 	enemy.ragdoll_handler.enable_ragdoll()
+	print("------------------YEET-------------")
+	# TODO: Calculate the force and direction of the YEETING.
+	var force := Vector3(0,100,5)
+	enemy.model.bones.hips.apply_central_impulse(force)

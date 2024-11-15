@@ -30,10 +30,7 @@ func set_collisions() -> void:
 	# Collisions for interactable area
 	CollisionMap.set_collisions(interactible_area, [
 		CollisionMap.item_interactable # is an interactable area
-	], [
-		CollisionMap.player, # get pushed by player
-		CollisionMap.enemy # get pushed by enemy
-	])
+	], [])
 
 func player_interact() -> void:
 	if holder == player:
