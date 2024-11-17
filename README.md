@@ -3,6 +3,11 @@
 ## TODO:
 - Cleanup items / Personalities to be a resource: https://www.youtube.com/watch?v=4vAkTHeoORk&ab_channel=Godotneers
 
+## Attaching Bones to Model in Blender
+
+- Easy tutorial to follow! https://www.youtube.com/watch?v=U1yL9qKlgKM&ab_channel=PolyFlo
+- Keep in mind there is an automatic rig for people / animals
+
 ## Importing Animations / Models from Mixamo
 Need to remove the root motion otherwise the animation will move the player and that sucks.
 2 minute video - https://www.youtube.com/watch?v=61WEupW4Eow
