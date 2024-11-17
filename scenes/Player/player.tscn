@@ -30,7 +30,7 @@ shape = SubResource("BoxShape3D_d6ca8")
 [node name="buffalo" parent="." instance=ExtResource("3_8ah8i")]
 
 [node name="CameraController" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.988567, 0.150777, 0, -0.150777, 0.988567, 0, 2.99464, 2.68811)
+transform = Transform3D(1, 0, 0, 0, 0.997683, 0.0680152, 0, -0.0680152, 0.997683, 0, 3.295, 2.688)
 
 [node name="CameraTarget" type="Node3D" parent="CameraController"]
 

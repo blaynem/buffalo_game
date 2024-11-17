@@ -28,6 +28,11 @@ Animations="*res://scripts/Singletons/Animations.gd"
 
 gdscript/warnings/untyped_declaration=2
 
+[display]
+
+window/size/viewport_width=2000
+window/size/viewport_height=1400
+
 [global_group]
 
 Player=""
