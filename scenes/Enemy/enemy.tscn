@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bj76d5gx1dthn"]
+[gd_scene load_steps=12 format=3 uid="uid://bj76d5gx1dthn"]
 
 [ext_resource type="Script" path="res://scripts/Enemy/state_machine.gd" id="1_0jcr3"]
 [ext_resource type="Script" path="res://scripts/Enemy/enemy.gd" id="1_g7dug"]
@@ -11,6 +11,10 @@
 [ext_resource type="PackedScene" uid="uid://cvesph78riowk" path="res://scenes/Items/inventory_manager.tscn" id="10_bxnew"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_481g0"]
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nr0ch"]
+height = 1.8
 
 [node name="Enemy" type="CharacterBody3D"]
 script = ExtResource("1_g7dug")
@@ -26,7 +30,7 @@ font_size = 70
 script = ExtResource("2_lsxn7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.81466, 0)
 shape = SubResource("CapsuleShape3D_481g0")
 
 [node name="StateMachine" type="Node" parent="."]
@@ -50,8 +54,8 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.680446, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyItemInteractionArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.319554, 0)
-shape = SubResource("CapsuleShape3D_481g0")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22, 0)
+shape = SubResource("CapsuleShape3D_nr0ch")
 
 [node name="BoneManModel" parent="." instance=ExtResource("8_3qhcl")]
 
