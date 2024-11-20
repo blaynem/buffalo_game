@@ -1,3 +1,4 @@
+class_name TestWorld
 extends Node3D
 
 @onready var goal_items_node: Node = $GoalItems
