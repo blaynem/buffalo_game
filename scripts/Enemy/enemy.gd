@@ -71,7 +71,7 @@ func _handle_ragdoll_change(is_ragdolled: bool) -> void:
 	else:
 		is_stunned = false
 		self.set_collision_mask_value(CollisionMap.player, true)
-		model.play_human_animation(Animations.Human.WALK)
+		model.play_walk_animation()
 
 # This is the connect method of Transitioned, the new_state is a Dictionary of {name, class}
 func _on_child_transition(enemy_id: int, state: EnemyState, new_state: Dictionary) -> void:
@@ -94,6 +94,15 @@ func _set_collisions() -> void:
 		CollisionMap.item_interactable, # allow clicking interactable items
 	])
 
+func _handle_animations(_delta: float) -> void:
+	if ragdoll_handler.is_ragdolled:
+		return;
+	if velocity == Vector3.ZERO:
+		model.play_human_animation(Animations.Human.IDLE)
+		return;
+	model.play_walk_animation();
+
+
 func _physics_process(delta: float) -> void:
 	if !is_on_floor():
 		velocity.y += get_gravity().y * delta
@@ -101,8 +110,8 @@ func _physics_process(delta: float) -> void:
 	if ragdoll_handler.is_ragdolled:
 		var new_root_transform := model.bones.hips.transform
 		global_transform.origin = global_transform.origin.lerp(new_root_transform.origin, 0.1)
-		return;
-	if nav_map_ready:
+
+	if nav_map_ready && !ragdoll_handler.is_ragdolled:
 		var direction := Vector3()
 		
 		nav_agent.target_position = target_location
@@ -118,6 +127,7 @@ func _physics_process(delta: float) -> void:
 		var _dist := (target_location - global_position).length()
 		if state_machine.current_state is EnemyFollow:
 			if _dist <= personality.move_closer_radius:
-				return;
+				velocity = Vector3.ZERO
 		
-		move_and_slide()
+	_handle_animations(delta)
+	move_and_slide()

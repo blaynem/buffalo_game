@@ -17,6 +17,7 @@ func _ready() -> void:
 func set_collisions() -> void:
 	CollisionMap.set_collisions(self, [CollisionMap.item_interactable], [
 		CollisionMap.enemy, # enemy can interact
+		CollisionMap.player, # enemy can interact
 	])
 
 func _on_area_entered(_area: Area3D) -> void:
