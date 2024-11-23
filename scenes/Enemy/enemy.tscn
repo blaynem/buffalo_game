@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://ckxi86nbcosmn" path="res://scenes/Enemy/BoneMan.tscn" id="8_3qhcl"]
 [ext_resource type="Script" path="res://scripts/Enemy/enemy_ragdoll_handler.gd" id="9_uswoj"]
 [ext_resource type="PackedScene" uid="uid://cvesph78riowk" path="res://scenes/Items/inventory_manager.tscn" id="10_bxnew"]
-[ext_resource type="Script" path="res://scripts/GOAP/GoapAgent.cs" id="10_q1r5p"]
+[ext_resource type="Script" path="res://scripts/GOAP/Agents/HumanAgent.cs" id="10_t1x1k"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_481g0"]
 height = 1.8
@@ -65,6 +65,5 @@ script = ExtResource("9_uswoj")
 
 [node name="InventoryManager" parent="." instance=ExtResource("10_bxnew")]
 
-[node name="Node" type="Node" parent="." node_paths=PackedStringArray("goals")]
-script = ExtResource("10_q1r5p")
-goals = []
+[node name="GoapAgent" type="Node" parent="."]
+script = ExtResource("10_t1x1k")

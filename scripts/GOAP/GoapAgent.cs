@@ -1,98 +1,87 @@
 using Godot;
 
+
 namespace Buffalobuffalo.scripts.GOAP
 {
-    public partial class GoapAgent : Node
-    {
-        /// <summary>
-        /// The action planner for the given Agent. Includes all available actions.
-        /// </summary>
-        private readonly GoapActionPlanner action_planner;
-        [Export]
-        private GoapAgent agent;
-        [Export]
-        private GoapGoal[] goals;
-        private GoapGoal current_goal;
-        private GoapAction[] current_plan;
-        private int current_plan_step = 0;
+    public partial class AgentState {
+        private readonly ConditionDict state;
 
-        public GoapAgent(GoapAgent _agent, GoapGoal[] _goals, GoapAction[] available_actions)
-        {
-            agent = _agent;
-            goals = _goals;
-
-            var planner = new GoapActionPlanner(_agent);
-            planner.SetActions(available_actions);
-            action_planner = planner;
+        public AgentState(ConditionDict initState) {
+            state = initState;
         }
 
-        public GoapAgent() {}
+        internal bool HasState(Condition condition, object val) {
+            if (state.TryGetValue(condition, out var curr_val)) {
+                // NOTE: We may need to change this equality for different values.
+                return curr_val.Equals(val);
+            }
+            return false;
+        }
+
+        internal void UpdateState(Condition condition, object val) {
+            state[condition] = val;
+        }
+    }
+    /// <summary>
+    /// The base class of the Agent.
+    /// </summary>
+    public abstract partial class GoapAgent : Node
+    {
+        private AgentState State;
+        public CharacterBody3D Actor { get; private set; }
+        public GoapGoal[] AvailableGoals { get; private set; }
+        public GoapAction[] AvailableActions { get; private set; }
+        public GoapAgentBrain Brain { get; private set; }
+        protected abstract GoapAction[] DefineDefaultActions();
+        protected abstract GoapGoal[] DefineDefaultGoals();
+
+        public GoapAgent(){}
 
         public override void _Ready()
         {
-            GD.Print("wow test");
+            Actor = (CharacterBody3D)GetParent();
+
+            AvailableActions = DefineDefaultActions();
+            AvailableGoals = DefineDefaultGoals();
+            State = DefineDefaultState();
+            
+            Brain = new GoapAgentBrain(this);
+
+            GD.Print("ok Agent loaded");
         }
 
         /// <summary>
-        /// On every loop this script checks if the current goal is still
-        /// the highest priority. if it's not, it requests a new plan
-        /// for the new high priority goal.
+        /// On every process cycle we should run our thinky brain!
         /// </summary>
-        /// <param name="delta"></param>        
-        public override void _Process(double delta)
-        {
-            var goal = GetBestGoal();
-            if (current_goal == null || goal != current_goal)
-            {
-                // TODO: Do we want a blackboard? Do we just use the agent state?
-                // GoapBlackboard blackboard = new GoapBlackboard();
-
-                current_goal = goal;
-                current_plan = action_planner.GetNewPlan(goal);
-                current_plan_step = 0;
-            }
-            else
-            {
-                FollowPlan(delta);
-            }
-        }
-
-        /// <summary>
-        /// Gets the best goal
-        /// </summary>
-        /// <returns></returns>
-        private GoapGoal GetBestGoal()
-        {
-            GoapGoal best_goal = null;
-
-            foreach (GoapGoal goal in goals)
-            {
-                if (goal.IsValid() && best_goal == null || goal.Priority() > best_goal.Priority())
-                {
-                    best_goal = goal;
-                }
-            }
-            return best_goal;
-        }
-
-        /// <summary>
-        /// Executes plan. This function is called on every game loop.
-        /// "plan" is the current list of actions, and delta is the time since last loop. <br/>
-        ///
-        /// Every action exposes a function called perform, which will return true when
-        /// the job is complete, so the agent can jump to the next action in the list.
-        /// </summary>
-        /// <param name="plan"></param>
         /// <param name="delta"></param>
-        private void FollowPlan(double delta)
-        {
-            if (current_plan.Length == 0) return;
+        public override void _Process(double delta) {
+            Brain.Process(delta);
+        }
 
-            var is_step_complete = current_plan[current_plan_step].Perform(agent, delta);
-            if (is_step_complete && current_plan_step < current_plan.Length - 1)
-            {
-                current_plan_step += 1;
-            }
+        /// <summary>
+        /// If the state is desired.
+        /// </summary>
+        public bool StateHasDesire(Condition condition, object val) {
+            return State.HasState(condition, val);
+        }
+
+        public void UpdateState(Condition condition, object val) {
+            State.UpdateState(condition, val);
+        }
+
+        protected virtual void SetAvailableGoals(GoapGoal[] _new_goals) {
+            AvailableGoals = _new_goals;
+        }
+
+        protected virtual void SetAvailableActions(GoapAction[] _new_actions) {
+            AvailableActions = _new_actions;
+            Brain.UpdateAvailableActions();
+        }
+
+        protected virtual AgentState DefineDefaultState()
+        {
+            var init_conditions = ConditionsProvider.GetDefaultConditions();
+            return new AgentState(init_conditions);
         }
     }
-}
+};

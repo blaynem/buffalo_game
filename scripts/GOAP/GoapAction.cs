@@ -1,10 +1,14 @@
-using System.Collections.Generic;
 using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP
 {
-    public abstract partial class GoapAction : Node
+    public abstract partial class GoapAction
     {
+        /// <summary>
+        /// Returns the actions name.
+        /// </summary>
+        /// <returns></returns>
+        public abstract string GetActionName();
         /// <summary>
         /// This indicates if the action should be considered or not.
         /// </summary>

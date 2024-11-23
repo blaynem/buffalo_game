@@ -18,6 +18,7 @@ namespace Buffalobuffalo.scripts.GOAP
         public GoapActionPlanner(GoapAgent _agent)
         {
             agent = _agent;
+            SetActions(agent.AvailableActions);
         }
 
         /// <summary>
@@ -83,10 +84,10 @@ namespace Buffalobuffalo.scripts.GOAP
                 return true;
             }
             // We're going to mark off each of the pieces from the blackboard
-            var current_state = step.CloneDesiredState();
+            var current_state = ConditionsProvider.CloneConditions(step.desired_state);
             GD.Print("Action Planner blackboard skipped");
             // todo: finish this check since blackboard doesn't really exit?
-            // foreach ((Condition condition, ConditionValue value) in current_state){
+            // foreach ((Condition condition, object value) in current_state){
             // }
             // If the blackboard has marked it off, we exit.
             if (current_state.Count == 0) return true;
@@ -95,27 +96,37 @@ namespace Buffalobuffalo.scripts.GOAP
             foreach (GoapAction action in available_actions)
             {
                 // Skip this action if it ain't valid.
-                if (action.IsValid()) continue;
+                if (!action.IsValid()) continue;
                 var effects = action.GetEffects();
-                // Doing annoying clone
-                var desired_state = JsonSerializer.Deserialize<ConditionDict>(JsonSerializer.Serialize(current_state));
+
+                var desired_state = ConditionsProvider.CloneConditions(current_state);
 
                 // Check if the action should be used
-                foreach ((Condition _name, _) in desired_state)
+                foreach ((Condition ds_name, object ds_val) in desired_state)
                 {
                     // TODO: Handle this correctly for bool / int values. if its an int, it needs to be subtracted or added.
-                    if (desired_state[_name].value == effects[_name].value)
+                    // If the key exists, then we need to handle it in a certain way.
+                    if (effects.TryGetValue(ds_name, out var effect_change))
                     {
-                        desired_state.Remove(_name);
+                        // If the effect is the same as the desired state, we can remove it.
+                        if (effect_change is bool && ds_val.Equals(effect_change)) {
+                            desired_state.Remove(ds_name);
+                        }
+                        // TODO: If string check
+                        // TODO: If int check
 
                         var preconditions = action.GetPreconditions();
                         // If there are none then we can return.
                         if (preconditions.Count == 0) return true;
                         // Adds actions preconditions to the desired_state.
-                        foreach ((Condition p, ConditionValue pv) in preconditions)
+                        foreach ((Condition p, object pv) in preconditions)
                         {
-                            // TODO: Handle if the precondition is already in desired state (bool/int options too)
-                            desired_state.Add(p, pv);
+                            if (pv is bool) {
+                                desired_state.Add(p, pv);
+                            } else {
+                                // TODO: Handle if the precondition is already in desired state (int options, etc)
+                                throw new System.NotImplementedException();
+                            }
                         }
 
                         // 
@@ -150,7 +161,12 @@ namespace Buffalobuffalo.scripts.GOAP
             {
                 dynamic plan = new ExpandoObject();
                 var plan_actions = Array.Empty<GoapAction>();
-                _ = plan_actions.Append(accomplisher.action);
+                // TODO: Finish this here.
+                if (accomplisher.isAction) {
+                    _ = plan_actions.Append(accomplisher.action);
+                } else {
+                    _ = plan_actions.Append(accomplisher.action);
+                }
                 plan.actions = plan_actions;
                 plans.Add(plan);
             }
@@ -169,7 +185,7 @@ namespace Buffalobuffalo.scripts.GOAP
             return plans;
         }
 
-        private GoapAction[] GetCheapestPlan(List<GoalAccomplisher> plans) {
+        private static GoapAction[] GetCheapestPlan(List<GoalAccomplisher> plans) {
             GoalAccomplisher best_plan = null;
             foreach (GoalAccomplisher p in plans) {
                 GD.Print("TODO: Print Plan", p);
@@ -209,11 +225,6 @@ namespace Buffalobuffalo.scripts.GOAP
                 action = null;
                 desired_state = _state;
                 isAction = false;
-            }
-            public ConditionDict CloneDesiredState()
-            {
-                var obj2 = JsonSerializer.Deserialize<ConditionDict>(JsonSerializer.Serialize(desired_state));
-                return obj2;
             }
         }
     }

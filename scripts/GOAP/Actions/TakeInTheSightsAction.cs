@@ -1,11 +1,15 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP.Actions
 {
-    public partial class PickUpItem : GoapAction
+    public partial class TakeInTheSightsAction : GoapAction
     {
-        public Node3D item = null;
+        public override string GetActionName()
+        {
+            return "TakeInTheSights";
+        }
 
         public override int GetCost(GoapAgent agent)
         {
@@ -14,7 +18,9 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
 
         public override ConditionDict GetEffects()
         {
-            return new ConditionDict();
+            return new ConditionDict(){
+                {Condition.WantsToViewSights, false}
+            };
         }
 
         public override ConditionDict GetPreconditions()
@@ -24,11 +30,13 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
 
         public override bool IsValid()
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
         public override bool Perform(GoapAgent agent, double delta)
         {
+            GD.Print("CANT PERFORM CUZ AINT IMPLEMENTATIONED!");
+
             throw new System.NotImplementedException();
         }
     }
