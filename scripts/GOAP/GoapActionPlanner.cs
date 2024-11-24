@@ -117,7 +117,13 @@ namespace Buffalobuffalo.scripts.GOAP
 
                         var preconditions = action.GetPreconditions();
                         // If there are none then we can return.
-                        if (preconditions.Count == 0) return true;
+                        if (preconditions.Count == 0) {
+                            // If the step is a goal, then we should assign the action that accomplishes it.
+                            if (!step.isAction) {
+                                step.action = action;
+                            }
+                            return true;
+                        }
                         // Adds actions preconditions to the desired_state.
                         foreach ((Condition p, object pv) in preconditions)
                         {
@@ -134,7 +140,10 @@ namespace Buffalobuffalo.scripts.GOAP
                         // If building the plan works, then we append it to the current step through the goals.
                         if (BuildPlan(new_root_goal, blackboard))
                         {
-                            _ = step.children.Append(action);
+                            if (!step.isAction) {
+                                GD.Print("----ANOTHER GOAL GOT HERE FIX?");
+                            }
+                            step.children = step.children.Append(action).ToArray();
                             has_followup = true;
                         }
                     }
@@ -157,18 +166,14 @@ namespace Buffalobuffalo.scripts.GOAP
         {
             var plans = new List<GoalAccomplisher>();
 
+            // GetCheapestPlan eventually returns the accomplisher.children, so we do some patching if there are none.
             if (accomplisher.children.Length <= 0)
             {
-                dynamic plan = new ExpandoObject();
-                var plan_actions = Array.Empty<GoapAction>();
-                // TODO: Finish this here.
-                if (accomplisher.isAction) {
-                    _ = plan_actions.Append(accomplisher.action);
-                } else {
-                    _ = plan_actions.Append(accomplisher.action);
-                }
-                plan.actions = plan_actions;
-                plans.Add(plan);
+                accomplisher.children = accomplisher.children.Append(accomplisher.action).ToArray();
+                accomplisher.total_cost = accomplisher.action.GetCost(agent);
+                plans.Add(accomplisher);
+
+                return plans;
             }
 
             foreach (GoapAction child in accomplisher.children)
@@ -176,7 +181,7 @@ namespace Buffalobuffalo.scripts.GOAP
                 var plan_holder = new GoalAccomplisher(accomplisher.action, accomplisher.desired_state);
                 foreach (GoalAccomplisher child_plan in GetActionsTotalCost(plan_holder, blackboard))
                 {
-                    _ = child_plan.children.Append(accomplisher.action);
+                    child_plan.children = child_plan.children.Append(accomplisher.action).ToArray();
                     child_plan.total_cost += accomplisher.action.GetCost(agent);
                     plans.Add(child_plan);
                 }
@@ -188,7 +193,6 @@ namespace Buffalobuffalo.scripts.GOAP
         private static GoapAction[] GetCheapestPlan(List<GoalAccomplisher> plans) {
             GoalAccomplisher best_plan = null;
             foreach (GoalAccomplisher p in plans) {
-                GD.Print("TODO: Print Plan", p);
                 if (best_plan == null || p.total_cost < best_plan.total_cost) {
                     best_plan = p;
                 }
