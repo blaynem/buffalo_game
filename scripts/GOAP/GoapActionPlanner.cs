@@ -61,7 +61,16 @@ namespace Buffalobuffalo.scripts.GOAP
             // BuildPlan does alter the `root_goal` action list.
             if (BuildPlan(root_goal, blackboard))
             {
-                var plans = GetActionsTotalCost(root_goal, blackboard);
+                // Grab the first action from the root goal, since it will always be the task. Though I could be wrong,
+                // so i'm going to add a check here just in case.
+                if (root_goal.Child_tasks.Count > 1)
+                {
+                    GD.PrintErr("AYYYYAAAA. Root goal has more child tasks?!");
+                }
+                var first_action = root_goal.Child_tasks[0];
+                Plan _plan = new(first_action);
+
+                var plans = GetActionsTotalCost(_plan, blackboard);
                 return GetCheapestPlan(plans);
             }
 
@@ -77,35 +86,37 @@ namespace Buffalobuffalo.scripts.GOAP
         {
             var has_followup = false;
             // If tasks desired_state is already met, we exit early.
-            if (accomplisher.current_state.Count == 0) return true;
+            if (accomplisher.Current_state.Count == 0) return true;
 
             // Let's mark off anything we have in the blackboard for the task, and check if it's completed.
             accomplisher.DoThingWithBlackboard(blackboard);
-            if (accomplisher.current_state.Count == 0) return true;
+            if (accomplisher.Current_state.Count == 0) return true;
 
-            var state = ConditionsProvider.CloneConditions(accomplisher.current_state);
+            var state = ConditionsProvider.CloneConditions(accomplisher.Current_state);
             // Next we loop over all the available actions to see if any of their effects
             // handle the state we want to get to.
             foreach (var action in available_actions)
             {
-                var current_state = ConditionsProvider.CloneConditions(state);
+                var desired_state = ConditionsProvider.CloneConditions(state);
                 // Skip this action if it ain't valid.
                 if (!action.IsValid) continue;
-                var useAction = ActionSatisfiesPartialState(current_state, action);
+                var useAction = ActionSatisfiesPartialState(desired_state, action);
 
-                if (useAction) {
+                if (useAction)
+                {
                     // Applying the action to the accomplisher returns our new state we need to solve for.
-                    current_state = ApplyAction(current_state, action);
+                    desired_state = ApplyAction(desired_state, action);
 
-                    TaskAccomplisher child_task = new(action, current_state);
+                    TaskAccomplisher child_task = new(action, desired_state);
                     // Apply the preconditions to the child task.
-                    child_task.current_state = ApplyPreconditions(child_task.current_state, action);
+                    child_task.Current_state = ApplyPreconditions(child_task.Current_state, action);
 
                     // If the child task is completed, it means this action was used and should be included.
                     // If it hasn't, we recursively call the BuildPlan so we can try to build up the state.
                     // If it cannot be built, then the action won't be included as a child task.
-                    var child_task_completed = child_task.current_state.Count == 0;
-                    if (child_task_completed || BuildPlan(child_task, blackboard)) {
+                    var child_task_completed = child_task.Current_state.Count == 0;
+                    if (child_task_completed || BuildPlan(child_task, blackboard))
+                    {
                         accomplisher.AddChildTask(child_task);
                         has_followup = true;
                     }
@@ -114,68 +125,58 @@ namespace Buffalobuffalo.scripts.GOAP
             return has_followup;
         }
 
-        private class Plan {
-            public TaskAccomplisher accomplisher;
-            public int cost = 0;
-            // TODO: This doesn't do anything yet.
-            // I thin kwe need to double check this is even making a tree..
-            public List<GoapAction> actions;
-
-            public Plan(TaskAccomplisher _accomplisher, int _cost) {
-                accomplisher = _accomplisher;
-                cost = _cost;
-            }
-        }
-
-        private List<Plan> GetActionsTotalCost(TaskAccomplisher accomplisher, dynamic blackboard)
+        private List<Plan> GetActionsTotalCost(Plan plan, dynamic blackboard)
         {
             var plans = new List<Plan>();
 
-            var test = accomplisher.CalculateTotalCost(agent);
-            // Read notes on paper.
+            // If there are no children, that means we're at the lowest node
+            // So set that plan and return.
+            if (plan.accomplisher.Child_tasks.Count <= 0)
+            {
+                GoapAction _action = (GoapAction)plan.accomplisher.Task;
+                Plan _plan = new();
+                _plan.actions.Add(_action);
+                _plan.cost = _action.GetCost(agent);
 
-            GD.Print("test");
+                plans.Add(_plan);
+                return plans;
+            }
 
-            // // If there are no children, we set the cost and push it to the plans.
-            // if (p.children.Count <= 0)
-            // {
-            //     GoapAction _action = (GoapAction) p.action;
-            //     Plan _plan = new(_action, _action.GetCost(agent));
-            //     plans.Add(_plan);
-            //     return plans;
-            // }
-
-            // // If there are children, we want to recurse through and get the costs,
-            // // adding the childs cost to the parents.
-            // foreach (var child in p.children)
-            // {
-            //     Plan _plan = new(child, child.GetCost(agent));
-            //     foreach (Plan child_plan in GetActionsTotalCost(_plan, blackboard))
-            //     {
-            //         if (p.action is GoapAction action && child_plan.action is GoapAction c_action) {
-            //             child_plan.actions.Add(action);
-            //             child_plan.cost += action.GetCost(agent);
-            //         }
-            //         plans.Add(child_plan);
-            //     }
-            // }
+            // If there are children, we want to recurse through and get the costs,
+            // adding the childs cost to the parents.
+            foreach (var child in plan.accomplisher.Child_tasks)
+            {
+                Plan _plan = new(child);
+                foreach (Plan child_plan in GetActionsTotalCost(_plan, blackboard))
+                {
+                    if (plan.accomplisher.Task is GoapAction action)
+                    {
+                        child_plan.actions.Add(action);
+                        child_plan.cost += action.GetCost(agent);
+                    }
+                    plans.Add(child_plan);
+                }
+            }
 
             return plans;
         }
 
-        public static ConditionDict ApplyAction(ConditionDict _curr_state, GoapAction action) {
-            // When an action gets added we should apply the `effects`
-            // As well as apply the `preconditions`.
-
+        public static ConditionDict ApplyAction(ConditionDict _curr_state, GoapAction action)
+        {
             var updated_state = ConditionsProvider.CloneConditions(_curr_state);
             // Loop through the current_state of the task and see if
             // any of the actions `effects` match up.
-            foreach ((Condition state_name, object state_val) in _curr_state) {
-                if (action.Effects.TryGetValue(state_name, out var effect_change)) {
+            foreach ((Condition state_name, object state_val) in _curr_state)
+            {
+                if (action.Effects.TryGetValue(state_name, out var effect_change))
+                {
                     // If the effect is the same as the desired state, we can remove it.
-                    if (effect_change is bool && state_val.Equals(effect_change)) {
+                    if (effect_change is bool && state_val.Equals(effect_change))
+                    {
                         updated_state.Remove(state_name);
-                    } else {
+                    }
+                    else
+                    {
                         // TODO: If string check
                         // TODO: If int check
                         GD.Print("AddAction: state change other than bool.");
@@ -186,16 +187,22 @@ namespace Buffalobuffalo.scripts.GOAP
             return updated_state;
         }
 
-        public static ConditionDict ApplyPreconditions(ConditionDict _curr_state, GoapAction action) {
-            if (action.Preconditions.Count == 0) {
+        public static ConditionDict ApplyPreconditions(ConditionDict _curr_state, GoapAction action)
+        {
+            if (action.Preconditions.Count == 0)
+            {
                 return _curr_state;
             }
 
             var updated_state = ConditionsProvider.CloneConditions(_curr_state);
-            foreach ((var p_name, var p_val) in action.Preconditions) {
-                if (p_val is bool) {
+            foreach ((var p_name, var p_val) in action.Preconditions)
+            {
+                if (p_val is bool)
+                {
                     updated_state.Add(p_name, p_val);
-                } else {
+                }
+                else
+                {
                     // TODO: Handle preconditions: int, object, etc
                     GD.Print("---AddAction: Precondition add attempt other than bool");
                     // updated_state.Add(p_name, p_val);
@@ -205,15 +212,21 @@ namespace Buffalobuffalo.scripts.GOAP
             return updated_state;
         }
 
-        public static bool ActionSatisfiesPartialState(ConditionDict _curr_state, GoapAction action) {
+        public static bool ActionSatisfiesPartialState(ConditionDict _curr_state, GoapAction action)
+        {
             // Loop through the current_state of the task and see if
             // any of the actions effects match up.
-            foreach ((var state_name, var state_val) in _curr_state) {
-                if (action.Effects.TryGetValue(state_name, out var effect_change)) {
+            foreach ((var state_name, var state_val) in _curr_state)
+            {
+                if (action.Effects.TryGetValue(state_name, out var effect_change))
+                {
                     // If the effect is the same as the desired state, we can remove it.
-                    if (effect_change is bool && state_val.Equals(effect_change)) {
+                    if (effect_change is bool && state_val.Equals(effect_change))
+                    {
                         return true;
-                    } else {
+                    }
+                    else
+                    {
                         // TODO: If string check
                         // TODO: If int check
                         GD.Print("ActionSatisfiesPartialState: state change other than bool.");
@@ -221,68 +234,78 @@ namespace Buffalobuffalo.scripts.GOAP
                     }
                 }
             }
-            
+
             // If the action satisfies a portion of the current_state or not.
             return false;
         }
 
-        private static List<GoapAction> GetCheapestPlan(List<Plan> plans) {
+        private static List<GoapAction> GetCheapestPlan(List<Plan> plans)
+        {
             Plan best_plan = null;
-            foreach (var p in plans) {
-                if (best_plan == null || p.cost < best_plan.cost) {
+            foreach (var p in plans)
+            {
+                if (best_plan == null || p.cost < best_plan.cost)
+                {
                     best_plan = p;
                 }
             }
             return best_plan.actions;
         }
 
+        // Lil box to hold some plans.
+        private class Plan
+        {
+            // The accomplisher
+            public TaskAccomplisher accomplisher;
+            // The actions required to complete the task
+            public List<GoapAction> actions = new();
+            public int cost = 0;
+
+            public Plan() { }
+            public Plan(TaskAccomplisher _accomplisher)
+            {
+                accomplisher = _accomplisher;
+            }
+        }
+
         // Lil box to store the goal / action we want to accomplish.
         private class TaskAccomplisher
         {
-            public List<TaskAccomplisher> child_tasks {get;private set;}= new();
+            public List<TaskAccomplisher> Child_tasks { get; private set; } = new();
             // State required to complete the task.
-            public ConditionDict current_state {get;set;}
+            public ConditionDict Current_state { get; set; }
             /// The actions needed to accomplish this task.
             private readonly ConditionDict desired_end_state;
             // A checklist of what state is completed by actions in the actions_list.
             // Task that the actions_list is going to accomplish.
             // Will either be the Action or Goal, we don't really need this.
             // Just for debugging easier.
-            public object task {get;private set;}
+            public object Task { get; private set; }
+            // Our task may be the parent most Goal or the Actions to complete it.
+            public bool IsGoal
+            {
+                get => Task is GoapGoal;
+            }
             public TaskAccomplisher(object _task, ConditionDict _state)
             {
                 desired_end_state = _state;
-                current_state = _state;
-                task = _task;
+                Current_state = _state;
+                Task = _task;
             }
 
-            public void AddChildTask(TaskAccomplisher child) {
-                child_tasks.Add(child);
+            public void AddChildTask(TaskAccomplisher child)
+            {
+                Child_tasks.Add(child);
             }
 
-            public void DoThingWithBlackboard(object blackboard) {
+            public void DoThingWithBlackboard(object blackboard)
+            {
                 var blackboard_checklist = ConditionsProvider.CloneConditions(desired_end_state);
                 GD.Print("Action Planner blackboard skipped");
                 // todo: finish this check since blackboard doesn't really exit?
                 // foreach ((Condition condition, object value) in current_state){
                 // }
                 // If the blackboard has marked it off, we exit.
-            }
-
-            public int CalculateTotalCost(GoapAgent agent) {
-                int total_cost = 0;
-
-                // Add the `task` cost, unles it's a goal.
-                if (task is GoapAction action) {
-                    total_cost += action.GetCost(agent);
-                }
-
-                foreach (var child in child_tasks) {
-                    var child_cost = child.CalculateTotalCost(agent);
-                    total_cost += child_cost;
-                }
-
-                return total_cost;
             }
         }
     }
