@@ -1,7 +1,9 @@
+using Buffalobuffalo.scripts.GOAP.Actions;
+using Buffalobuffalo.scripts.GOAP.Goals;
 using Godot;
 
 
-namespace Buffalobuffalo.scripts.GOAP
+namespace Buffalobuffalo.scripts.GOAP.Agents
 {
     public partial class AgentState {
         private readonly ConditionDict state;

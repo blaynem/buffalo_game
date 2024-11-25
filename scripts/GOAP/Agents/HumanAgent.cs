@@ -8,14 +8,17 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         protected override GoapAction[] DefineDefaultActions()
         {
             return new GoapAction[]{
-                new TakeInTheSightsAction()
+                // new Actions.TakeInTheSightsAction(),
+                new Actions.BuildFirePit(),
+                new Actions.CollectWood(),
             };
         }
 
         protected override GoapGoal[] DefineDefaultGoals()
         {
             return new GoapGoal[]{
-                new TakeInTheSightsGoal()
+                // new Goals.TakeInTheSightsGoal(),
+                new Goals.BuildFirePit(),
             };
         }
     }

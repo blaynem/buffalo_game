@@ -1,21 +1,17 @@
 using Buffalobuffalo.scripts.GOAP.Agents;
-using Godot;
 
-namespace Buffalobuffalo.scripts.GOAP.Actions
-{
-    public partial class TakeInTheSightsAction : GoapAction
+namespace Buffalobuffalo.scripts.GOAP.Actions {
+    public class CollectWood : GoapAction
     {
         protected override int Cost => 1;
-        public override ConditionDict Preconditions => new() { };
+        public override ConditionDict Preconditions => new(){};
 
         public override ConditionDict Effects => new(){
-            {Condition.WantsToViewSights, false}
+            {Condition.HasWood, true}
         };
 
         public override bool Perform(GoapAgent agent, double delta)
         {
-            GD.Print("CANT PERFORM CUZ AINT IMPLEMENTATIONED!");
-
             throw new System.NotImplementedException();
         }
     }

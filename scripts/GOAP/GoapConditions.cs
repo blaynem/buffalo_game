@@ -13,9 +13,11 @@ namespace Buffalobuffalo.scripts.GOAP
         {
             return new ConditionDict
             {
-                { Condition.HasItemInHand, false },   // Default value: not holding an item
-                { Condition.HungerLevel, 0 },        // Default value: no hunger
-                { Condition.WantsToViewSights, true } // Default value: not interested in viewing sights
+                { Condition.HasItemInHand, false },
+                { Condition.HungerLevel, 0 },
+                { Condition.WantsToViewSights, false },
+                { Condition.HasWood, false },
+                { Condition.HasFirepit, false },
             };
         }
 
@@ -39,5 +41,7 @@ namespace Buffalobuffalo.scripts.GOAP
         HasItemInHand,
         HungerLevel,
         WantsToViewSights,
+        HasWood,
+        HasFirepit,
     }
 }

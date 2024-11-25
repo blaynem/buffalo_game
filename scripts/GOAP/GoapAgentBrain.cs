@@ -1,4 +1,7 @@
-using Godot;
+using System.Collections.Generic;
+using Buffalobuffalo.scripts.GOAP.Actions;
+using Buffalobuffalo.scripts.GOAP.Agents;
+using Buffalobuffalo.scripts.GOAP.Goals;
 
 namespace Buffalobuffalo.scripts.GOAP
 {
@@ -10,7 +13,7 @@ namespace Buffalobuffalo.scripts.GOAP
         private GoapActionPlanner action_planner;
         private GoapAgent agent;
         private GoapGoal current_goal;
-        private GoapAction[] current_plan;
+        private List<GoapAction> current_plan;
         private int current_plan_step = 0;
 
         public GoapAgentBrain(GoapAgent _agent)
@@ -59,7 +62,7 @@ namespace Buffalobuffalo.scripts.GOAP
 
             foreach (GoapGoal goal in agent.AvailableGoals)
             {
-                if (goal.IsValid(agent) && best_goal == null || goal.Priority() > best_goal?.Priority())
+                if (goal.IsValid(agent) && best_goal == null || goal.GetPriority() > best_goal?.GetPriority())
                 {
                     best_goal = goal;
                 }
@@ -78,10 +81,10 @@ namespace Buffalobuffalo.scripts.GOAP
         /// <param name="delta"></param>
         private void FollowPlan(double delta)
         {
-            if (current_plan.Length == 0) return;
+            if (current_plan.Count == 0) return;
 
             var is_step_complete = current_plan[current_plan_step].Perform(agent, delta);
-            if (is_step_complete && current_plan_step < current_plan.Length - 1)
+            if (is_step_complete && current_plan_step < current_plan.Count - 1)
             {
                 current_plan_step += 1;
             }

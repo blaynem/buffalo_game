@@ -1,19 +1,22 @@
-
 using Buffalobuffalo.scripts.GOAP.Agents;
-using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP.Goals
 {
-    public partial class TakeInTheSightsGoal : GoapGoal
+    public partial class BuildFirePit : GoapGoal
     {
         protected override int Priority => 1;
         public override ConditionDict DesiredState => new(){
-            { Condition.WantsToViewSights, false }
+            { Condition.HasFirepit, true }
         };
+
+        public override int GetPriority()
+        {
+            return base.GetPriority();
+        }
 
         public override bool IsValid(GoapAgent agent)
         {
-            return agent.StateHasDesire(Condition.WantsToViewSights, true);
+            return agent.StateHasDesire(Condition.HasFirepit, false);
         }
     }
 }
