@@ -18,6 +18,7 @@ namespace Buffalobuffalo.scripts.GOAP
                 { Condition.WantsToViewSights, false },
                 { Condition.HasWood, false },
                 { Condition.HasFirepit, false },
+                { Condition.HasAxe, false },
             };
         }
 
@@ -43,5 +44,6 @@ namespace Buffalobuffalo.scripts.GOAP
         WantsToViewSights,
         HasWood,
         HasFirepit,
+        HasAxe,
     }
 }

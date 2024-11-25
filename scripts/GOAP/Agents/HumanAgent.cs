@@ -9,8 +9,10 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         {
             return new GoapAction[]{
                 // new Actions.TakeInTheSightsAction(),
-                new Actions.BuildFirePit(),
                 new Actions.CollectWood(),
+                new Actions.CollectAxe(),
+                new Actions.ChopWood(),
+                new Actions.BuildFirePit(),
             };
         }
 
