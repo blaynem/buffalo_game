@@ -1,5 +1,14 @@
 # How to do things!
 
+## Setup
+- Ensure you have an exported var in your terminal for `GODOT4`. Mine is `export GODOT4="/Applications/godot.app/Contents/MacOS/Godot"`
+- Few extensions to install:
+	- `C# Dev Kit` by Microsoft, `.NET Install Tool` by Microsoft, `godot-tools` by Geequlim
+
+## FAQ
+**Why can't I access my C# code in gdscript?**
+You can, nerd! Just need to build it. Press Ctrl + Shift + B (or Cmd + Shift + B on macOS) and click `build`.
+
 ## TODO:
 - Cleanup items / Personalities to be a resource: https://www.youtube.com/watch?v=4vAkTHeoORk&ab_channel=Godotneers
 
