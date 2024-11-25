@@ -8,7 +8,7 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
         /// Action Cost<br/>
         /// If you need to do a calculation on the Priority, override the GetCost.
         /// </summary>
-        protected abstract int Priority {get;}
+        protected abstract int Priority { get; }
         /// <summary>
         /// This indicates if the action should be considered or not.
         /// </summary>
@@ -18,14 +18,15 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
         /// I.e. Actions "effects" will apply these conditions.
         /// </summary>
         /// <returns>Dictionary of Conditions and object</returns>
-        public abstract ConditionDict DesiredState {get;}
+        public abstract ConditionDict DesiredState { get; }
 
         /// <summary>
         /// Action Cost<br/>
         /// Should be >= 1.
         /// </summary>
         // TODO: May need to add the blackboard back in for the priority calc.
-        public virtual int GetPriority() {
+        public virtual int GetPriority()
+        {
             return Priority;
         }
 
@@ -33,7 +34,8 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
         /// Returns the goals name.
         /// </summary>
         /// <returns></returns>
-        public virtual string GetGoalName() {
+        public virtual string GetGoalName()
+        {
             return GetType().Name;
         }
     }

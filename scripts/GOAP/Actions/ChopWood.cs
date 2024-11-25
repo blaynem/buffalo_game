@@ -1,6 +1,7 @@
 using Buffalobuffalo.scripts.GOAP.Agents;
 
-namespace Buffalobuffalo.scripts.GOAP.Actions {
+namespace Buffalobuffalo.scripts.GOAP.Actions
+{
     public class ChopWood : GoapAction
     {
         protected override int Cost => 1;

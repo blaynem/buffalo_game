@@ -8,12 +8,12 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
         /// The cost of the Action.<br/>
         /// If you need to do a calculation on the Cost, override the GetCost.
         /// </summary>
-        protected abstract int Cost {get;}
+        protected abstract int Cost { get; }
         /// <summary>
         /// Requirements for action to be completed. <br/>
         /// Example: { has_wood: true }
         /// </summary>
-        public abstract ConditionDict Preconditions {get;}
+        public abstract ConditionDict Preconditions { get; }
         /// <summary>
         /// What conditions this action satisfies <br/>
         ///
@@ -22,17 +22,18 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
         ///   "has_wood": true
         /// }
         /// </summary>
-        public abstract ConditionDict Effects {get;}
+        public abstract ConditionDict Effects { get; }
         /// <summary>
         /// This indicates if the action should be considered or not.
         /// </summary>
-        public virtual bool IsValid {get;} = true;
-        
+        public virtual bool IsValid { get; } = true;
+
         /// <summary>
         /// Action Cost<br/>
         /// Should be >= 1.
         /// </summary>
-        public virtual int GetCost(GoapAgent agent) {
+        public virtual int GetCost(GoapAgent agent)
+        {
             return Cost;
         }
 
@@ -49,7 +50,8 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
         /// Returns the actions name.
         /// </summary>
         /// <returns></returns>
-        public virtual string GetActionName() {
+        public virtual string GetActionName()
+        {
             return GetType().Name;
         }
     }

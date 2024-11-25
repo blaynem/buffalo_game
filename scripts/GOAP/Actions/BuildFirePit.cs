@@ -1,9 +1,10 @@
 using Buffalobuffalo.scripts.GOAP.Agents;
 
-namespace Buffalobuffalo.scripts.GOAP.Actions {
+namespace Buffalobuffalo.scripts.GOAP.Actions
+{
     public partial class BuildFirePit : GoapAction
     {
-         protected override int Cost => 1;
+        protected override int Cost => 1;
         public override ConditionDict Preconditions => new(){
             {Condition.HasWood, true}
         };

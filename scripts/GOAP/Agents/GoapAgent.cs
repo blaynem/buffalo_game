@@ -53,10 +53,10 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         }
 
         /// <summary>
-        /// On every process cycle we should run our thinky brain!
+        /// On every physics process cycle we should run our thinky brain!
         /// </summary>
         /// <param name="delta"></param>
-        public override void _Process(double delta) {
+        public override void _PhysicsProcess(double delta) {
             Brain.Process(delta);
         }
 
