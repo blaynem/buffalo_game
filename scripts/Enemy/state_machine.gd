@@ -7,6 +7,7 @@ var states: Dictionary = {}
 var potential_states := EnemyStateMap.new()
 
 func _ready() -> void:
+	pass;
 	# Loop through all children of the StateMachine node
 	for child in get_children():
 		if child is EnemyState:
