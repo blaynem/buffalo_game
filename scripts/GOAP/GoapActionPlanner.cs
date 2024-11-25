@@ -74,15 +74,15 @@ namespace Buffalobuffalo.scripts.GOAP
         /// We recurse through the goal_step, building up a list of actions needed to complete each step.
         /// </summary>
         /// <returns>True if the plan was able to be built successfully.</returns>
-        private bool BuildPlan(TaskAccomplisher task, dynamic blackboard)
+        private bool BuildPlan(TaskAccomplisher accomplisher, dynamic blackboard)
         {
             var has_followup = false;
             // If tasks desired_state is already met, we exit early.
-            if (task.TaskCompleted()) return true;
+            if (accomplisher.TaskCompleted()) return true;
 
             // Let's mark off anything we have in the blackboard for the task, and check if it's completed.
-            task.DoThingWithBlackboard(blackboard);
-            if (task.TaskCompleted()) return true;
+            accomplisher.DoThingWithBlackboard(blackboard);
+            if (accomplisher.TaskCompleted()) return true;
 
             // Next we loop over all the available actions to see if any of their effects
             // handle the state we want to get to.
@@ -90,17 +90,22 @@ namespace Buffalobuffalo.scripts.GOAP
             {
                 // Skip this action if it ain't valid.
                 if (!action.IsValid) continue;
-                var useAction = task.ActionSatisfiesPartialState(action);
+                var useAction = accomplisher.ActionSatisfiesPartialState(action);
 
                 if (useAction) {
-                    var updated_state = task.ApplyAction(action);
-                    TaskAccomplisher child_task = new(action, updated_state);
+                    // Applying the action to the accomplisher returns our new state we need to solve for.
+                    var desired_child_state = accomplisher.ApplyAction(action);
 
-                    // If the task is completed, it means this action was used and should be included.
+                    TaskAccomplisher child_task = new(action, desired_child_state);
+                    // Apply the preconditions to the child task.
+                    child_task.ApplyPreconditions(action);
+
+                    // If the child task is completed, it means this action was used and should be included.
                     // If it hasn't, we recursively call the BuildPlan so we can try to build up the state.
                     // If it cannot be built, then the action won't be included as a child task.
-                    if (task.TaskCompleted() || BuildPlan(child_task, blackboard)) {
-                        task.AddChildTask(child_task);
+                    var task_completed = child_task.TaskCompleted();
+                    if (child_task.TaskCompleted() || BuildPlan(child_task, blackboard)) {
+                        accomplisher.AddChildTask(child_task);
                         has_followup = true;
                     }
                 }
@@ -217,7 +222,6 @@ namespace Buffalobuffalo.scripts.GOAP
                 // As well as apply the `preconditions`.
 
                 var updated_state = ConditionsProvider.CloneConditions(current_state);
-                bool satisfies_partial = false;
                 // Loop through the current_state of the task and see if
                 // any of the actions `effects` match up.
                 foreach ((Condition state_name, object state_val) in current_state) {
@@ -230,26 +234,30 @@ namespace Buffalobuffalo.scripts.GOAP
                             // TODO: If int check
                             GD.Print("AddAction: state change other than bool.");
                         }
-                        satisfies_partial = true;
                     }
                 }
 
-                if (satisfies_partial) {
-                    // Add the `preconditions` to updated_state
-                    foreach ((var p_name, var p_val) in action.Preconditions) {
-                        if (p_val is bool) {
-                            updated_state.Add(p_name, p_val);
-                        } else {
-                            // TODO: Handle preconditions: int, object, etc
-                            GD.Print("---AddAction: Precondition add attempt other than bool");
-                            // updated_state.Add(p_name, p_val);
-                        }
-                    }
+                current_state = updated_state;
+                return current_state;
+            }
 
-                    // Assign the updated_state to the current state.
-                    current_state = updated_state;
+            public ConditionDict ApplyPreconditions(GoapAction action) {
+                if (action.Preconditions.Count == 0) {
+                    return current_state;
                 }
-                
+
+                var updated_state = ConditionsProvider.CloneConditions(current_state);
+                foreach ((var p_name, var p_val) in action.Preconditions) {
+                    if (p_val is bool) {
+                        updated_state.Add(p_name, p_val);
+                    } else {
+                        // TODO: Handle preconditions: int, object, etc
+                        GD.Print("---AddAction: Precondition add attempt other than bool");
+                        // updated_state.Add(p_name, p_val);
+                    }
+                }
+
+                current_state = updated_state;
                 return current_state;
             }
 
