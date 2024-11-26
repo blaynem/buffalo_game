@@ -23,12 +23,10 @@ func _stupid_status_display_hack_pls_delete(_status: String) -> void:
 	enemy.display_status = _status
 
 func _process(delta: float) -> void:
-	return;
 	if current_state:
 		current_state.update(delta);
 	
 func _physics_process(delta: float) -> void:
-	return;
 	if current_state:
 		current_state.physics_update(delta);
 
