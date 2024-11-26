@@ -1,9 +1,10 @@
-using Buffalobuffalo.scripts.GOAP.Agents;
-
+using System;
 namespace Buffalobuffalo.scripts.GOAP.Actions
 {
-    public class ChopWood : GoapAction
+    public partial class ChopWood : GoapAction
     {
+        public ChopWood(Func<double, bool> callback) : base(callback) {}
+
         protected override int Cost => 1;
         public override ConditionDict Preconditions => new(){
             {Condition.HasAxe, true}
@@ -12,10 +13,5 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
         public override ConditionDict Effects => new(){
             {Condition.HasWood, true}
         };
-
-        public override bool Perform(GoapAgent agent, double delta)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

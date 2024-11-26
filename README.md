@@ -9,6 +9,35 @@
 **Why can't I access my C# code in gdscript?**
 You can, nerd! Just need to build it. Press Ctrl + Shift + B (or Cmd + Shift + B on macOS) and click `build`.
 
+**Okay, but I really can't see it even after building.. why?**
+It's possible you're not extending a Godot native type like `Node`, `Resource`, etc.
+It's also likely because the type you're trying to use is not compatible. Take the below examples.
+```c#
+// Can be seen
+public bool BoolTest(bool test) {
+    return test;
+}
+
+// Can be seen
+public GodotObject TestGodotObj(GodotObject test) {
+    return test;
+}
+
+// Cannot be seen. As object is not a known gdscript construct.
+public object TestObject(object test) {
+    return test;
+}
+
+// Then in GDScript
+const GoapAgent := preload("res://scripts/GOAP/Agents/GoapAgent.cs");
+var goapAgent := GoapAgent.new();
+goapAgent.BoolTest(false);
+goapAgent.TestGodotObj(Object.new());
+// Does not work.
+goapAgent.TestObject(Object.new());
+```
+
+
 ## TODO:
 - Cleanup items / Personalities to be a resource: https://www.youtube.com/watch?v=4vAkTHeoORk&ab_channel=Godotneers
 

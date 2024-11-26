@@ -1,19 +1,16 @@
-using Buffalobuffalo.scripts.GOAP.Agents;
+using System;
 
 namespace Buffalobuffalo.scripts.GOAP.Actions
 {
-    public class CollectAxe : GoapAction
+    public partial class CollectAxe : GoapAction
     {
+        public CollectAxe(Func<double, bool> callback) : base(callback) {}
+
         protected override int Cost => 1;
         public override ConditionDict Preconditions => new() { };
 
         public override ConditionDict Effects => new(){
             {Condition.HasAxe, true}
         };
-
-        public override bool Perform(GoapAgent agent, double delta)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

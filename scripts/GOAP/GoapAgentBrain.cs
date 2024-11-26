@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Buffalobuffalo.scripts.GOAP.Actions;
 using Buffalobuffalo.scripts.GOAP.Agents;
 using Buffalobuffalo.scripts.GOAP.Goals;
+using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP
 {
@@ -19,13 +20,14 @@ namespace Buffalobuffalo.scripts.GOAP
         public GoapAgentBrain(GoapAgent _agent)
         {
             agent = _agent;
+            action_planner = new GoapActionPlanner(agent);
 
             UpdateAvailableActions();
         }
 
         public void UpdateAvailableActions() {
-            var planner = new GoapActionPlanner(agent);
-            action_planner = planner;
+            action_planner.available_actions = agent.AvailableActions;
+            // TODO: If the actions change, we are gonna need to change the goals.
         }
 
         /// <summary>
@@ -83,7 +85,7 @@ namespace Buffalobuffalo.scripts.GOAP
         {
             if (current_plan.Count == 0) return;
 
-            var is_step_complete = current_plan[current_plan_step].Perform(agent, delta);
+            var is_step_complete = current_plan[current_plan_step].Perform(delta);
             if (is_step_complete && current_plan_step < current_plan.Count - 1)
             {
                 current_plan_step += 1;

@@ -1,9 +1,14 @@
+using System;
 using Buffalobuffalo.scripts.GOAP.Agents;
 
 namespace Buffalobuffalo.scripts.GOAP.Actions
 {
     public abstract partial class GoapAction
     {
+        protected Func<double, bool> performCallback;
+        public GoapAction(Func<double, bool> callback) {
+            performCallback = callback;
+        }
         /// <summary>
         /// The cost of the Action.<br/>
         /// If you need to do a calculation on the Cost, override the GetCost.
@@ -42,9 +47,13 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
         /// "agent" is the NPC using the AI
         /// "delta" is the time in seconds since last loop. <br/>
         ///
-        /// Returns true when the task is complete.
+        /// Returns the variant of the perform from GDScript.
         /// </summary>
-        public abstract bool Perform(GoapAgent agent, double delta);
+        public virtual bool Perform(double delta) {
+            // The callback should return a boolean, so we can convert it to one.
+            return performCallback(delta);
+        }
+        
 
         /// <summary>
         /// Returns the actions name.

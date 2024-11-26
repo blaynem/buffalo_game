@@ -11,12 +11,9 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
             { Condition.HasItemInHand, target_item }
         };
 
-
         private GodotObject target_item = null;
-
-        public PickUpItemGoal(GodotObject item)
-        {
-            target_item = item;
+        public void SetTargetItem(GodotObject _target_item) {
+            target_item = _target_item;
         }
 
         public override bool IsValid(GoapAgent agent)

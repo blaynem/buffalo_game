@@ -2,15 +2,15 @@ using System;
 
 namespace Buffalobuffalo.scripts.GOAP.Actions
 {
-    public partial class CollectWood : GoapAction
+    public partial class TakeInTheSights : GoapAction
     {
-        public CollectWood(Func<double, bool> callback) : base(callback) {}
+        public TakeInTheSights(Func<double, bool> callback) : base(callback) {}
 
         protected override int Cost => 1;
         public override ConditionDict Preconditions => new() { };
 
         public override ConditionDict Effects => new(){
-            {Condition.HasWood, true}
+            {Condition.WantsToViewSights, false}
         };
     }
 }
