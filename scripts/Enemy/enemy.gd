@@ -3,7 +3,6 @@ extends CharacterBody3D
 
 @onready var nameplate: Nameplate = $Nameplate
 @onready var item_hold_position: Marker3D = $CarryObjetMarker
-@onready var state_machine: EnemyStateMachine = %StateMachine
 @onready var enemy_item_interaction_area: Area3D = %EnemyItemInteractionArea
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var model: EnemyBaseModel = $BoneManModel
@@ -46,7 +45,6 @@ func _ready() -> void:
 
 func _setup_signals() -> void:
 	NavigationServer3D.map_changed.connect(_on_navigation_map_ready)
-	SignalBus.EnemyStateMachineTransitioned.connect(_on_child_transition)
 	ragdoll_handler.RagdollChange.connect(_handle_ragdoll_change)
 
 func _setup_personality() -> void:
@@ -72,12 +70,6 @@ func _handle_ragdoll_change(is_ragdolled: bool) -> void:
 		is_stunned = false
 		self.set_collision_mask_value(CollisionMap.player, true)
 		model.play_walk_animation()
-
-# This is the connect method of Transitioned, the new_state is a Dictionary of {name, class}
-func _on_child_transition(enemy_id: int, state: EnemyState, new_state: Dictionary) -> void:
-	if enemy_id == get_instance_id():
-		display_status = new_state.name
-		_update_nameplate()
 
 func _update_nameplate() -> void:
 	nameplate.update_content(display_name)
@@ -122,12 +114,6 @@ func _physics_process(delta: float) -> void:
 		if direction != Vector3.ZERO:
 			var target_rotation_y := atan2(direction.x, direction.z)
 			rotation.y = lerp_angle(rotation.y, target_rotation_y, 0.1)
-	
-		# If the goal is to follow a player, enemy doesn't get too close
-		var _dist := (target_location - global_position).length()
-		if state_machine.current_state is EnemyFollow:
-			if _dist <= personality.move_closer_radius:
-				velocity = Vector3.ZERO
 		
 	_handle_animations(delta)
 	move_and_slide()

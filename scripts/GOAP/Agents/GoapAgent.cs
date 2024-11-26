@@ -58,6 +58,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         /// <param name="delta"></param>
         public override void _PhysicsProcess(double delta) {
             Brain.Process(delta);
+            SetTargetLocation(new Vector3((float)10.0,(float)1.0,(float)10.0));
         }
 
         /// <summary>
@@ -84,6 +85,10 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         {
             var init_conditions = ConditionsProvider.GetDefaultConditions();
             return new AgentState(init_conditions);
+        }
+
+        public void SetTargetLocation(Vector3 location) {
+            Actor.Call("set_target_location", location);
         }
     }
 };

@@ -18,16 +18,7 @@ namespace Buffalobuffalo.scripts.GOAP
         public GoapActionPlanner(GoapAgent _agent)
         {
             agent = _agent;
-            SetActions(agent.AvailableActions);
-        }
-
-        /// <summary>
-        /// Updates the actions list with potential
-        /// </summary>
-        /// <param name="available_actions"></param>
-        public void SetActions(GoapAction[] _available_actions)
-        {
-            available_actions = _available_actions;
+            available_actions = agent.AvailableActions;
         }
 
         /// <summary>

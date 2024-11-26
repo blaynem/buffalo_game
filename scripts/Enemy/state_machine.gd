@@ -7,7 +7,6 @@ var states: Dictionary = {}
 var potential_states := EnemyStateMap.new()
 
 func _ready() -> void:
-	pass;
 	# Loop through all children of the StateMachine node
 	for child in get_children():
 		if child is EnemyState:
@@ -24,10 +23,12 @@ func _stupid_status_display_hack_pls_delete(_status: String) -> void:
 	enemy.display_status = _status
 
 func _process(delta: float) -> void:
+	return;
 	if current_state:
 		current_state.update(delta);
 	
 func _physics_process(delta: float) -> void:
+	return;
 	if current_state:
 		current_state.physics_update(delta);
 

@@ -11,24 +11,35 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         protected override GoapAction[] DefineDefaultActions()
         {
             return new GoapAction[]{
-                // new Actions.TakeInTheSights(),
-                new Actions.CollectWood(TempPerform),
-                new Actions.CollectAxe(TempPerform),
-                new Actions.ChopWood(TempPerform),
-                new Actions.BuildFirePit(TempPerform),
+                new Actions.TakeInTheSights(TakeInTheSights),
+                new Actions.CollectWood(CollectWood),
+                new Actions.CollectAxe(CollectAxe),
+                new Actions.ChopWood(ChopWood),
+                new Actions.BuildFirePit(BuildFirePit),
             };
         }
 
         protected override GoapGoal[] DefineDefaultGoals()
         {
             return new GoapGoal[]{
-                // new Goals.TakeInTheSightsGoal(),
+                new Goals.TakeInTheSightsGoal(),
                 new Goals.BuildFirePit(),
             };
         }
 
-        public static bool TempPerform(double delta) {
-            GD.Print("Performing action...");
+        public static bool TakeInTheSights(double delta) {
+            return true;
+        }
+        public static bool CollectWood(double delta) {
+            return true;
+        }
+        public static bool CollectAxe(double delta) {
+            return true;
+        }
+        public static bool ChopWood(double delta) {
+            return true;
+        }
+        public static bool BuildFirePit(double delta) {
             return true;
         }
     }
