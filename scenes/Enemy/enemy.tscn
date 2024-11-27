@@ -48,5 +48,5 @@ script = ExtResource("9_uswoj")
 
 [node name="InventoryManager" parent="." instance=ExtResource("10_bxnew")]
 
-[node name="GoapAgent" type="Node" parent="."]
+[node name="HumanAgent" type="Node" parent="."]
 script = ExtResource("10_t1x1k")

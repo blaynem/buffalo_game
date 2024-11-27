@@ -18,7 +18,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1013, 0, 1.39351)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.06285, 0, 1.39351)
 
 [node name="CommonTree_13" parent="." instance=ExtResource("4_qhhj2")]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 4.70675, 0, 1.39351)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.70675, 0, 1.39351)
 
 [node name="Pebble_Round_12" parent="." instance=ExtResource("5_6o7eh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.954141, 0, 3.49409)
