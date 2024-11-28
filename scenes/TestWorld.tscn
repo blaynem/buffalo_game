@@ -156,46 +156,23 @@ transform = Transform3D(1, 0, 0, 0, -0.479427, 0.877582, 0, -0.877582, -0.479427
 shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("4_mkff5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.063, 0, 14.875)
-
-[node name="GoalItems" type="Node" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.68425, 0, 23.886)
 
 [node name="Enemies" type="Node" parent="."]
 
-[node name="Markers" type="Node" parent="."]
+[node name="Relics" type="Node" parent="."]
 
-[node name="GoalItemSpawns" type="Node" parent="Markers"]
+[node name="Relic" parent="Relics" instance=ExtResource("9_dc0ms")]
+transform = Transform3D(0.996672, 0, -0.0815202, 0, 1, 0, 0.0815202, 0, 0.996672, 2.0891, 7.2967, 5.52057)
 
-[node name="Marker3D" type="Marker3D" parent="Markers/GoalItemSpawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5598, 0, -3.11789)
+[node name="Relic2" parent="Relics" instance=ExtResource("9_dc0ms")]
+transform = Transform3D(0.660788, 0, -0.750573, 0, 1, 0, 0.750573, 0, 0.660788, -35.6635, 4.11228, 36.5201)
 
-[node name="Marker3D2" type="Marker3D" parent="Markers/GoalItemSpawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5598, 0, -10.3183)
+[node name="Relic3" parent="Relics" instance=ExtResource("9_dc0ms")]
+transform = Transform3D(0.0722805, 0, 0.997384, 0, 1, 0, -0.997384, 0, 0.0722805, -15.2509, 4.11228, -4.12928)
 
-[node name="Marker3D3" type="Marker3D" parent="Markers/GoalItemSpawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7302, 0, -12.7022)
+[node name="Relic4" parent="Relics" instance=ExtResource("9_dc0ms")]
+transform = Transform3D(0.995802, 0, 0.0915361, 0, 1, 0, -0.0915361, 0, 0.995802, -18.529, 7.65556, -23.3768)
 
-[node name="Marker3D4" type="Marker3D" parent="Markers/GoalItemSpawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.44507, 0, -8.15661)
-
-[node name="Marker3D5" type="Marker3D" parent="Markers/GoalItemSpawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6652, 0, -8.15661)
-
-[node name="Marker3D6" type="Marker3D" parent="Markers/GoalItemSpawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.42887, 3.69193, 9.05953)
-
-[node name="EnemySpawns" type="Node" parent="Markers"]
-
-[node name="Marker3D" type="Marker3D" parent="Markers/EnemySpawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.59297, 0, -0.121193)
-
-[node name="Marker3D2" type="Marker3D" parent="Markers/EnemySpawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.59297, 0, 2.7742)
-
-[node name="Marker3D3" type="Marker3D" parent="Markers/EnemySpawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.59297, 0, 6.06659)
-
-[node name="GoalEndingSpawns" type="Node" parent="Markers"]
-
-[node name="Marker3D" type="Marker3D" parent="Markers/GoalEndingSpawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.1832, 0, 4.59456)
+[node name="Relic5" parent="Relics" instance=ExtResource("9_dc0ms")]
+transform = Transform3D(-0.732234, 0, -0.681053, 0, 1, 0, 0.681053, 0, -0.732234, 15.7624, 4.11228, -38.617)

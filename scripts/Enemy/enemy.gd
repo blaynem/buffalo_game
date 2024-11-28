@@ -9,7 +9,6 @@ extends CharacterBody3D
 @onready var ragdoll_handler: EnemyRagdollHandler = $RagdollHandler
 @onready var inventory_manager: InventoryManager = $InventoryManager
 
-@export var goal_manager: EnemyGoalManager;
 ## If true, the enemy can not take any actions.
 @export var is_stunned: bool = true
 @export var personality: EnemyPersonality;
@@ -22,13 +21,14 @@ var target_location: Vector3;
 var nav_map_ready := false;
 var held_item: CarriableEnemyGoalItem = null;
 
-func get_current_goal() -> EnemyGoal:
-	if goal_manager:
-		var current_goal := goal_manager.get_current_goal();
-		if current_goal:
-			nameplate.update_sub_content(current_goal.name)
-		return current_goal
-	return null;
+# If true, is following the path, rather than going towards the target_location (usually their goal
+var is_following_path: bool = true;
+var follow_path: PathFollow3D;
+var performing_action := false;
+
+# If true, can be called by a nearby relic.
+var can_be_called_by_relic := true;
+var last_called_relic: Relic;
 
 func set_target_location(location: Vector3) -> void:
 	target_location = location
