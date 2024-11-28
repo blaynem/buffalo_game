@@ -29,7 +29,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
     /// </summary>
     public abstract partial class GoapAgent : Node
     {
-        private AgentState State;
+        public AgentState State {get; private set;}
         public CharacterBody3D Actor { get; private set; }
         public GoapGoal[] AvailableGoals { get; private set; }
         public GoapAction[] AvailableActions { get; private set; }
@@ -61,22 +61,12 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             Brain.Process(delta);
         }
 
-        /// <summary>
-        /// If the state is desired.
-        /// </summary>
-        public bool StateHasDesire(Condition condition, object val) {
-            return State.HasState(condition, val);
-        }
-
-        public void UpdateState(Condition condition, object val) {
-            State.UpdateState(condition, val);
-        }
-
-        protected virtual void SetAvailableGoals(GoapGoal[] _new_goals) {
+        public virtual void SetAvailableGoals(GoapGoal[] _new_goals) {
             AvailableGoals = _new_goals;
+            Brain.ResetCurrentGoal();
         }
 
-        protected virtual void SetAvailableActions(GoapAction[] _new_actions) {
+        public virtual void SetAvailableActions(GoapAction[] _new_actions) {
             AvailableActions = _new_actions;
             Brain.UpdateAvailableActions();
         }

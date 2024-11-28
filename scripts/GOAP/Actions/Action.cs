@@ -7,8 +7,13 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
     public abstract partial class GoapAction
     {
         protected Func<double, bool> performCallback;
-        public GoapAction(Func<double, bool> callback) {
-            performCallback = callback;
+        /// <summary>
+        /// Takes in a cb that will be fired when the action is attempted via GOAP.<br/>
+        /// Func takes in the delta, returns true if action is completed.
+        /// </summary>
+        /// <param name="action_callback"></param>
+        public GoapAction(Func<double, bool> action_callback) {
+            performCallback = action_callback;
         }
         /// <summary>
         /// The cost of the Action.<br/>

@@ -11,11 +11,11 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         protected override GoapAction[] DefineDefaultActions()
         {
             return new GoapAction[]{
-                new Actions.TakeInTheSights(TakeInTheSights),
-                new Actions.CollectWood(CollectWood),
-                new Actions.CollectAxe(CollectAxe),
-                new Actions.ChopWood(ChopWood),
-                new Actions.BuildFirePit(BuildFirePit),
+                new Actions.TakeInTheSights(TakeInTheSightsCb),
+                new Actions.CollectWood(CollectWoodCb),
+                new Actions.CollectAxe(CollectAxeCb),
+                new Actions.ChopWood(ChopWoodCb),
+                new Actions.BuildFirePit(BuildFirePitCb),
             };
         }
 
@@ -27,19 +27,24 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             };
         }
 
-        public static bool TakeInTheSights(double delta) {
+        
+        public static bool TakeInTheSightsCb(double delta) {
             return true;
         }
-        public static bool CollectWood(double delta) {
+        
+        public static bool CollectWoodCb(double delta) {
             return true;
         }
-        public static bool CollectAxe(double delta) {
+        
+        public static bool CollectAxeCb(double delta) {
             return true;
         }
-        public static bool ChopWood(double delta) {
+        
+        public static bool ChopWoodCb(double delta) {
             return true;
         }
-        public static bool BuildFirePit(double delta) {
+        
+        public static bool BuildFirePitCb(double delta) {
             return true;
         }
     }

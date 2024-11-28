@@ -25,9 +25,22 @@ namespace Buffalobuffalo.scripts.GOAP
             UpdateAvailableActions();
         }
 
+        /// <summary>
+        /// Forces a new goal to be found.
+        /// </summary>
+        public void ResetCurrentGoal() {
+            current_goal = null;
+            current_plan = null;
+            current_plan_step = 0;
+        }
+
+        /// <summary>
+        /// Updates the available actions, then looks for a new action_plan.
+        /// </summary>
         public void UpdateAvailableActions() {
             action_planner.available_actions = agent.AvailableActions;
-            // TODO: If the actions change, we are gonna need to change the goals.
+            current_plan = action_planner.GetNewPlan(current_goal);
+            current_plan_step = 0;
         }
 
         /// <summary>

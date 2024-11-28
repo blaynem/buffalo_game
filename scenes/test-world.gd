@@ -30,7 +30,7 @@ func handle_enemy_spawn(enemy_count: int) -> void:
 	# Spawn x amount of enemies.
 	for c in range(enemy_count):
 		var follow_path := PathFollow3D.new()
-		follow_path.progress = 50 * c;
+		follow_path.progress = 40 * c;
 		path_3d.add_child(follow_path);
 		spawn_enemy(follow_path);
 
