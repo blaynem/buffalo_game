@@ -24,13 +24,13 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if Input.is_action_pressed(KeyMap.plus):
 		Engine.time_scale += 1
 	if event.is_action_pressed(KeyMap.action_1):
-		handle_enemy_spawn(20)
+		handle_enemy_spawn(10)
 
 func handle_enemy_spawn(enemy_count: int) -> void:
 	# Spawn x amount of enemies.
 	for c in range(enemy_count):
 		var follow_path := PathFollow3D.new()
-		follow_path.progress = 40 * c;
+		follow_path.progress = 50 * c;
 		path_3d.add_child(follow_path);
 		spawn_enemy(follow_path);
 
@@ -39,7 +39,6 @@ func spawn_enemy(follow_path: PathFollow3D) -> void:
 	enemy.follow_path = follow_path;
 	enemy.personality = Brave.new()
 	enemy.is_stunned = false;
-	enemy.nav_map_ready = true
 	
 	# lastly spawn the enemy
 	enemies_node.add_child(enemy)

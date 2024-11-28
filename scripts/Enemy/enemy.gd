@@ -21,8 +21,6 @@ const HumanAgent = preload("res://scripts/GOAP/Agents/HumanAgent.cs");
 var display_name: String
 var display_status: String;
 var target_location: Vector3;
-# Only use nav when the map is ready
-var nav_map_ready := false;
 var held_item: CarriableEnemyGoalItem = null;
 
 # If true, is following the path, rather than going towards the target_location (usually their goal
@@ -53,7 +51,6 @@ func _after_spawn() -> void:
 	global_position = follow_path.global_position
 
 func _setup_signals() -> void:
-	NavigationServer3D.map_changed.connect(_on_navigation_map_ready)
 	ragdoll_handler.RagdollChange.connect(_handle_ragdoll_change)
 	SignalBus.RelicCallsToEntity.connect(_handle_relic_calls)
 	action_timer.timeout.connect(_action_timer_timeout)
@@ -86,9 +83,6 @@ func _setup_personality() -> void:
 
 func _setup_model() -> void:
 	model.play_human_animation(default_animation)
-
-func _on_navigation_map_ready(_map: RID) -> void:
-	nav_map_ready = true;
 
 func _handle_ragdoll_change(is_ragdolled: bool) -> void:
 	# Note: This does make it so we can just run through the enemy
@@ -160,11 +154,19 @@ func _handle_path_movement(_delta: float) -> void:
 
 # When we want the agent to Enemy to follow the NavAgent
 func _go_to_desired_location(_delta: float, desired_position: Vector3) -> void:
-	if nav_map_ready:
+	# Ensuring map is ready.
+	var map_RID := NavigationServer3D.agent_get_map(nav_agent);
+	if map_RID:
 		var direction := Vector3()
 		
 		nav_agent.target_position = desired_position
-		direction = (nav_agent.get_next_path_position() - global_position).normalized()
+		
+		# Take out the height so we are on the floor.
+		var map_height_offset := NavigationServer3D.map_get_cell_height(map_RID)
+		var next_path_pos := nav_agent.get_next_path_position()
+		next_path_pos.y -= map_height_offset;
+		
+		direction = (next_path_pos - global_position).normalized()
 		velocity = velocity.lerp(direction * personality.move_speed, personality.acceleration * _delta)
 		
 		# Rotate to face the movement direction
