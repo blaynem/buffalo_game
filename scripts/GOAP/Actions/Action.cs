@@ -51,7 +51,6 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
         /// Returns the variant of the perform from GDScript.
         /// </summary>
         public virtual bool Perform(double delta) {
-            GD.Print("Performing action: ", GetActionName());
             // The callback should return a boolean, so we can convert it to one.
             return performCallback(delta);
         }

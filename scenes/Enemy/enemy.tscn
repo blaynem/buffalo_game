@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://bj76d5gx1dthn"]
+[gd_scene load_steps=12 format=3 uid="uid://bj76d5gx1dthn"]
 
 [ext_resource type="Script" path="res://scripts/Enemy/enemy.gd" id="1_g7dug"]
 [ext_resource type="Script" path="res://scripts/nameplates.gd" id="2_lsxn7"]
+[ext_resource type="Script" path="res://scripts/Enemy/PathDebugger.gd" id="7_56rp8"]
 [ext_resource type="PackedScene" uid="uid://ckxi86nbcosmn" path="res://scenes/Enemy/BoneMan.tscn" id="8_3qhcl"]
 [ext_resource type="Script" path="res://scripts/Enemy/enemy_ragdoll_handler.gd" id="9_uswoj"]
 [ext_resource type="PackedScene" uid="uid://cvesph78riowk" path="res://scenes/Items/inventory_manager.tscn" id="10_bxnew"]
@@ -12,6 +13,11 @@ height = 1.8
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nr0ch"]
 height = 1.8
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_erfqn"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lt6hm"]
+albedo_color = Color(1, 0.0784314, 0, 1)
 
 [node name="Enemy" type="CharacterBody3D"]
 script = ExtResource("1_g7dug")
@@ -50,3 +56,11 @@ script = ExtResource("9_uswoj")
 
 [node name="HumanAgent" type="Node" parent="."]
 script = ExtResource("10_t1x1k")
+
+[node name="PathDebugger" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_erfqn")
+surface_material_override/0 = SubResource("StandardMaterial3D_lt6hm")
+script = ExtResource("7_56rp8")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true

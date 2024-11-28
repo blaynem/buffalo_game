@@ -15,3 +15,6 @@ var action_2 := "action_2"
 var action_3 := "action_3"
 var action_4 := "action_4"
 var action_5 := "action_5"
+
+var plus := "plus"
+var minus := "minus"

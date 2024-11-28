@@ -8,11 +8,15 @@ extends CharacterBody3D
 @onready var model: EnemyBaseModel = $BoneManModel
 @onready var ragdoll_handler: EnemyRagdollHandler = $RagdollHandler
 @onready var inventory_manager: InventoryManager = $InventoryManager
+@onready var action_timer: Timer = $Timer
 
 ## If true, the enemy can not take any actions.
 @export var is_stunned: bool = true
 @export var personality: EnemyPersonality;
 @export var default_animation: Animations.Human = Animations.Human.T_POSE
+
+const HumanAgent = preload("res://scripts/GOAP/Agents/HumanAgent.cs");
+@onready var agent: HumanAgent = $HumanAgent
 
 var display_name: String
 var display_status: String;
@@ -42,10 +46,40 @@ func _ready() -> void:
 	_set_collisions();
 	_setup_model();
 	_setup_signals();
+	
+	call_deferred("_after_spawn");
+
+func _after_spawn() -> void:
+	global_position = follow_path.global_position
 
 func _setup_signals() -> void:
 	NavigationServer3D.map_changed.connect(_on_navigation_map_ready)
 	ragdoll_handler.RagdollChange.connect(_handle_ragdoll_change)
+	SignalBus.RelicCallsToEntity.connect(_handle_relic_calls)
+	action_timer.timeout.connect(_action_timer_timeout)
+
+func _handle_relic_calls(relic: Relic, area: Area3D) -> void:
+	if !can_be_called_by_relic: return;
+	if last_called_relic == relic: return;
+	
+	if area == enemy_item_interaction_area:
+		can_be_called_by_relic = false
+		is_following_path = false;
+		last_called_relic = relic;
+		set_target_location(relic.global_position)
+
+func view_relic_action() -> void:
+	if performing_action: return;
+	action_timer.wait_time = 3;
+	action_timer.start()
+	performing_action = true;
+	model.play_human_animation(Animations.Human.JUMP)
+
+func _action_timer_timeout() -> void:
+	performing_action = false;
+	is_following_path = true;
+	can_be_called_by_relic = true;
+	pass;
 
 func _setup_personality() -> void:
 	display_name = personality.display_name
@@ -94,7 +128,6 @@ func _handle_animations(_delta: float) -> void:
 		return;
 	model.play_walk_animation();
 
-
 func _physics_process(delta: float) -> void:
 	if !is_on_floor():
 		velocity.y += get_gravity().y * delta
@@ -102,18 +135,63 @@ func _physics_process(delta: float) -> void:
 	if ragdoll_handler.is_ragdolled:
 		var new_root_transform := model.bones.hips.transform
 		global_transform.origin = global_transform.origin.lerp(new_root_transform.origin, 0.1)
+	
+	if !ragdoll_handler.is_ragdolled:
+		_handle_path_movement(delta);
+		if is_following_path:
+			_go_to_desired_location(delta, follow_path.global_position)
+		else:
+			# If we've gotten within the distance to the relic we view it.
+			if global_position.distance_to(target_location) < 5:
+				view_relic_action()
+				return;
+			# Target_location is usually set by the GOAPAgent methods.
+			_go_to_desired_location(delta, target_location);
+	
+	_handle_animations(delta)
+	move_and_slide()
 
-	if nav_map_ready && !ragdoll_handler.is_ragdolled:
+func _handle_path_movement(_delta: float) -> void:
+	# Get distance between path node and the enemey.
+	var distance := global_position.distance_to(follow_path.global_position)
+	# If they are within like 2m we should consider it "progress"
+	if distance < 5:
+		follow_path.progress += _delta * personality.move_speed * 2; # lil speed boost multiplier
+
+# When we want the agent to Enemy to follow the NavAgent
+func _go_to_desired_location(_delta: float, desired_position: Vector3) -> void:
+	if nav_map_ready:
 		var direction := Vector3()
 		
-		nav_agent.target_position = target_location
+		nav_agent.target_position = desired_position
 		direction = (nav_agent.get_next_path_position() - global_position).normalized()
-		velocity = velocity.lerp(direction * personality.move_speed, personality.acceleration * delta)
+		velocity = velocity.lerp(direction * personality.move_speed, personality.acceleration * _delta)
 		
 		# Rotate to face the movement direction
 		if direction != Vector3.ZERO:
 			var target_rotation_y := atan2(direction.x, direction.z)
 			rotation.y = lerp_angle(rotation.y, target_rotation_y, 0.1)
-		
-	_handle_animations(delta)
-	move_and_slide()
+
+#
+#func _old_physics_process(delta: float) -> void:
+	#if !is_on_floor():
+		#velocity.y += get_gravity().y * delta
+	## If ragdolled, we want to correctly move the position
+	#if ragdoll_handler.is_ragdolled:
+		#var new_root_transform := model.bones.hips.transform
+		#global_transform.origin = global_transform.origin.lerp(new_root_transform.origin, 0.1)
+#
+	#if nav_map_ready && !ragdoll_handler.is_ragdolled:
+		#var direction := Vector3()
+		#
+		#nav_agent.target_position = target_location
+		#direction = (nav_agent.get_next_path_position() - global_position).normalized()
+		#velocity = velocity.lerp(direction * personality.move_speed, personality.acceleration * delta)
+		#
+		## Rotate to face the movement direction
+		#if direction != Vector3.ZERO:
+			#var target_rotation_y := atan2(direction.x, direction.z)
+			#rotation.y = lerp_angle(rotation.y, target_rotation_y, 0.1)
+		#
+	#_handle_animations(delta)
+	#move_and_slide()

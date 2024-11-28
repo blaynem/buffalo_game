@@ -1,0 +1,32 @@
+[gd_scene load_steps=7 format=3 uid="uid://c4ar8nuhhbfdo"]
+
+[ext_resource type="Texture2D" uid="uid://b6lygvscouv3h" path="res://assets/stylized nature/Rocks_Diffuse.png" id="1_idjya"]
+[ext_resource type="Script" path="res://scripts/Items/Relic.gd" id="2_1x48l"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hrnwo"]
+albedo_texture = ExtResource("1_idjya")
+
+[sub_resource type="BoxMesh" id="BoxMesh_0p4q2"]
+lightmap_size_hint = Vector2i(7, 18)
+material = SubResource("StandardMaterial3D_hrnwo")
+size = Vector3(3, 8, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_adnrq"]
+size = Vector3(20, 30, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_iyf05"]
+size = Vector3(20, 30, 20)
+
+[node name="Relic" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+mesh = SubResource("BoxMesh_0p4q2")
+script = ExtResource("2_1x48l")
+
+[node name="Call Area" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Call Area"]
+shape = SubResource("BoxShape3D_adnrq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Call Area"]
+visible = false
+mesh = SubResource("BoxMesh_iyf05")

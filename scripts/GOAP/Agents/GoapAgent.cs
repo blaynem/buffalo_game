@@ -48,6 +48,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             State = DefineDefaultState();
             
             Brain = new GoapAgentBrain(this);
+            SetTargetLocation(new Vector3((float)10.0,(float)1.0,(float)10.0));
 
             GD.Print("ok Agent loaded");
         }
@@ -58,7 +59,6 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         /// <param name="delta"></param>
         public override void _PhysicsProcess(double delta) {
             Brain.Process(delta);
-            SetTargetLocation(new Vector3((float)10.0,(float)1.0,(float)10.0));
         }
 
         /// <summary>
