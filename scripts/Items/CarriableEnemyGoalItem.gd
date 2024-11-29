@@ -36,7 +36,7 @@ func player_interact() -> void:
 	if holder == player:
 		return; # no changes happened.
 	# New item is placed on player
-	player.inventory_manager.pickup_item(self)
+	player.inventory_manager.PickupItem(self)
 	holder = player
 	enemy_pickup_timer.start()
 	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), holder)
@@ -46,16 +46,16 @@ func enemy_interact(enemy: Enemy) -> void:
 	if holder == enemy or !enemy_pickup_timer.is_stopped():
 		return; # no changes happened.
 	holder = enemy
-	enemy.inventory_manager.pickup_item(self)
+	enemy.inventory_manager.PickupItem(self)
 	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), holder)
 
 func drop_item() -> void:
 	if holder is Enemy:
 		# If the enemy dropped the item, we start a timer.
 		enemy_pickup_timer.start()
-		holder.inventory_manager.drop_item();
+		holder.inventory_manager.DropItem();
 	if holder is Player:
-		holder.inventory_manager.drop_item();
+		holder.inventory_manager.DropItem();
 
 	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), null)
 	holder = null;
@@ -63,7 +63,7 @@ func drop_item() -> void:
 # Player can't place at goal.
 func place_item_at_goal() -> void:
 	if holder is Enemy:
-		holder.inventory_manager.held_item = null
+		holder.inventory_manager.DropItem()
 		holder = null;
 		queue_free()
 
@@ -79,7 +79,7 @@ func _physics_process(delta: float) -> void:
 		collision_shape.disabled = false
 		return;
 	if holder is Enemy:
-		self.global_position = holder.inventory_manager.carry_position.global_position
+		self.global_position = holder.inventory_manager.GetCarryPosition().global_position
 	if holder is Player:	
-		self.global_position = holder.inventory_manager.carry_position.global_position
+		self.global_position = holder.inventory_manager.GetCarryPosition().global_position
 	collision_shape.disabled = true

@@ -3,7 +3,7 @@ using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP.Goals
 {
-    public abstract partial class GoapGoal : Resource
+    public abstract partial class GoapGoal
     {
         /// <summary>
         /// Action Cost<br/>

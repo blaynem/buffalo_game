@@ -4,7 +4,7 @@ using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP.Actions
 {
-    public abstract partial class GoapAction : Resource
+    public abstract partial class GoapAction
     {
         protected Func<double, bool> performCallback;
         /// <summary>

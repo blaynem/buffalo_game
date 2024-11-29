@@ -49,7 +49,7 @@ func fire_interact(item: ItemInteractionArea) -> void:
 	# Interact will both drop the old item and pick up a new one if there was one.
 	await item.interact.call()
 	
-	var previous_held_item := player.inventory_manager.held_item
+	var previous_held_item := player.inventory_manager.GetHeldItem()
 	if previous_held_item:
 		# Register the interactible_area of the item.
 		register_area(previous_held_item.interactible_area)

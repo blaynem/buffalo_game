@@ -1,4 +1,4 @@
-class_name InventoryManager
+class_name InventoryManagerOld
 extends Node
 
 var inventory_owner: CharacterBody3D = null;

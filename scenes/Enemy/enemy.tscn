@@ -1,11 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://bj76d5gx1dthn"]
+[gd_scene load_steps=11 format=3 uid="uid://bj76d5gx1dthn"]
 
 [ext_resource type="Script" path="res://scripts/Enemy/enemy.gd" id="1_g7dug"]
 [ext_resource type="Script" path="res://scripts/nameplates.gd" id="2_lsxn7"]
 [ext_resource type="Script" path="res://scripts/Enemy/PathDebugger.gd" id="7_56rp8"]
 [ext_resource type="PackedScene" uid="uid://ckxi86nbcosmn" path="res://scenes/Enemy/BoneMan.tscn" id="8_3qhcl"]
 [ext_resource type="Script" path="res://scripts/Enemy/enemy_ragdoll_handler.gd" id="9_uswoj"]
-[ext_resource type="PackedScene" uid="uid://cvesph78riowk" path="res://scenes/Items/inventory_manager.tscn" id="10_bxnew"]
 [ext_resource type="Script" path="res://scripts/GOAP/Agents/HumanAgent.cs" id="10_t1x1k"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_481g0"]
@@ -51,8 +50,6 @@ shape = SubResource("CapsuleShape3D_nr0ch")
 
 [node name="RagdollHandler" type="Node" parent="."]
 script = ExtResource("9_uswoj")
-
-[node name="InventoryManager" parent="." instance=ExtResource("10_bxnew")]
 
 [node name="HumanAgent" type="Node" parent="."]
 script = ExtResource("10_t1x1k")

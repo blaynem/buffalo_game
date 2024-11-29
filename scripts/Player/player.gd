@@ -1,22 +1,24 @@
 class_name Player
 extends CharacterBody3D
 
+const InventoryManager = preload("res://scripts/Items/InventoryManager.cs")
+
 @onready var item_hold_position: Marker3D = $CarryObjetMarker
 @onready var interaction_area: Area3D = $ItemInteractionArea
-@onready var inventory_manager: InventoryManager = $InventoryManager
 @onready var model: BuffaloModel = $buffalo
 
 @export var WALK_SPEED := 7.0
 @export var RUN_SPEED := 15.0
 @export var JUMP_VELOCITY := 5
 
+var inventory_manager := InventoryManager.new();
 var _is_running := false
 var _is_jumping := false;
 var _time_since_last_movement := 0.0
 
 func _ready() -> void:
 	set_collisions()
-	inventory_manager.setup_inventory(self)
+	inventory_manager.SetupInventory(self)
 
 func set_collisions() -> void:
 	# Collision on ourselves

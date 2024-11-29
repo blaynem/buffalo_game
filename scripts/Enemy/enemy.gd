@@ -1,13 +1,14 @@
 class_name Enemy
 extends CharacterBody3D
 
+const InventoryManager = preload("res://scripts/Items/InventoryManager.cs")
+
 @onready var nameplate: Nameplate = $Nameplate
 @onready var item_hold_position: Marker3D = $CarryObjetMarker
 @onready var enemy_item_interaction_area: Area3D = %EnemyItemInteractionArea
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var model: EnemyBaseModel = $BoneManModel
 @onready var ragdoll_handler: EnemyRagdollHandler = $RagdollHandler
-@onready var inventory_manager: InventoryManager = $InventoryManager
 @onready var action_timer: Timer = $Timer
 
 ## If true, the enemy can not take any actions.
@@ -20,6 +21,7 @@ const HumanAgent = preload("res://scripts/GOAP/Agents/HumanAgent.cs");
 
 var display_name: String
 var display_status: String;
+var inventory_manager := InventoryManager.new();
 var target_location: Vector3;
 var held_item: CarriableEnemyGoalItem = null;
 
@@ -39,7 +41,7 @@ func _ready() -> void:
 	# Set personality before everything.
 	_setup_personality()
 	
-	inventory_manager.setup_inventory(self)
+	inventory_manager.SetupInventory(self)
 	_update_nameplate()
 	_set_collisions();
 	_setup_model();
@@ -90,10 +92,7 @@ func _handle_ragdoll_change(is_ragdolled: bool) -> void:
 	if is_ragdolled:
 		is_stunned = true;
 		self.set_collision_mask_value(CollisionMap.player, false)
-		var held_item := inventory_manager.held_item;
-		if held_item:
-			held_item.drop_item()
-			inventory_manager.drop_item()
+		inventory_manager.DropItem()
 	else:
 		is_stunned = false
 		self.set_collision_mask_value(CollisionMap.player, true)
