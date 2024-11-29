@@ -21,8 +21,7 @@ namespace Buffalobuffalo.scripts.GOAP
         {
             agent = _agent;
             action_planner = new GoapActionPlanner(agent);
-
-            UpdateAvailableActions();
+            action_planner.available_actions = agent.AvailableActions;
         }
 
         /// <summary>
@@ -39,8 +38,11 @@ namespace Buffalobuffalo.scripts.GOAP
         /// </summary>
         public void UpdateAvailableActions() {
             action_planner.available_actions = agent.AvailableActions;
-            current_plan = action_planner.GetNewPlan(current_goal);
-            current_plan_step = 0;
+
+            if (current_goal != null) {
+                current_plan = action_planner.GetNewPlan(current_goal);
+                current_plan_step = 0;
+            }
         }
 
         /// <summary>

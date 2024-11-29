@@ -1,8 +1,9 @@
 using Buffalobuffalo.scripts.GOAP.Agents;
+using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP.Goals
 {
-    public abstract partial class GoapGoal
+    public abstract partial class GoapGoal : Resource
     {
         /// <summary>
         /// Action Cost<br/>
@@ -37,6 +38,25 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
         public virtual string GetGoalName()
         {
             return GetType().Name;
+        }
+
+        public static GoapGoal CreateByName(string goal_name, Variant arg)
+        {
+            return goal_name.ToLower() switch
+            {
+                "buildfirepit" => new BuildFirePit(),
+                "pickupitem" => CreatePickUpItemGoal(arg),
+                "takeinthesights" => new TakeInTheSightsGoal(),
+                _ => null,
+            };
+        }
+        
+        // Helper method for cases that require more complex logic
+        private static GoapGoal CreatePickUpItemGoal(Variant target_item)
+        {
+            var goal = new PickUpItemGoal();
+            goal.SetTargetItem((GodotObject) target_item);
+            return goal;
         }
     }
 }

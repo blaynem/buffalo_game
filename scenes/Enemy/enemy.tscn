@@ -35,7 +35,6 @@ script = ExtResource("2_lsxn7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
-visible = false
 shape = SubResource("CapsuleShape3D_481g0")
 
 [node name="CarryObjetMarker" type="Marker3D" parent="."]

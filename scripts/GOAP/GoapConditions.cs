@@ -5,23 +5,6 @@ namespace Buffalobuffalo.scripts.GOAP
 {
     public static class ConditionsProvider
     {
-        /// <summary>
-        /// Contains a list of the default conditions, basically all of our potential conditions.
-        /// </summary>
-        /// <returns></returns>
-        public static ConditionDict GetDefaultConditions()
-        {
-            return new ConditionDict
-            {
-                { Condition.HasItemInHand, false },
-                { Condition.HungerLevel, 0 },
-                { Condition.WantsToViewSights, false },
-                { Condition.HasWood, false },
-                { Condition.HasFirepit, false },
-                { Condition.HasAxe, false },
-            };
-        }
-
         public static ConditionDict CloneConditions(ConditionDict original)
         {
             var clone = new ConditionDict();
@@ -34,8 +17,6 @@ namespace Buffalobuffalo.scripts.GOAP
     }
     /// <summary>
     /// Possible conditions, or states, that can be applied to an Agent.<br/><br/>
-    /// 
-    /// Note: For any Condition added, we should add it to the GetDefaultConditions method.
     /// </summary>
     public enum Condition
     {

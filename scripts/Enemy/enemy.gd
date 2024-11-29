@@ -122,6 +122,18 @@ func _handle_animations(_delta: float) -> void:
 		return;
 	model.play_walk_animation();
 
+# Example of how to do the setting of actions / goals.
+#func _handle_setting_goals() -> void:
+	##agent.SetAvailableActions()
+	#const GoapAction = preload("res://scripts/GOAP/Actions/Action.cs");
+	#const GoapGoal = preload("res://scripts/GOAP/Goals/GoapGoal.cs")
+	##goal1.CreateByName()
+	#var actions: Array[GoapAction] = []
+	#var action := agent.CreateAction("");
+	#var goal: GoapGoal = agent.CreateGoal("", "")
+	#agent.SetAvailableActions([action])
+	#agent.SetAvailableGoals([goal])
+
 func _physics_process(delta: float) -> void:
 	if !is_on_floor():
 		velocity.y += get_gravity().y * delta

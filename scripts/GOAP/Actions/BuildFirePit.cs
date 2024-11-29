@@ -11,7 +11,7 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
             {Condition.HasWood, true}
         };
 
-        public override ConditionDict Effects => new(){
+        public new static ConditionDict Effects => new(){
             {Condition.HasFirepit, true}
         };
     }

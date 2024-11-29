@@ -4,7 +4,7 @@ using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP.Actions
 {
-    public abstract partial class GoapAction
+    public abstract partial class GoapAction : Resource
     {
         protected Func<double, bool> performCallback;
         /// <summary>
@@ -33,7 +33,10 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
         ///   "has_wood": true
         /// }
         /// </summary>
-        public abstract ConditionDict Effects { get; }
+        public static ConditionDict Effects => new();
+        public ConditionDict GetEffects() {
+            return Effects;
+        }
         /// <summary>
         /// This indicates if the action should be considered or not.
         /// </summary>

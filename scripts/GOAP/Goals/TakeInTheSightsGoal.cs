@@ -13,7 +13,7 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
 
         public override bool IsValid(GoapAgent agent)
         {
-            return agent.State.HasState(Condition.WantsToViewSights, true);
+            return !agent.State.HasState(Condition.WantsToViewSights, true);
         }
     }
 }

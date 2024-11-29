@@ -16,7 +16,7 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
 
         public override bool IsValid(GoapAgent agent)
         {
-            return agent.State.HasState(Condition.HasFirepit, false);
+            return !agent.State.HasState(Condition.HasFirepit, false);
         }
     }
 }

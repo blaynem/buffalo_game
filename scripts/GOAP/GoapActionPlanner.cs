@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
 using Buffalobuffalo.scripts.GOAP.Actions;
 using Buffalobuffalo.scripts.GOAP.Agents;
 using Buffalobuffalo.scripts.GOAP.Goals;
@@ -12,7 +10,7 @@ namespace Buffalobuffalo.scripts.GOAP
 
     public partial class GoapActionPlanner
     {
-        public GoapAction[] available_actions;
+        public List<GoapAction> available_actions;
         public GoapAgent agent;
 
         public GoapActionPlanner(GoapAgent _agent)
@@ -159,7 +157,7 @@ namespace Buffalobuffalo.scripts.GOAP
             // any of the actions `effects` match up.
             foreach ((Condition state_name, object state_val) in _curr_state)
             {
-                if (action.Effects.TryGetValue(state_name, out var effect_change))
+                if (action.GetEffects().TryGetValue(state_name, out var effect_change))
                 {
                     // If the effect is the same as the desired state, we can remove it.
                     if (effect_change is bool && state_val.Equals(effect_change))
@@ -209,7 +207,7 @@ namespace Buffalobuffalo.scripts.GOAP
             // any of the actions effects match up.
             foreach ((var state_name, var state_val) in _curr_state)
             {
-                if (action.Effects.TryGetValue(state_name, out var effect_change))
+                if (action.GetEffects().TryGetValue(state_name, out var effect_change))
                 {
                     // If the effect is the same as the desired state, we can remove it.
                     if (effect_change is bool && state_val.Equals(effect_change))
