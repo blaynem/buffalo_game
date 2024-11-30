@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://do7ksivvif5cj"]
+[gd_scene load_steps=23 format=3 uid="uid://do7ksivvif5cj"]
 
 [ext_resource type="Texture2D" uid="uid://c6i4qs03rki1o" path="res://assets/textures/rocky_terrain_02_diff_1k.jpg" id="1_4v6rc"]
 [ext_resource type="Script" path="res://scenes/test-world.gd" id="1_b62hf"]
@@ -9,6 +9,7 @@
 [ext_resource type="MeshLibrary" uid="uid://bcspsyxj5w8hk" path="res://scenes/useable_assets/nature.tres" id="5_r0ytx"]
 [ext_resource type="Texture2D" uid="uid://i06y7fnas8f" path="res://icon.svg" id="6_1rs1b"]
 [ext_resource type="PackedScene" uid="uid://c4ar8nuhhbfdo" path="res://scenes/Relic.tscn" id="9_dc0ms"]
+[ext_resource type="PackedScene" uid="uid://sbemyimn5kep" path="res://scenes/Items/BoxItem.tscn" id="10_n20ps"]
 
 [sub_resource type="Curve3D" id="Curve3D_sefa7"]
 _data = {
@@ -214,3 +215,6 @@ transform = Transform3D(0.995802, 0, 0.0915361, 0, 1, 0, -0.0915361, 0, 0.995802
 
 [node name="Relic5" parent="Relics" instance=ExtResource("9_dc0ms")]
 transform = Transform3D(-0.732234, 0, -0.681053, 0, 1, 0, 0.681053, 0, -0.732234, 15.7624, 4.11228, -38.617)
+
+[node name="PickThisItem" parent="." instance=ExtResource("10_n20ps")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.645123, 0.876214, 14.1039)

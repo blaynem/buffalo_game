@@ -54,8 +54,7 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
         // Helper method for cases that require more complex logic
         private static GoapGoal CreatePickUpItemGoal(Variant target_item)
         {
-            var goal = new PickUpItemGoal();
-            goal.SetTargetItem((GodotObject) target_item);
+            var goal = new PickUpItemGoal((GodotObject) target_item);
             return goal;
         }
     }

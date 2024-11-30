@@ -24,7 +24,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if Input.is_action_pressed(KeyMap.plus):
 		Engine.time_scale += 1
 	if event.is_action_pressed(KeyMap.action_1):
-		handle_enemy_spawn(10)
+		handle_enemy_spawn(1)
 
 func handle_enemy_spawn(enemy_count: int) -> void:
 	# Spawn x amount of enemies.

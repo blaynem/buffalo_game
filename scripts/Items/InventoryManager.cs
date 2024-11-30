@@ -15,8 +15,8 @@ namespace Buffalobuffalo.scripts.Items {
             Held_item = null;
         }
 
-        public Marker3D GetCarryPosition() {
-            return Carry_position;
+        public Vector3 GetCarryPosition() {
+            return Carry_position.GlobalPosition;
         }
 
         public GodotObject GetHeldItem(){
@@ -29,6 +29,7 @@ namespace Buffalobuffalo.scripts.Items {
 
         public void SetupInventory(CharacterBody3D _inventory_owner) {
             inventory_owner = _inventory_owner;
+            Carry_position = (Marker3D)_inventory_owner.Call("_get_item_hold_position_marker");
         }
     }
 }

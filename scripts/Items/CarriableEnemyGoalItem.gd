@@ -11,6 +11,7 @@ extends RigidBody3D
 var holder: PhysicsBody3D = null;
 
 func _ready() -> void:
+	add_to_group(GroupMap.temp_item)
 	set_collisions();
 	# When item is interacted with
 	interactible_area.set_interact_fn(player_interact)
@@ -39,7 +40,6 @@ func player_interact() -> void:
 	player.inventory_manager.PickupItem(self)
 	holder = player
 	enemy_pickup_timer.start()
-	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), holder)
 
 func enemy_interact(enemy: Enemy) -> void:
 	# Enemy cannot pick up if the timer 
@@ -47,7 +47,6 @@ func enemy_interact(enemy: Enemy) -> void:
 		return; # no changes happened.
 	holder = enemy
 	enemy.inventory_manager.PickupItem(self)
-	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), holder)
 
 func drop_item() -> void:
 	if holder is Enemy:
@@ -57,7 +56,6 @@ func drop_item() -> void:
 	if holder is Player:
 		holder.inventory_manager.DropItem();
 
-	SignalBus.GoalItemHolderChange.emit(self.get_instance_id(), null)
 	holder = null;
 
 # Player can't place at goal.
@@ -79,7 +77,7 @@ func _physics_process(delta: float) -> void:
 		collision_shape.disabled = false
 		return;
 	if holder is Enemy:
-		self.global_position = holder.inventory_manager.GetCarryPosition().global_position
+		self.global_position = holder.inventory_manager.GetCarryPosition()
 	if holder is Player:	
-		self.global_position = holder.inventory_manager.GetCarryPosition().global_position
+		self.global_position = holder.inventory_manager.GetCarryPosition()
 	collision_shape.disabled = true

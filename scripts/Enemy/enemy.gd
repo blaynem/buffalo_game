@@ -25,7 +25,7 @@ var inventory_manager := InventoryManager.new();
 var target_location: Vector3;
 var held_item: CarriableEnemyGoalItem = null;
 
-# If true, is following the path, rather than going towards the target_location (usually their goal
+# If true, is following the path, rather than going towards the target_location (usually their goal)
 var is_following_path: bool = true;
 var follow_path: PathFollow3D;
 var performing_action := false;
@@ -54,18 +54,7 @@ func _after_spawn() -> void:
 
 func _setup_signals() -> void:
 	ragdoll_handler.RagdollChange.connect(_handle_ragdoll_change)
-	SignalBus.RelicCallsToEntity.connect(_handle_relic_calls)
 	action_timer.timeout.connect(_action_timer_timeout)
-
-func _handle_relic_calls(relic: Relic, area: Area3D) -> void:
-	if !can_be_called_by_relic: return;
-	if last_called_relic == relic: return;
-	
-	if area == enemy_item_interaction_area:
-		can_be_called_by_relic = false
-		is_following_path = false;
-		last_called_relic = relic;
-		set_target_location(relic.global_position)
 
 func view_relic_action() -> void:
 	if performing_action: return;
@@ -79,6 +68,10 @@ func _action_timer_timeout() -> void:
 	is_following_path = true;
 	can_be_called_by_relic = true;
 	pass;
+
+# If there are no more goals to follow, we'll continue on following the path instead.
+func _update_has_goals_to_follow(has_more_goals: bool) -> void:
+	is_following_path = !has_more_goals
 
 func _setup_personality() -> void:
 	display_name = personality.display_name
@@ -121,17 +114,14 @@ func _handle_animations(_delta: float) -> void:
 		return;
 	model.play_walk_animation();
 
-# Example of how to do the setting of actions / goals.
-#func _handle_setting_goals() -> void:
-	##agent.SetAvailableActions()
-	#const GoapAction = preload("res://scripts/GOAP/Actions/Action.cs");
-	#const GoapGoal = preload("res://scripts/GOAP/Goals/GoapGoal.cs")
-	##goal1.CreateByName()
-	#var actions: Array[GoapAction] = []
-	#var action := agent.CreateAction("");
-	#var goal: GoapGoal = agent.CreateGoal("", "")
-	#agent.SetAvailableActions([action])
-	#agent.SetAvailableGoals([goal])
+
+# Used for the c# layer to get the inventory manager
+func _get_inventory_manager() -> InventoryManager:
+	return inventory_manager;
+
+# Used for the c# layer to get the inventory manager
+func _get_item_hold_position_marker() -> Marker3D:
+	return item_hold_position;
 
 func _physics_process(delta: float) -> void:
 	if !is_on_floor():
@@ -146,16 +136,19 @@ func _physics_process(delta: float) -> void:
 		if is_following_path:
 			_go_to_desired_location(delta, follow_path.global_position)
 		else:
-			# If we've gotten within the distance to the relic we view it.
-			if global_position.distance_to(target_location) < 5:
-				view_relic_action()
-				return;
-			# Target_location is usually set by the GOAPAgent methods.
+			"""
+			TODO: Need to handle animations bebtter now. Since we need to fire differnet ones
+			from the Human Agent.
+			We should actually move all the animations to C# instead imo
+			and have it handled via the HumanAgent.
+			Target_location is usually set by the GOAPAgent methods.
+			"""
 			_go_to_desired_location(delta, target_location);
 	
 	_handle_animations(delta)
 	move_and_slide()
 
+# This is the moving the literal Path3DFollower.
 func _handle_path_movement(_delta: float) -> void:
 	# Get distance between path node and the enemey.
 	var distance := global_position.distance_to(follow_path.global_position)
@@ -184,27 +177,3 @@ func _go_to_desired_location(_delta: float, desired_position: Vector3) -> void:
 		if direction != Vector3.ZERO:
 			var target_rotation_y := atan2(direction.x, direction.z)
 			rotation.y = lerp_angle(rotation.y, target_rotation_y, 0.1)
-
-#
-#func _old_physics_process(delta: float) -> void:
-	#if !is_on_floor():
-		#velocity.y += get_gravity().y * delta
-	## If ragdolled, we want to correctly move the position
-	#if ragdoll_handler.is_ragdolled:
-		#var new_root_transform := model.bones.hips.transform
-		#global_transform.origin = global_transform.origin.lerp(new_root_transform.origin, 0.1)
-#
-	#if nav_map_ready && !ragdoll_handler.is_ragdolled:
-		#var direction := Vector3()
-		#
-		#nav_agent.target_position = target_location
-		#direction = (nav_agent.get_next_path_position() - global_position).normalized()
-		#velocity = velocity.lerp(direction * personality.move_speed, personality.acceleration * delta)
-		#
-		## Rotate to face the movement direction
-		#if direction != Vector3.ZERO:
-			#var target_rotation_y := atan2(direction.x, direction.z)
-			#rotation.y = lerp_angle(rotation.y, target_rotation_y, 0.1)
-		#
-	#_handle_animations(delta)
-	#move_and_slide()

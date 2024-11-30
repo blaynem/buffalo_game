@@ -33,10 +33,7 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
         ///   "has_wood": true
         /// }
         /// </summary>
-        public static ConditionDict Effects => new();
-        public ConditionDict GetEffects() {
-            return Effects;
-        }
+        public abstract ConditionDict GetEffects();
         /// <summary>
         /// This indicates if the action should be considered or not.
         /// </summary>

@@ -9,9 +9,10 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
         protected override int Cost => 1;
         public override ConditionDict Preconditions => new() { };
 
-        public new static ConditionDict Effects => new()
-        {
+        public static ConditionDict StaticEffects => new(){
             {Condition.WantsToViewSights, false}
         };
+
+        public override ConditionDict GetEffects() { return StaticEffects; }
     }
 }

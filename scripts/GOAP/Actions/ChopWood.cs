@@ -10,8 +10,10 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
             {Condition.HasAxe, true}
         };
 
-        public new static ConditionDict Effects => new(){
+        public static ConditionDict StaticEffects => new(){
             {Condition.HasWood, true}
         };
+
+        public override ConditionDict GetEffects() { return StaticEffects; }
     }
 }

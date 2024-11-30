@@ -20,8 +20,10 @@ namespace Buffalobuffalo.scripts.GOAP
         public GoapAgentBrain(GoapAgent _agent)
         {
             agent = _agent;
-            action_planner = new GoapActionPlanner(agent);
-            action_planner.available_actions = agent.AvailableActions;
+            action_planner = new GoapActionPlanner(agent)
+            {
+                available_actions = agent.AvailableActions
+            };
         }
 
         /// <summary>
@@ -50,10 +52,12 @@ namespace Buffalobuffalo.scripts.GOAP
         /// the highest priority. if it's not, it requests a new plan
         /// for the new high priority goal.
         /// </summary>
-        /// <param name="delta"></param>  
-        public void Process(double delta)
+        /// <param name="delta">Returns the current goal, otherwise null.</param>  
+        public GoapGoal Process(double delta)
         {
             var goal = GetBestGoal();
+            if (goal == null) return null;
+
             if (current_goal == null || goal != current_goal)
             {
                 // TODO: Do we want a blackboard? Do we just use the agent state?
@@ -67,12 +71,13 @@ namespace Buffalobuffalo.scripts.GOAP
             {
                 FollowPlan(delta);
             }
+            return goal;
         }
 
         /// <summary>
         /// Gets the best goal
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns a goal if one can be completed, and null if there are none.</returns>
         private GoapGoal GetBestGoal()
         {
             GoapGoal best_goal = null;

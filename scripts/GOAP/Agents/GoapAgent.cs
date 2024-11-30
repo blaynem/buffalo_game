@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Buffalobuffalo.scripts.GOAP.Actions;
 using Buffalobuffalo.scripts.GOAP.Goals;
+using Buffalobuffalo.scripts.Items;
 using Godot;
 
 
@@ -42,7 +43,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
     /// </summary>
     public abstract partial class GoapAgent : Node
     {
-        public AgentState State {get;set;}
+        public AgentState State { get; set; }
         public CharacterBody3D Actor { get; private set; }
         public List<GoapGoal> AvailableGoals { get; private set; }
         public List<GoapAction> AvailableActions { get; private set; }
@@ -72,18 +73,15 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         /// <param name="delta"></param>
         public override void _PhysicsProcess(double delta)
         {
-            Brain.Process(delta);
-        }
-
-        /// <summary>
-        /// There may be no arg.
-        /// </summary>
-        /// <param name="goal_name"></param>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        public static GoapGoal CreateGoal(string goal_name, Variant arg)
-        {
-            return GoapGoal.CreateByName(goal_name, arg);
+            var current_goal = Brain.Process(delta);
+            // Calling the Actor to update which movement script is running
+            if (current_goal == null) {
+                GD.Print("==== No current goal.");
+                Actor.Call("_update_has_goals_to_follow", false);
+            } else {
+                GD.Print("==== Current Goal: ", current_goal.GetGoalName());
+                Actor.Call("_update_has_goals_to_follow", true);
+            }
         }
 
         // Each agent kinda needs to create their own action builder that maps the action to the callback.
@@ -101,8 +99,10 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             Brain.UpdateAvailableActions();
         }
 
-        protected void ApplyEffectsToState(ConditionDict effects) {
-            foreach((Condition condition, object value) in effects) {
+        protected void ApplyEffectsToState(ConditionDict effects)
+        {
+            foreach ((Condition condition, object value) in effects)
+            {
                 State.UpdateState(condition, value);
             }
         }
@@ -111,6 +111,12 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         {
             var init_conditions = new ConditionDict();
             return new AgentState(init_conditions);
+        }
+
+        protected InventoryManager GetInventoryManager()
+        {
+            var inventory_manager = Actor.Call("_get_inventory_manager");
+            return (InventoryManager)inventory_manager;
         }
 
         protected void SetTargetLocation(Vector3 location)

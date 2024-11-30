@@ -62,6 +62,9 @@ func handle_animation(_delta: float) -> void:
 	model.play_walk_anim()
 	_time_since_last_movement = 0;
 
+func _get_item_hold_position_marker() -> Marker3D:
+	return item_hold_position;
+
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():

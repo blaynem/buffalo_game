@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Buffalobuffalo.scripts.GOAP.Actions;
 using Buffalobuffalo.scripts.GOAP.Goals;
+using Godot;
 using BuildFirePit = Buffalobuffalo.scripts.GOAP.Actions.BuildFirePit;
 
 namespace Buffalobuffalo.scripts.GOAP.Agents
@@ -8,6 +9,8 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
     // TODO: Maybe alter the potential actions depending on the personality.
     public partial class HumanAgent : GoapAgent
     {
+        // Items that are required to complete the current quests.
+        private List<Node3D> goal_items = new();
         public HumanAgent() { }
         protected override List<GoapAction> DefineDefaultActions()
         {
@@ -17,14 +20,18 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
                 new Actions.CollectAxe(CollectAxeCb),
                 new Actions.ChopWood(ChopWoodCb),
                 new Actions.BuildFirePit(BuildFirePitCb),
+                new Actions.PickUpItem(PickUpItemCb),
             };
         }
 
         protected override List<GoapGoal> DefineDefaultGoals()
         {
+            var item = GetTree().GetFirstNodeInGroup("TempItem");
+            goal_items.Add((Node3D) item);
             return new(){
-                new Goals.TakeInTheSightsGoal(),
-                new Goals.BuildFirePit(),
+                // new Goals.TakeInTheSightsGoal(),
+                // new Goals.BuildFirePit(),
+                new Goals.PickUpItemGoal(item),
             };
         }
 
@@ -43,44 +50,61 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
 
         private bool TakeInTheSightsCb(double delta)
         {
-            ApplyEffectsToState(TakeInTheSights.Effects);
+            ApplyEffectsToState(TakeInTheSights.StaticEffects);
             return true;
+        }
+
+        private void OnNoMoreGoals() {
+            // If we have no more goals to follow, update the Actor so it knows to change back to following the path.
+            Actor.Call("_update_has_goals_to_follow", false);
         }
 
         private bool PickUpItemCb(double delta)
         {
-            // TODO: How the fk do we choose which item to pick up here?
+            var target = goal_items[0];
+            var distance = Actor.GlobalPosition.DistanceTo(target.GlobalPosition);
+            if (distance < 5) {
+                // TODO: Should fire the animation in here for pickup, and ensure the item is actually picked up.
+                // Probably need an animation timer 
+                // Attempt to pick up the item
+                target.Call("enemy_interact", Actor);
+                // Ensure it actually got looted
+                if (GetInventoryManager().Held_item == target) {
+                    var _effects = PickUpItem.StaticEffects;
+                    // Set the item thats being held.
+                    _effects[Condition.HasItemInHand] = target;
 
+                    ApplyEffectsToState(_effects);
+                    return true;
+                }
+            }
 
-            var _effects = PickUpItem.Effects;
-            // Set the item thats being held.
-            _effects[Condition.HasItemInHand] = "";
+            SetTargetLocation(target.GlobalPosition);
 
-            ApplyEffectsToState(_effects);
-            return true;
+            return false;
         }
 
         private bool CollectWoodCb(double delta)
         {
-            ApplyEffectsToState(CollectWood.Effects);
+            ApplyEffectsToState(CollectWood.StaticEffects);
             return true;
         }
 
         private bool CollectAxeCb(double delta)
         {
-            ApplyEffectsToState(CollectAxe.Effects);
+            ApplyEffectsToState(CollectAxe.StaticEffects);
             return true;
         }
 
         private bool ChopWoodCb(double delta)
         {
-            ApplyEffectsToState(ChopWood.Effects);
+            ApplyEffectsToState(ChopWood.StaticEffects);
             return true;
         }
 
         private bool BuildFirePitCb(double delta)
         {
-            ApplyEffectsToState(BuildFirePit.Effects);
+            ApplyEffectsToState(BuildFirePit.StaticEffects);
             return true;
         }
     }
