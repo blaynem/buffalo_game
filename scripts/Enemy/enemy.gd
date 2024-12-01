@@ -137,7 +137,7 @@ func _physics_process(delta: float) -> void:
 			_go_to_desired_location(delta, follow_path.global_position)
 		else:
 			"""
-			TODO: Need to handle animations bebtter now. Since we need to fire differnet ones
+			TODO: Need to handle animations better now. Since we need to fire differnet ones
 			from the Human Agent.
 			We should actually move all the animations to C# instead imo
 			and have it handled via the HumanAgent.

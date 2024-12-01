@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using Buffalobuffalo.scripts.GOAP.Actions;
-using Buffalobuffalo.scripts.GOAP.Goals;
 using Godot;
-using BuildFirePit = Buffalobuffalo.scripts.GOAP.Actions.BuildFirePit;
 
 namespace Buffalobuffalo.scripts.GOAP.Agents
 {
@@ -15,12 +13,8 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         protected override List<GoapAction> DefineDefaultActions()
         {
             return new(){
-                new Actions.TakeInTheSights(TakeInTheSightsCb),
-                new Actions.CollectWood(CollectWoodCb),
-                new Actions.CollectAxe(CollectAxeCb),
-                new Actions.ChopWood(ChopWoodCb),
-                new Actions.BuildFirePit(BuildFirePitCb),
-                new Actions.PickUpItem(PickUpItemCb),
+                new TakeInTheSights(TakeInTheSightsCb),
+                new PickUpItem(PickUpItemCb),
             };
         }
 
@@ -30,7 +24,6 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             goal_items.Add((Node3D) item);
             return new(){
                 // new Goals.TakeInTheSightsGoal(),
-                // new Goals.BuildFirePit(),
                 new Goals.PickUpItemGoal(item),
             };
         }
@@ -40,7 +33,6 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         {
             GoapAction built_action = action_name.ToLower() switch
             {
-                "buildfirepit" => new BuildFirePit(BuildFirePitCb),
                 "pickupitem" => new PickUpItem(PickUpItemCb),
                 "takeinthesights" => new TakeInTheSights(TakeInTheSightsCb),
                 _ => null,
@@ -52,11 +44,6 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         {
             ApplyEffectsToState(TakeInTheSights.StaticEffects);
             return true;
-        }
-
-        private void OnNoMoreGoals() {
-            // If we have no more goals to follow, update the Actor so it knows to change back to following the path.
-            Actor.Call("_update_has_goals_to_follow", false);
         }
 
         private bool PickUpItemCb(double delta)
@@ -82,30 +69,6 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             SetTargetLocation(target.GlobalPosition);
 
             return false;
-        }
-
-        private bool CollectWoodCb(double delta)
-        {
-            ApplyEffectsToState(CollectWood.StaticEffects);
-            return true;
-        }
-
-        private bool CollectAxeCb(double delta)
-        {
-            ApplyEffectsToState(CollectAxe.StaticEffects);
-            return true;
-        }
-
-        private bool ChopWoodCb(double delta)
-        {
-            ApplyEffectsToState(ChopWood.StaticEffects);
-            return true;
-        }
-
-        private bool BuildFirePitCb(double delta)
-        {
-            ApplyEffectsToState(BuildFirePit.StaticEffects);
-            return true;
         }
     }
 }

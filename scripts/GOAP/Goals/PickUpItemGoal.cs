@@ -1,5 +1,3 @@
-
-using Buffalobuffalo.scripts.GOAP.Agents;
 using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP.Goals

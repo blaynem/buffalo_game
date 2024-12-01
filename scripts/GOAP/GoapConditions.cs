@@ -23,8 +23,5 @@ namespace Buffalobuffalo.scripts.GOAP
         HasItemInHand,
         HungerLevel,
         WantsToViewSights,
-        HasWood,
-        HasFirepit,
-        HasAxe,
     }
 }

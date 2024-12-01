@@ -1,8 +1,4 @@
 using System.Collections.Generic;
-using Buffalobuffalo.scripts.GOAP.Actions;
-using Buffalobuffalo.scripts.GOAP.Agents;
-using Buffalobuffalo.scripts.GOAP.Goals;
-using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP
 {

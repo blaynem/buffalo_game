@@ -1,8 +1,8 @@
 using System;
-using Buffalobuffalo.scripts.GOAP.Agents;
-using Godot;
 
-namespace Buffalobuffalo.scripts.GOAP.Actions
+/// The base action that all GoapActions will inherit from.
+
+namespace Buffalobuffalo.scripts.GOAP
 {
     public abstract partial class GoapAction
     {

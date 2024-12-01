@@ -1,7 +1,9 @@
-using Buffalobuffalo.scripts.GOAP.Agents;
+using Buffalobuffalo.scripts.GOAP.Goals;
 using Godot;
 
-namespace Buffalobuffalo.scripts.GOAP.Goals
+/// The base action that all GoapActions will inherit from.
+
+namespace Buffalobuffalo.scripts.GOAP
 {
     public abstract partial class GoapGoal
     {
@@ -44,7 +46,6 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
         {
             return goal_name.ToLower() switch
             {
-                "buildfirepit" => new BuildFirePit(),
                 "pickupitem" => CreatePickUpItemGoal(arg),
                 "takeinthesights" => new TakeInTheSightsGoal(),
                 _ => null,

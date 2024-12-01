@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Buffalobuffalo.scripts.GOAP.Actions;
-using Buffalobuffalo.scripts.GOAP.Goals;
 using Buffalobuffalo.scripts.Items;
 using Godot;
 
+/// The base action that all GoapActions will inherit from.
 
-namespace Buffalobuffalo.scripts.GOAP.Agents
+namespace Buffalobuffalo.scripts.GOAP
 {
     public class AgentState
     {
