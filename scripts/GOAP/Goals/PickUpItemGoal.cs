@@ -18,7 +18,7 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
             { Condition.HasItemInHand, true }
         };
 
-        private Node3D target_item = null;
+        public Node3D target_item {get; private set; }= null;
         public PickUpItemGoal(Node3D _target_item) {
             target_item = _target_item;
         }

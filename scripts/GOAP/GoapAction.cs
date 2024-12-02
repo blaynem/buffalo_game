@@ -50,10 +50,10 @@ namespace Buffalobuffalo.scripts.GOAP
 
         /// <summary>
         /// Action implementation called on every loop.
-        /// "agent" is the NPC using the AI
+        /// 
         /// "delta" is the time in seconds since last loop. <br/>
         ///
-        /// Returns the variant of the perform from GDScript.
+        /// Returns a bool determining if the perform completed or not.
         /// </summary>
         public virtual bool Perform(double delta) {
             // The callback should return a boolean, so we can convert it to one.

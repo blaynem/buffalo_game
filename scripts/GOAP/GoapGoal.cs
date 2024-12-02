@@ -36,22 +36,5 @@ namespace Buffalobuffalo.scripts.GOAP
         {
             return GetType().Name;
         }
-
-        public static GoapGoal CreateByName(string goal_name, Variant arg)
-        {
-            return goal_name.ToLower() switch
-            {
-                "pickupitem" => CreatePickUpItemGoal(arg),
-                "takeinthesights" => new TakeInTheSightsGoal(),
-                _ => null,
-            };
-        }
-        
-        // Helper method for cases that require more complex logic
-        private static GoapGoal CreatePickUpItemGoal(Variant target_item)
-        {
-            var goal = new PickUpItemGoal((Node3D) target_item);
-            return goal;
-        }
     }
 }

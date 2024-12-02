@@ -9,7 +9,7 @@ namespace Buffalobuffalo.scripts.GOAP
         /// </summary>
         private GoapActionPlanner action_planner;
         private GoapAgent agent;
-        private GoapGoal current_goal;
+        public GoapGoal current_goal {get; private set;}
         private List<GoapAction> current_plan;
         private int current_plan_step = 0;
 
@@ -49,10 +49,10 @@ namespace Buffalobuffalo.scripts.GOAP
         /// for the new high priority goal.
         /// </summary>
         /// <param name="delta">Returns the current goal, otherwise null.</param>  
-        public GoapGoal Process(double delta)
+        public void Process(double delta)
         {
             var goal = GetBestGoal();
-            if (goal == null) return null;
+            if (goal == null) return;
 
             if (current_goal == null || goal != current_goal)
             {
@@ -67,7 +67,6 @@ namespace Buffalobuffalo.scripts.GOAP
             {
                 FollowPlan(delta);
             }
-            return goal;
         }
 
         /// <summary>

@@ -2,15 +2,15 @@ using System;
 
 namespace Buffalobuffalo.scripts.GOAP.Actions
 {
-    public partial class TakeInTheSights : GoapAction
+    public partial class ViewRelic : GoapAction
     {
-        public TakeInTheSights(Func<double, bool> action_callback) : base(action_callback) {}
+        public ViewRelic(Func<double, bool> action_callback) : base(action_callback) {}
 
         protected override int Cost => 1;
-        public override ConditionDict Preconditions => new() { };
+        public override ConditionDict Preconditions => new();
 
         public static ConditionDict StaticEffects => new(){
-            {Condition.WantsToViewSights, false}
+            {Condition.ViewedRelic, true}
         };
 
         public override ConditionDict GetEffects() { return StaticEffects; }

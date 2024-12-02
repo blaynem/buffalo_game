@@ -21,7 +21,7 @@ namespace Buffalobuffalo.scripts.GOAP
     public enum Condition
     {
         HasItemInHand,
-        WantsToViewSights,
+        ViewedRelic,
         CompletedHike,
     }
 }

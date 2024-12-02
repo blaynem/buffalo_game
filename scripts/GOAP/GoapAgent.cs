@@ -58,22 +58,14 @@ namespace Buffalobuffalo.scripts.GOAP
         /// <param name="delta"></param>
         public override void _PhysicsProcess(double delta)
         {
-            var current_goal = Brain.Process(delta);
+            Brain.Process(delta);
             // Calling the Actor to update which movement script is running
-            if (current_goal == null) {
+            if (Brain.current_goal == null) {
                 GD.Print("==== No current goal.");
             } else {
-                GD.Print("==== Current Goal: ", current_goal.GetGoalName());
-                if (current_goal.GetGoalName() == "CompleteHike") {
-                    Actor.Call("_follow_path", true);
-                } else {
-                    Actor.Call("_follow_path", false);
-                }
+                GD.Print("==== Current Goal: ", Brain.current_goal.GetGoalName());
             }
         }
-
-        // Each agent kinda needs to create their own action builder that maps the action to the callback.
-        public abstract GoapAction CreateAction(string action_name);
 
         public void SetAvailableGoals(GoapGoal[] _new_goals)
         {
