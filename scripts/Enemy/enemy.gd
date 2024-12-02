@@ -17,8 +17,10 @@ const InventoryManager = preload("res://scripts/Items/InventoryManager.cs")
 @export var default_animation: Animations.Human = Animations.Human.T_POSE
 
 const HumanAgent = preload("res://scripts/GOAP/Agents/HumanAgent.cs");
+const AnimationHandler = preload("res://scripts/AnimationHandler.cs")
 @onready var agent: HumanAgent = $HumanAgent
 
+var animation_handler: AnimationHandler;
 var display_name: String
 var display_status: String;
 var inventory_manager := InventoryManager.new();
@@ -39,6 +41,8 @@ func _ready() -> void:
 	_setup_personality()
 	
 	inventory_manager.SetupInventory(self)
+	agent.AttachAnimationHandler(model._animation_player)
+	animation_handler = agent.animationHandler;
 	_update_nameplate()
 	_set_collisions();
 	_setup_signals();
@@ -67,13 +71,16 @@ func _handle_ragdoll_change(is_ragdolled: bool) -> void:
 	# Note: This does make it so we can just run through the enemy
 	var coll: CollisionShape3D = $CollisionShape3D
 	if is_ragdolled:
+		# Need to stop the animation so that we know it's been cancelled
+		animation_handler.Stop()
 		is_stunned = true;
 		self.set_collision_mask_value(CollisionMap.player, false)
 		inventory_manager.DropItem()
 	else:
 		is_stunned = false
 		self.set_collision_mask_value(CollisionMap.player, true)
-		model.play_human_animation(Animations.Human.WALK)
+		var _anim := Animations.get_human_animation_name(Animations.Human.WALK)
+		animation_handler.Play(_anim, false)
 
 func _update_nameplate() -> void:
 	nameplate.update_content(display_name)
@@ -94,9 +101,12 @@ func _handle_animations(_delta: float) -> void:
 	if ragdoll_handler.is_ragdolled:
 		return;
 	if velocity == Vector3.ZERO:
-		model.play_human_animation(Animations.Human.IDLE)
+		var _anim := Animations.get_human_animation_name(Animations.Human.IDLE)
+		animation_handler.Play(_anim, false)
 		return;
-	model.play_human_animation(Animations.Human.WALK);
+	if not animation_handler.IsAnimationPlaying():
+		var _anim := Animations.get_human_animation_name(Animations.Human.WALK)
+		animation_handler.Play(_anim, false)
 
 
 # Used for the c# layer to get the inventory manager
@@ -120,17 +130,12 @@ func _physics_process(delta: float) -> void:
 		if is_following_path:
 			_go_to_desired_location(delta, agent_path.global_position)
 		else:
-			"""
-			TODO: Need to handle animations better now. Since we need to fire differnet ones
-			from the Human Agent.
-			We should actually move all the animations to C# instead imo
-			and have it handled via the HumanAgent.
-			Target_location is usually set by the GOAPAgent methods.
-			"""
 			_go_to_desired_location(delta, target_location);
 	
 	_handle_animations(delta)
-	move_and_slide()
+	# TODO: Depending on the animation, we shouldn't allow any movement.
+	if animation_handler.CanMove():
+		move_and_slide()
 
 # This is the moving the literal Path3DFollower.
 func _handle_path_movement(_delta: float) -> void:

@@ -1,3 +1,4 @@
+using Buffalobuffalo.scripts.Animation;
 using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP.Agents
@@ -5,6 +6,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
     // TODO: Maybe alter the potential actions depending on the personality.
     public partial class HumanAgent : GoapAgent
     {
+        public AnimationHandler animationHandler;
         public HumanAgent() {}
         public override void _Ready()
         {
@@ -24,6 +26,10 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             };
 
             base._Ready();
+        }
+
+        public void AttachAnimationHandler(AnimationPlayer animationPlayer) {
+            animationHandler = new(animationPlayer);
         }
 
         // Each agent kinda needs to create their own build that maps the action to the callback.
@@ -59,6 +65,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
 
         private bool ViewRelicCb(double delta)
         {
+            var viewed_relic = false;
             if (Brain.current_goal is not Goals.ViewRelic viewRelicGoal) {
                 GD.PrintErr("Somehow in the ViewRelic Action with incorrect goal.");
                 return false;
@@ -66,10 +73,15 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             var target_relic = viewRelicGoal.target_relic;
             var distance = Actor.GlobalPosition.DistanceSquaredTo(target_relic.GlobalPosition);
             if (distance < 20) {
-                // Make some sort of call to the relic???
-                // Ensure it was actually viewed
-                ApplyEffectsToState(Actions.ViewRelic.StaticEffects);
-                return true;
+                // TODO: Edit this to be some sort of alternate than just turning lol
+                var animation_name = "people_locomotion_pack/left_turn_180";
+                if (animationHandler.current_animation.name != animation_name) {
+                    animationHandler.PlayWithCallback(animation_name, () => {
+                        ApplyEffectsToState(Actions.ViewRelic.StaticEffects);
+                        viewed_relic = true;
+                    });
+                }
+                return viewed_relic;
             }
 
             SetTargetLocation(target_relic.GlobalPosition);
@@ -79,6 +91,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
 
         private bool PickUpItemCb(double delta)
         {
+            var item_pickedup = false;
             if (Brain.current_goal is not Goals.PickUpItemGoal pickupItemGoal) {
                 GD.PrintErr("Somehow in the PickUpItem Action with incorrect goal.");
                 return false;
@@ -87,20 +100,26 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             var target = pickupItemGoal.target_item;
             var distance = Actor.GlobalPosition.DistanceSquaredTo(target.GlobalPosition);
             if (distance < 5) {
-                // TODO: Should fire the animation in here for pickup, and ensure the item is actually picked up.
-                // Probably need an animation timer 
-                // Attempt to pick up the item
-                Items.CarriableEnemyGoalItem.EnemyInteract(target, Actor);
-                // Ensure it actually got looted
-                if (GetInventoryManager().Held_item == target) {
-                    ApplyEffectsToState(Actions.PickUpItem.StaticEffects);
-                    return true;
+                var animation_name = "people_locomotion_pack/jump";
+                if (animationHandler.current_animation.name != animation_name) {
+                    animationHandler.PlayWithCallback(animation_name, () => {
+                        // Probably need an animation timer 
+                        // Attempt to pick up the item
+                        Items.CarriableEnemyGoalItem.EnemyInteract(target, Actor);
+                        // Ensure it actually got looted
+                        if (GetInventoryManager().Held_item == target) {
+                            ApplyEffectsToState(Actions.PickUpItem.StaticEffects);
+                            item_pickedup = true;
+                        }
+                    });
+
+                    return item_pickedup;
                 }
             }
 
             SetTargetLocation(target.GlobalPosition);
 
-            return false;
+            return item_pickedup;
         }
     }
 }
