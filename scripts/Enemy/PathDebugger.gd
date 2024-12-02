@@ -12,5 +12,5 @@ extends MeshInstance3D
 		mat.albedo_color = val;
 
 func _physics_process(delta: float) -> void:
-	var pos := enemy.follow_path.global_position;
+	var pos := enemy.agent_path.global_position;
 	global_position = Vector3(pos.x, pos.y + 1, pos.z);

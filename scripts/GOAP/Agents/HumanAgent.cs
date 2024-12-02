@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Buffalobuffalo.scripts.GOAP.Actions;
 using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP.Agents
@@ -8,24 +7,23 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
     public partial class HumanAgent : GoapAgent
     {
         // Items that are required to complete the current quests.
-        private List<Node3D> goal_items = new();
-        public HumanAgent() { }
-        protected override List<GoapAction> DefineDefaultActions()
+        private readonly List<Node3D> goal_items = new();
+        public HumanAgent() {}
+        public override void _Ready()
         {
-            return new(){
-                new TakeInTheSights(TakeInTheSightsCb),
-                new PickUpItem(PickUpItemCb),
+             AvailableActions = new(){
+                new Actions.PickUpItem(PickUpItemCb),
+                new Actions.CompleteHike(CompleteHikeCb),
             };
-        }
 
-        protected override List<GoapGoal> DefineDefaultGoals()
-        {
-            var item = GetTree().GetFirstNodeInGroup("TempItem");
-            goal_items.Add((Node3D) item);
-            return new(){
-                // new Goals.TakeInTheSightsGoal(),
+            var item = (Node3D) GetTree().GetFirstNodeInGroup("TempItem");
+            goal_items.Add(item);
+            AvailableGoals =  new(){
+                new Goals.CompleteHike(),
                 new Goals.PickUpItemGoal(item),
             };
+
+            base._Ready();
         }
 
         // Each agent kinda needs to create their own build that maps the action to the callback.
@@ -33,16 +31,16 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         {
             GoapAction built_action = action_name.ToLower() switch
             {
-                "pickupitem" => new PickUpItem(PickUpItemCb),
-                "takeinthesights" => new TakeInTheSights(TakeInTheSightsCb),
+                "pickupitem" => new Actions.PickUpItem(PickUpItemCb),
+                "completehike" => new Actions.CompleteHike(CompleteHikeCb),
                 _ => null,
             };
             return built_action;
         }
 
-        private bool TakeInTheSightsCb(double delta)
+        private bool CompleteHikeCb(double delta)
         {
-            ApplyEffectsToState(TakeInTheSights.StaticEffects);
+            ApplyEffectsToState(Actions.TakeInTheSights.StaticEffects);
             return true;
         }
 
@@ -57,7 +55,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
                 target.Call("enemy_interact", Actor);
                 // Ensure it actually got looted
                 if (GetInventoryManager().Held_item == target) {
-                    var _effects = PickUpItem.StaticEffects;
+                    var _effects = Actions.PickUpItem.StaticEffects;
                     // Set the item thats being held.
                     _effects[Condition.HasItemInHand] = target;
 

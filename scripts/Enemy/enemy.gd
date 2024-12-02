@@ -27,12 +27,9 @@ var held_item: CarriableEnemyGoalItem = null;
 
 # If true, is following the path, rather than going towards the target_location (usually their goal)
 var is_following_path: bool = true;
-var follow_path: PathFollow3D;
+var agent_path: PathFollow3D;
+# If true, is currently performing an action.
 var performing_action := false;
-
-# If true, can be called by a nearby relic.
-var can_be_called_by_relic := true;
-var last_called_relic: Relic;
 
 func set_target_location(location: Vector3) -> void:
 	target_location = location
@@ -50,28 +47,19 @@ func _ready() -> void:
 	call_deferred("_after_spawn");
 
 func _after_spawn() -> void:
-	global_position = follow_path.global_position
+	global_position = agent_path.global_position
 
 func _setup_signals() -> void:
 	ragdoll_handler.RagdollChange.connect(_handle_ragdoll_change)
 	action_timer.timeout.connect(_action_timer_timeout)
 
-func view_relic_action() -> void:
-	if performing_action: return;
-	action_timer.wait_time = 3;
-	action_timer.start()
-	performing_action = true;
-	model.play_human_animation(Animations.Human.JUMP)
-
 func _action_timer_timeout() -> void:
 	performing_action = false;
-	is_following_path = true;
-	can_be_called_by_relic = true;
 	pass;
 
-# If there are no more goals to follow, we'll continue on following the path instead.
-func _update_has_goals_to_follow(has_more_goals: bool) -> void:
-	is_following_path = !has_more_goals
+# If is set to true, will follow the path rather than the other objective.
+func _follow_path(_should_follow_path: bool) -> void:
+	is_following_path = _should_follow_path;
 
 func _setup_personality() -> void:
 	display_name = personality.display_name
@@ -134,7 +122,7 @@ func _physics_process(delta: float) -> void:
 	if !ragdoll_handler.is_ragdolled:
 		_handle_path_movement(delta);
 		if is_following_path:
-			_go_to_desired_location(delta, follow_path.global_position)
+			_go_to_desired_location(delta, agent_path.global_position)
 		else:
 			"""
 			TODO: Need to handle animations better now. Since we need to fire differnet ones
@@ -151,10 +139,10 @@ func _physics_process(delta: float) -> void:
 # This is the moving the literal Path3DFollower.
 func _handle_path_movement(_delta: float) -> void:
 	# Get distance between path node and the enemey.
-	var distance := global_position.distance_to(follow_path.global_position)
+	var distance := global_position.distance_to(agent_path.global_position)
 	# If they are within like 2m we should consider it "progress"
 	if distance < 5:
-		follow_path.progress += _delta * personality.move_speed * 2; # lil speed boost multiplier
+		agent_path.progress += _delta * personality.move_speed * 2; # lil speed boost multiplier
 
 # When we want the agent to Enemy to follow the NavAgent
 func _go_to_desired_location(_delta: float, desired_position: Vector3) -> void:

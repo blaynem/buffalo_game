@@ -80,7 +80,10 @@ namespace Buffalobuffalo.scripts.GOAP
 
             foreach (GoapGoal goal in agent.AvailableGoals)
             {
-                if (goal.IsValid(agent) && best_goal == null || goal.GetPriority() > best_goal?.GetPriority())
+                // If goal isn't valid, no need to consider it.
+                if (goal.IsValid(agent) == false) continue;
+                // Check for priority shifts
+                if (best_goal == null || goal.GetPriority(agent) > best_goal?.GetPriority(agent))
                 {
                     best_goal = goal;
                 }

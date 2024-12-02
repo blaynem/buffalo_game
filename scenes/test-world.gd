@@ -34,9 +34,9 @@ func handle_enemy_spawn(enemy_count: int) -> void:
 		path_3d.add_child(follow_path);
 		spawn_enemy(follow_path);
 
-func spawn_enemy(follow_path: PathFollow3D) -> void:
+func spawn_enemy(agent_path: PathFollow3D) -> void:
 	var enemy := ENEMY.instantiate()
-	enemy.follow_path = follow_path;
+	enemy.agent_path = agent_path;
 	enemy.personality = Brave.new()
 	enemy.is_stunned = false;
 	

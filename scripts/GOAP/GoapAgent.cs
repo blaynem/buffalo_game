@@ -9,20 +9,15 @@ namespace Buffalobuffalo.scripts.GOAP
 {
     public class AgentState
     {
-        private readonly ConditionDict state;
-
-        public AgentState(ConditionDict initState)
-        {
-            state = initState;
-        }
+        private readonly ConditionDict state = new();
 
         /// <summary>
-        /// Does a check to see if the condition is present and met.
+        /// Returns true if the condition is present and met, otherwise false.
         /// </summary>
         /// <param name="condition">Condition we want to match.</param>
         /// <param name="val">Value of the condition.</param>
         /// <returns></returns>
-        public bool HasState(Condition condition, object val)
+        public bool MatchesCondition(Condition condition, object val)
         {
             if (state.TryGetValue(condition, out var curr_val))
             {
@@ -42,27 +37,18 @@ namespace Buffalobuffalo.scripts.GOAP
     /// </summary>
     public abstract partial class GoapAgent : Node
     {
-        public AgentState State { get; set; }
         public CharacterBody3D Actor { get; private set; }
-        public List<GoapGoal> AvailableGoals { get; private set; }
-        public List<GoapAction> AvailableActions { get; private set; }
+        public AgentState State { get; set; } = new();
+        public List<GoapGoal> AvailableGoals { get; protected set; } = new();
+        public List<GoapAction> AvailableActions { get; protected set; } = new();
         public GoapAgentBrain Brain { get; private set; }
-        protected abstract List<GoapAction> DefineDefaultActions();
-        protected abstract List<GoapGoal> DefineDefaultGoals();
 
-        public GoapAgent() { }
+        public GoapAgent() {}
 
         public override void _Ready()
         {
             Actor = (CharacterBody3D)GetParent();
-
-            AvailableActions = DefineDefaultActions();
-            AvailableGoals = DefineDefaultGoals();
-            State = DefineDefaultState();
-
             Brain = new GoapAgentBrain(this);
-            SetTargetLocation(new Vector3((float)10.0, (float)1.0, (float)10.0));
-
             GD.Print("ok Agent loaded");
         }
 
@@ -76,10 +62,13 @@ namespace Buffalobuffalo.scripts.GOAP
             // Calling the Actor to update which movement script is running
             if (current_goal == null) {
                 GD.Print("==== No current goal.");
-                Actor.Call("_update_has_goals_to_follow", false);
             } else {
                 GD.Print("==== Current Goal: ", current_goal.GetGoalName());
-                Actor.Call("_update_has_goals_to_follow", true);
+                if (current_goal.GetGoalName() == "CompleteHike") {
+                    Actor.Call("_follow_path", true);
+                } else {
+                    Actor.Call("_follow_path", false);
+                }
             }
         }
 
@@ -104,12 +93,6 @@ namespace Buffalobuffalo.scripts.GOAP
             {
                 State.UpdateState(condition, value);
             }
-        }
-
-        protected virtual AgentState DefineDefaultState()
-        {
-            var init_conditions = new ConditionDict();
-            return new AgentState(init_conditions);
         }
 
         protected InventoryManager GetInventoryManager()

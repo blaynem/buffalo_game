@@ -8,11 +8,6 @@ namespace Buffalobuffalo.scripts.GOAP
     public abstract partial class GoapGoal
     {
         /// <summary>
-        /// Action Cost<br/>
-        /// If you need to do a calculation on the Priority, override the GetCost.
-        /// </summary>
-        protected abstract int Priority { get; }
-        /// <summary>
         /// This indicates if the action should be considered or not.
         /// </summary>
         public abstract bool IsValid(GoapAgent agent);
@@ -24,13 +19,13 @@ namespace Buffalobuffalo.scripts.GOAP
         public abstract ConditionDict DesiredState { get; }
 
         /// <summary>
-        /// Action Cost<br/>
+        /// Priority for the given gGoal<br/>
         /// Should be >= 1.
         /// </summary>
         // TODO: May need to add the blackboard back in for the priority calc.
-        public virtual int GetPriority()
+        public virtual int GetPriority(GoapAgent agent)
         {
-            return Priority;
+            return 1;
         }
 
         /// <summary>
@@ -55,7 +50,7 @@ namespace Buffalobuffalo.scripts.GOAP
         // Helper method for cases that require more complex logic
         private static GoapGoal CreatePickUpItemGoal(Variant target_item)
         {
-            var goal = new PickUpItemGoal((GodotObject) target_item);
+            var goal = new PickUpItemGoal((Node3D) target_item);
             return goal;
         }
     }

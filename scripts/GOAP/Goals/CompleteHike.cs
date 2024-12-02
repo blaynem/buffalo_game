@@ -1,15 +1,16 @@
-namespace Buffalobuffalo.scripts.GOAP.Goals
-{
-    public partial class TakeInTheSightsGoal : GoapGoal
+
+namespace Buffalobuffalo.scripts.GOAP.Goals {
+    public partial class CompleteHike : GoapGoal
     {
+
         public override ConditionDict DesiredState => new(){
-            { Condition.WantsToViewSights, false }
+            {Condition.CompletedHike, true}
         };
 
         public override bool IsValid(GoapAgent agent)
         {
             // If we've matched these conditions, then the goal is no longer valid.
-            return !agent.State.MatchesCondition(Condition.WantsToViewSights, true);
+            return !agent.State.MatchesCondition(Condition.CompletedHike, true);
         }
     }
 }
