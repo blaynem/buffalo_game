@@ -20,6 +20,3 @@ func play_human_animation(anim: Animations.Human) -> void:
 		var _animation_player: AnimationPlayer = $AnimationPlayer
 		var _anim := Animations.get_human_animation_name(anim)
 		_animation_player.play(_anim)
-
-func play_walk_animation() -> void:
-	play_human_animation(Animations.Human.WALK)

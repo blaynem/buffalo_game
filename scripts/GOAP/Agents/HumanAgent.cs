@@ -43,9 +43,9 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             base._PhysicsProcess(delta);
             
             if (Brain.current_goal?.GetGoalName() == "CompleteHike") {
-                Actor.Call("_follow_path", true);
+                Enemy.GDUtils.SetFollowPath(Actor, true);
             } else {
-                Actor.Call("_follow_path", false);
+                Enemy.GDUtils.SetFollowPath(Actor, false);
             }
         }
 
@@ -67,7 +67,6 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             var distance = Actor.GlobalPosition.DistanceSquaredTo(target_relic.GlobalPosition);
             if (distance < 20) {
                 // Make some sort of call to the relic???
-                // relic_target.Call("enemy_interact", Actor);
                 // Ensure it was actually viewed
                 ApplyEffectsToState(Actions.ViewRelic.StaticEffects);
                 return true;
@@ -91,9 +90,9 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
                 // TODO: Should fire the animation in here for pickup, and ensure the item is actually picked up.
                 // Probably need an animation timer 
                 // Attempt to pick up the item
-                target.Call("enemy_interact", Actor);
+                Items.CarriableEnemyGoalItem.EnemyInteract(target, Actor);
                 // Ensure it actually got looted
-                     {
+                if (GetInventoryManager().Held_item == target) {
                     var _effects = Actions.PickUpItem.StaticEffects;
                     // Set the item thats being held.
                     _effects[Condition.HasItemInHand] = target;

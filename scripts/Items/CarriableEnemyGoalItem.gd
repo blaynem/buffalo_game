@@ -52,16 +52,12 @@ func drop_item() -> void:
 	if holder is Enemy:
 		# If the enemy dropped the item, we start a timer.
 		enemy_pickup_timer.start()
-		holder.inventory_manager.DropItem();
-	if holder is Player:
-		holder.inventory_manager.DropItem();
 
 	holder = null;
 
 # Player can't place at goal.
 func place_item_at_goal() -> void:
 	if holder is Enemy:
-		holder.inventory_manager.DropItem()
 		holder = null;
 		queue_free()
 

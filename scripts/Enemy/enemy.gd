@@ -41,7 +41,6 @@ func _ready() -> void:
 	inventory_manager.SetupInventory(self)
 	_update_nameplate()
 	_set_collisions();
-	_setup_model();
 	_setup_signals();
 	
 	call_deferred("_after_spawn");
@@ -64,9 +63,6 @@ func _follow_path(_should_follow_path: bool) -> void:
 func _setup_personality() -> void:
 	display_name = personality.display_name
 
-func _setup_model() -> void:
-	model.play_human_animation(default_animation)
-
 func _handle_ragdoll_change(is_ragdolled: bool) -> void:
 	# Note: This does make it so we can just run through the enemy
 	var coll: CollisionShape3D = $CollisionShape3D
@@ -77,7 +73,7 @@ func _handle_ragdoll_change(is_ragdolled: bool) -> void:
 	else:
 		is_stunned = false
 		self.set_collision_mask_value(CollisionMap.player, true)
-		model.play_walk_animation()
+		model.play_human_animation(Animations.Human.WALK)
 
 func _update_nameplate() -> void:
 	nameplate.update_content(display_name)
@@ -100,7 +96,7 @@ func _handle_animations(_delta: float) -> void:
 	if velocity == Vector3.ZERO:
 		model.play_human_animation(Animations.Human.IDLE)
 		return;
-	model.play_walk_animation();
+	model.play_human_animation(Animations.Human.WALK);
 
 
 # Used for the c# layer to get the inventory manager

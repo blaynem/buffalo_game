@@ -89,13 +89,12 @@ namespace Buffalobuffalo.scripts.GOAP
 
         protected InventoryManager GetInventoryManager()
         {
-            var inventory_manager = Actor.Call("_get_inventory_manager");
-            return (InventoryManager)inventory_manager;
+            return Enemy.GDUtils.GetInventoryManager(Actor);
         }
 
         protected void SetTargetLocation(Vector3 location)
         {
-            Actor.Call("set_target_location", location);
+            Enemy.GDUtils.SetTargetLocation(Actor, location);
         }
     }
 };

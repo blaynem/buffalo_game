@@ -10,7 +10,7 @@ namespace Buffalobuffalo.scripts.Items {
 
         public void DropItem() {
             // Calling `drop_item` on the `CarriableEnemyGoalItem` node.
-            Held_item?.Call("drop_item");
+            Items.CarriableEnemyGoalItem.DropItem(Held_item);
 
             Held_item = null;
         }
