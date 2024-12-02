@@ -87,7 +87,7 @@ namespace Buffalobuffalo.scripts.GOAP
             }
         }
 
-        protected InventoryManager GetInventoryManager()
+        public InventoryManager GetInventoryManager()
         {
             return Enemy.GDUtils.GetInventoryManager(Actor);
         }

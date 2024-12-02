@@ -36,6 +36,8 @@ func set_collisions() -> void:
 func player_interact() -> void:
 	if holder == player:
 		return; # no changes happened.
+	if holder is Enemy:
+		holder.inventory_manager.DropItem()
 	# New item is placed on player
 	player.inventory_manager.PickupItem(self)
 	holder = player

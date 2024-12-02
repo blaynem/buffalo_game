@@ -93,11 +93,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
                 Items.CarriableEnemyGoalItem.EnemyInteract(target, Actor);
                 // Ensure it actually got looted
                 if (GetInventoryManager().Held_item == target) {
-                    var _effects = Actions.PickUpItem.StaticEffects;
-                    // Set the item thats being held.
-                    _effects[Condition.HasItemInHand] = target;
-
-                    ApplyEffectsToState(_effects);
+                    ApplyEffectsToState(Actions.PickUpItem.StaticEffects);
                     return true;
                 }
             }

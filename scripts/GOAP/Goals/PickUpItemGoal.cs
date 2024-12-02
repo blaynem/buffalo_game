@@ -25,8 +25,12 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
 
         public override bool IsValid(GoapAgent agent)
         {
-            // If we've matched these conditions, then the goal is no longer valid.
-            return !agent.State.MatchesCondition(Condition.HasItemInHand, target_item);
+            // If we have the held item in hand.
+            // TODO: When an item is dropped, we need to alter the specific pick up item goal if there was one.
+            if (agent.GetInventoryManager().Held_item == target_item) return false;
+            return true;
+            // Or If we've matched these conditions, then the goal is no longer valid.
+            // return !agent.State.MatchesCondition(Condition.HasItemInHand, true);
         }
     }
 };

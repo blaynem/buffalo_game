@@ -9,6 +9,7 @@ namespace Buffalobuffalo.scripts.Items {
         public InventoryManager() { }
 
         public void DropItem() {
+            if (Held_item == null) return;
             // Calling `drop_item` on the `CarriableEnemyGoalItem` node.
             Items.CarriableEnemyGoalItem.DropItem(Held_item);
 
