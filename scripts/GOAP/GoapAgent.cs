@@ -77,13 +77,6 @@ namespace Buffalobuffalo.scripts.GOAP
             Brain.UpdateAvailableActions();
         }
 
-        protected void ApplyEffectsToState(ConditionDict effects)
-        {
-            foreach ((Condition condition, object value) in effects)
-            {
-                State.UpdateState(condition, value);
-            }
-        }
 
         public InventoryManager GetInventoryManager()
         {

@@ -33,7 +33,7 @@ namespace Buffalobuffalo.scripts.GOAP
         /// Action Cost<br/>
         /// Should be >= 1.
         /// </summary>
-        public abstract int GetCost(GoapAgent agent);
+        public abstract int GetCost(GoapAgent agent, Blackboard blackboard);
         /// <summary>
         /// This indicates if the action should be considered or not.
         /// </summary>

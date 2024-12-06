@@ -2,6 +2,27 @@ using System.Collections.Generic;
 
 namespace Buffalobuffalo.scripts.GOAP
 {
+    public class Blackboard {
+        private readonly Dictionary<string, object> state = new();
+        public Blackboard() {}
+
+        public object GetValue(string key) {
+            if (state == null) return null;
+
+            if (state.TryGetValue(key, out var val)) {
+                return val;
+            }
+            return null;
+        }
+
+        public void AddValue(string key, object val) {
+            state.Add(key, val);
+        }
+
+        public void Clear() {
+            state.Clear();
+        }
+    }
     public partial class GoapAgentBrain
     {
         /// <summary>
@@ -9,6 +30,7 @@ namespace Buffalobuffalo.scripts.GOAP
         /// </summary>
         private GoapActionPlanner action_planner;
         private GoapAgent agent;
+        private Blackboard blackboard = new();
         public GoapGoal current_goal {get; private set;}
         private List<GoapAction> current_plan;
         private int current_plan_step = 0;
@@ -38,8 +60,7 @@ namespace Buffalobuffalo.scripts.GOAP
             action_planner.available_actions = agent.AvailableActions;
 
             if (current_goal != null) {
-                current_plan = action_planner.GetNewPlan(current_goal);
-                current_plan_step = 0;
+                HandleGoalChange(current_goal);
             }
         }
 
@@ -56,17 +77,27 @@ namespace Buffalobuffalo.scripts.GOAP
 
             if (current_goal == null || goal != current_goal)
             {
-                // TODO: Do we want a blackboard? Do we just use the agent state?
-                // GoapBlackboard blackboard = new GoapBlackboard();
-
                 current_goal = goal;
-                current_plan = action_planner.GetNewPlan(goal);
-                current_plan_step = 0;
+                HandleGoalChange(goal);
             }
             else
             {
                 FollowPlan(delta);
             }
+        }
+
+        /// <summary>
+        /// On goal change, we need to do a few things like clearing the blackboard and gettin a new plan.
+        /// </summary>
+        private void HandleGoalChange(GoapGoal _goal) {
+            blackboard.Clear();
+            var target_location_prop = _goal.GetType().GetProperty("target_location");
+            if (target_location_prop != null) {
+                blackboard.AddValue("target_location", target_location_prop.GetValue(_goal));
+            }
+
+            current_plan = action_planner.GetNewPlan(_goal, blackboard);
+            current_plan_step = 0;
         }
 
         /// <summary>

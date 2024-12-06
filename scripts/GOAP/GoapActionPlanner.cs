@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Dynamic;
 using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP
@@ -21,12 +20,12 @@ namespace Buffalobuffalo.scripts.GOAP
         /// </summary>
         /// <param name="goal"></param>
         /// <returns>A list of planned actions to complete the goal.</returns>
-        public List<GoapAction> GetNewPlan(GoapGoal goal)
+        public List<GoapAction> GetNewPlan(GoapGoal goal, Blackboard blackboard)
         {
             if (goal.DesiredState.Count <= 0)
                 return new();
 
-            return FindBestPlan(goal, goal.DesiredState);
+            return FindBestPlan(goal, blackboard, goal.DesiredState);
         }
 
         /// <summary>
@@ -35,14 +34,12 @@ namespace Buffalobuffalo.scripts.GOAP
         /// <param name="goal"></param>
         /// <param name="required_state"></param>
         /// <returns></returns>
-        private List<GoapAction> FindBestPlan(GoapGoal goal, ConditionDict required_state)
+        private List<GoapAction> FindBestPlan(GoapGoal goal, Blackboard blackboard, ConditionDict required_state)
         {
             // First we need to build a list of plans to complete the initial goal.
             // Then we find the cheapest plan.
 
             var root_goal = new TaskAccomplisher(goal, required_state);
-            // TODO: Use the blackboard?
-            dynamic blackboard = new ExpandoObject();
 
             // BuildPlan does alter the `root_goal` action list.
             if (BuildPlan(root_goal, blackboard))
@@ -68,7 +65,7 @@ namespace Buffalobuffalo.scripts.GOAP
         /// We recurse through the goal_step, building up a list of actions needed to complete each step.
         /// </summary>
         /// <returns>True if the plan was able to be built successfully.</returns>
-        private bool BuildPlan(TaskAccomplisher accomplisher, dynamic blackboard)
+        private bool BuildPlan(TaskAccomplisher accomplisher, Blackboard blackboard)
         {
             var has_followup = false;
             // If tasks desired_state is already met, we exit early.
@@ -111,7 +108,7 @@ namespace Buffalobuffalo.scripts.GOAP
             return has_followup;
         }
 
-        private List<Plan> GetActionsTotalCost(Plan plan, dynamic blackboard)
+        private List<Plan> GetActionsTotalCost(Plan plan, Blackboard blackboard)
         {
             var plans = new List<Plan>();
 
@@ -122,7 +119,7 @@ namespace Buffalobuffalo.scripts.GOAP
                 GoapAction _action = (GoapAction)plan.accomplisher.Task;
                 Plan _plan = new();
                 _plan.actions.Add(_action);
-                _plan.cost = _action.GetCost(agent);
+                _plan.cost = _action.GetCost(agent, blackboard);
 
                 plans.Add(_plan);
                 return plans;
@@ -138,7 +135,7 @@ namespace Buffalobuffalo.scripts.GOAP
                     if (plan.accomplisher.Task is GoapAction action)
                     {
                         child_plan.actions.Add(action);
-                        child_plan.cost += action.GetCost(agent);
+                        child_plan.cost += action.GetCost(agent, blackboard);
                     }
                     plans.Add(child_plan);
                 }
@@ -262,7 +259,6 @@ namespace Buffalobuffalo.scripts.GOAP
             public ConditionDict Current_state { get; set; }
             /// The actions needed to accomplish this task.
             private readonly ConditionDict desired_end_state;
-            // A checklist of what state is completed by actions in the actions_list.
             // Task that the actions_list is going to accomplish.
             // Will either be the Action or Goal, we don't really need this.
             // Just for debugging easier.
@@ -284,7 +280,7 @@ namespace Buffalobuffalo.scripts.GOAP
                 Child_tasks.Add(child);
             }
 
-            public void DoThingWithBlackboard(object blackboard)
+            public void DoThingWithBlackboard(Blackboard blackboard)
             {
                 var blackboard_checklist = ConditionsProvider.CloneConditions(desired_end_state);
                 GD.Print("Action Planner blackboard skipped");

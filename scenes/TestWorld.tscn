@@ -228,4 +228,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.402, 0, 5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.253, 0, -32)
 
 [node name="EnemyActivityZone4" parent="ActivityZones" instance=ExtResource("11_aeaq5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.829, 0, -11)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.7089, 0, -7.97744)

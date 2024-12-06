@@ -6,7 +6,7 @@ namespace Buffalobuffalo.scripts.GOAP.Actions
     {
         public PickUpItem(Func<double, bool> action_callback) : base(action_callback) {}
 
-        public override int GetCost(GoapAgent agent)
+        public override int GetCost(GoapAgent agent, Blackboard blackboard)
         {
             return 1;
         }
