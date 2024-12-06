@@ -16,11 +16,6 @@ namespace Buffalobuffalo.scripts.GOAP
             performCallback = action_callback;
         }
         /// <summary>
-        /// The cost of the Action.<br/>
-        /// If you need to do a calculation on the Cost, override the GetCost.
-        /// </summary>
-        protected abstract int Cost { get; }
-        /// <summary>
         /// Requirements for action to be completed. <br/>
         /// Example: { has_wood: true }
         /// </summary>
@@ -35,18 +30,14 @@ namespace Buffalobuffalo.scripts.GOAP
         /// </summary>
         public abstract ConditionDict GetEffects();
         /// <summary>
-        /// This indicates if the action should be considered or not.
-        /// </summary>
-        public virtual bool IsValid { get; } = true;
-
-        /// <summary>
         /// Action Cost<br/>
         /// Should be >= 1.
         /// </summary>
-        public virtual int GetCost(GoapAgent agent)
-        {
-            return Cost;
-        }
+        public abstract int GetCost(GoapAgent agent);
+        /// <summary>
+        /// This indicates if the action should be considered or not.
+        /// </summary>
+        public virtual bool IsValid { get; } = true;
 
         /// <summary>
         /// Action implementation called on every loop.

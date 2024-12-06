@@ -12,7 +12,7 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
         {
             // If within range of the target, let's make this a priority of 2.
             var distance = agent.Actor.GlobalPosition.DistanceSquaredTo(target_relic.GlobalPosition);
-            if (distance <= 200) {
+            if (distance <= 100) {
                 return 2;
             }
             return 1;
