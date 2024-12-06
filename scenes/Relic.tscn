@@ -11,22 +11,68 @@ lightmap_size_hint = Vector2i(7, 18)
 material = SubResource("StandardMaterial3D_hrnwo")
 size = Vector3(3, 8, 0.5)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_adnrq"]
-size = Vector3(20, 30, 20)
+[sub_resource type="PlaneMesh" id="PlaneMesh_nsqat"]
+size = Vector2(0.3, 0.3)
 
-[sub_resource type="BoxMesh" id="BoxMesh_iyf05"]
-size = Vector3(20, 30, 20)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2lsog"]
+albedo_color = Color(0.403002, 0.737064, 1.15514e-06, 1)
 
-[node name="Relic" type="MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
-mesh = SubResource("BoxMesh_0p4q2")
+[node name="Relic" type="Node3D"]
 script = ExtResource("2_1x48l")
 
-[node name="Call Area" type="Area3D" parent="."]
+[node name="Relic Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+mesh = SubResource("BoxMesh_0p4q2")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Call Area"]
-shape = SubResource("BoxShape3D_adnrq")
+[node name="Markers" type="Node3D" parent="."]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Call Area"]
-visible = false
-mesh = SubResource("BoxMesh_iyf05")
+[node name="Marker3D" type="Marker3D" parent="Markers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.88369)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Markers/Marker3D"]
+mesh = SubResource("PlaneMesh_nsqat")
+surface_material_override/0 = SubResource("StandardMaterial3D_2lsog")
+
+[node name="Marker3D5" type="Marker3D" parent="Markers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.11414, 0, 2.47842)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Markers/Marker3D5"]
+mesh = SubResource("PlaneMesh_nsqat")
+surface_material_override/0 = SubResource("StandardMaterial3D_2lsog")
+
+[node name="Marker3D6" type="Marker3D" parent="Markers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.17984, 0, 1.26434)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Markers/Marker3D6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.167322, 0, -0.486366)
+mesh = SubResource("PlaneMesh_nsqat")
+surface_material_override/0 = SubResource("StandardMaterial3D_2lsog")
+
+[node name="Marker3D2" type="Marker3D" parent="Markers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.910396, 0, 2.67713)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Markers/Marker3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00679493, 0, -0.186022)
+mesh = SubResource("PlaneMesh_nsqat")
+surface_material_override/0 = SubResource("StandardMaterial3D_2lsog")
+
+[node name="Marker3D3" type="Marker3D" parent="Markers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.82489, 0, 1.8524)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Markers/Marker3D3"]
+mesh = SubResource("PlaneMesh_nsqat")
+surface_material_override/0 = SubResource("StandardMaterial3D_2lsog")
+
+[node name="Marker3D7" type="Marker3D" parent="Markers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85467, 0, 1.8524)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Markers/Marker3D7"]
+mesh = SubResource("PlaneMesh_nsqat")
+surface_material_override/0 = SubResource("StandardMaterial3D_2lsog")
+
+[node name="Marker3D4" type="Marker3D" parent="Markers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6613, 0, 0.751531)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Markers/Marker3D4"]
+mesh = SubResource("PlaneMesh_nsqat")
+surface_material_override/0 = SubResource("StandardMaterial3D_2lsog")

@@ -94,11 +94,10 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             };
 
             var distance = Actor.GlobalPosition.DistanceSquaredTo(activityZone.target_location);
-            if (distance < 5) {
+            if (distance <= 1) {
                 var animation_name = activityZone.interaction_animation;
                 if (animationHandler.current_animation.name != animation_name) {
                     animationHandler.PlayWithCallback(animation_name, () => {
-                        ApplyEffectsToState(Actions.CompleteActivityZone.StaticEffects);
                         activityZone.CompleteGoal();
                     });
                 }
@@ -116,21 +115,19 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
                 GD.PrintErr("Somehow in the ViewRelic Action with incorrect goal.");
                 return false;
             };
-            var target_relic = viewRelicGoal.target_relic;
-            var distance = Actor.GlobalPosition.DistanceSquaredTo(target_relic.GlobalPosition);
-            if (distance < 10) {
+            var distance = Actor.GlobalPosition.DistanceSquaredTo(viewRelicGoal.target_location);
+            if (distance <= 1) {
                 // TODO: Edit this to be some sort of alternate than just turning lol
                 var animation_name = "people_locomotion_pack/left_turn_180";
                 if (animationHandler.current_animation.name != animation_name) {
                     animationHandler.PlayWithCallback(animation_name, () => {
-                        ApplyEffectsToState(Actions.ViewRelic.StaticEffects);
                         viewRelicGoal.CompleteGoal();
                     });
                 }
                 return viewRelicGoal.IsCompleted();
             }
 
-            SetTargetLocation(target_relic.GlobalPosition);
+            SetTargetLocation(viewRelicGoal.target_location);
 
             return false;
         }
@@ -145,7 +142,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
 
             var target = pickupItemGoal.target_item;
             var distance = Actor.GlobalPosition.DistanceSquaredTo(target.GlobalPosition);
-            if (distance < 5) {
+            if (distance <= 1) {
                 var animation_name = "people_locomotion_pack/jump";
                 if (animationHandler.current_animation.name != animation_name) {
                     animationHandler.PlayWithCallback(animation_name, () => {
@@ -154,7 +151,6 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
                         Items.CarriableEnemyGoalItem.EnemyInteract(target, Actor);
                         // Ensure it actually got looted
                         if (GetInventoryManager().Held_item == target) {
-                            ApplyEffectsToState(Actions.PickUpItem.StaticEffects);
                             item_pickedup = true;
                         }
                     });

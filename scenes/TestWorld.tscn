@@ -213,19 +213,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.68425, 0, 23.886)
 [node name="Relics" type="Node" parent="."]
 
 [node name="Relic" parent="Relics" instance=ExtResource("9_dc0ms")]
-transform = Transform3D(0.996672, 0, -0.0815202, 0, 1, 0, 0.0815202, 0, 0.996672, 2.0891, 7.2967, 5.52057)
+transform = Transform3D(0.933054, 0, 0.359736, 0, 1, 0, -0.359736, 0, 0.933054, -2.24153, 3.31343, 4.36689)
 
 [node name="Relic2" parent="Relics" instance=ExtResource("9_dc0ms")]
-transform = Transform3D(0.660788, 0, -0.750573, 0, 1, 0, 0.750573, 0, 0.660788, -35.6635, 4.11228, 36.5201)
+transform = Transform3D(-0.83456, 0, 0.550918, 0, 1, 0, -0.550918, 0, -0.83456, -35.6635, 0.0590743, 36.5201)
 
 [node name="Relic3" parent="Relics" instance=ExtResource("9_dc0ms")]
-transform = Transform3D(0.0722805, 0, 0.997384, 0, 1, 0, -0.997384, 0, 0.0722805, -15.2509, 4.11228, -4.12928)
+transform = Transform3D(0.109162, 0, -0.994024, 0, 1, 0, 0.994024, 0, 0.109162, -15.2509, 0.021971, -4.12928)
 
 [node name="Relic4" parent="Relics" instance=ExtResource("9_dc0ms")]
-transform = Transform3D(0.995802, 0, 0.0915361, 0, 1, 0, -0.0915361, 0, 0.995802, -18.529, 7.65556, -23.3768)
+transform = Transform3D(0.999448, 0, 0.0332421, 0, 1, 0, -0.0332421, 0, 0.999448, -14.8885, 3.31298, -23.3768)
 
 [node name="Relic5" parent="Relics" instance=ExtResource("9_dc0ms")]
-transform = Transform3D(-0.732234, 0, -0.681053, 0, 1, 0, 0.681053, 0, -0.732234, 15.7624, 4.11228, -38.617)
+transform = Transform3D(0.676169, 0, -0.736747, 0, 1, 0, 0.736747, 0, 0.676169, 19.301, 0.0586257, -41.3018)
 
 [node name="CarriableEnemyGoalItem" parent="." instance=ExtResource("10_n20ps")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.645123, 0.876214, 14.1039)

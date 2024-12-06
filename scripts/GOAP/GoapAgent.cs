@@ -59,12 +59,6 @@ namespace Buffalobuffalo.scripts.GOAP
         public override void _PhysicsProcess(double delta)
         {
             Brain.Process(delta);
-            // Calling the Actor to update which movement script is running
-            if (Brain.current_goal == null) {
-                GD.Print("==== No current goal.");
-            } else {
-                GD.Print("==== Current Goal: ", Brain.current_goal.GetGoalName());
-            }
         }
 
         public void SetAvailableGoals(GoapGoal[] _new_goals)

@@ -27,9 +27,11 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
             return relic_viewed;
         }
 
+        public Vector3 target_location { get; private set; }
         public Node3D target_relic {get; private set;} = null;
         public ViewRelic(Node3D _target_relic) {
             target_relic = _target_relic;
+            target_location = (Vector3)_target_relic.Call("get_view_location");
         }
 
         public override bool IsValid(GoapAgent agent)
