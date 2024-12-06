@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://do7ksivvif5cj"]
+[gd_scene load_steps=23 format=3 uid="uid://do7ksivvif5cj"]
 
 [ext_resource type="Texture2D" uid="uid://c6i4qs03rki1o" path="res://assets/textures/rocky_terrain_02_diff_1k.jpg" id="1_4v6rc"]
 [ext_resource type="Script" path="res://scenes/test-world.gd" id="1_b62hf"]
@@ -9,8 +9,7 @@
 [ext_resource type="MeshLibrary" uid="uid://bcspsyxj5w8hk" path="res://scenes/useable_assets/nature.tres" id="5_r0ytx"]
 [ext_resource type="Texture2D" uid="uid://i06y7fnas8f" path="res://icon.svg" id="6_1rs1b"]
 [ext_resource type="PackedScene" uid="uid://c4ar8nuhhbfdo" path="res://scenes/Relic.tscn" id="9_dc0ms"]
-[ext_resource type="PackedScene" uid="uid://sbemyimn5kep" path="res://scenes/Items/BoxItem.tscn" id="10_n20ps"]
-[ext_resource type="Script" path="res://scripts/Items/enemy_activity_zone.gd" id="11_wq24e"]
+[ext_resource type="PackedScene" uid="uid://cg7op0kub40mr" path="res://scenes/enemy_activity_zone.tscn" id="11_aeaq5"]
 
 [sub_resource type="Curve3D" id="Curve3D_sefa7"]
 _data = {
@@ -66,16 +65,6 @@ sky_material = SubResource("ProceduralSkyMaterial_uhobw")
 [sub_resource type="Environment" id="Environment_ofnn7"]
 background_mode = 2
 sky = SubResource("Sky_oyb3q")
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_7lb1q"]
-top_radius = 10.0
-bottom_radius = 10.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hrawn"]
-albedo_color = Color(0.129412, 0.470588, 0, 0.372549)
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_8lfgu"]
-radius = 10.0
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_b62hf")
@@ -227,57 +216,16 @@ transform = Transform3D(0.999448, 0, 0.0332421, 0, 1, 0, -0.0332421, 0, 0.999448
 [node name="Relic5" parent="Relics" instance=ExtResource("9_dc0ms")]
 transform = Transform3D(0.676169, 0, -0.736747, 0, 1, 0, 0.736747, 0, 0.676169, 19.301, 0.0586257, -41.3018)
 
-[node name="CarriableEnemyGoalItem" parent="." instance=ExtResource("10_n20ps")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.645123, 0.876214, 14.1039)
+[node name="ActivityZones" type="Node" parent="."]
 
-[node name="EnemyActivityZone" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.83564, 0, 26.4127)
-script = ExtResource("11_wq24e")
+[node name="EnemyActivityZone" parent="ActivityZones" instance=ExtResource("11_aeaq5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.836, 0, 26)
 
-[node name="Area3D" type="Area3D" parent="EnemyActivityZone"]
+[node name="EnemyActivityZone2" parent="ActivityZones" instance=ExtResource("11_aeaq5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.402, 0, 5)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EnemyActivityZone/Area3D"]
-mesh = SubResource("CylinderMesh_7lb1q")
-surface_material_override/0 = SubResource("StandardMaterial3D_hrawn")
+[node name="EnemyActivityZone3" parent="ActivityZones" instance=ExtResource("11_aeaq5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.253, 0, -32)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyActivityZone/Area3D"]
-shape = SubResource("CylinderShape3D_8lfgu")
-
-[node name="EnemyActivityZone2" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.4024, 0, 5.20636)
-script = ExtResource("11_wq24e")
-
-[node name="Area3D" type="Area3D" parent="EnemyActivityZone2"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EnemyActivityZone2/Area3D"]
-mesh = SubResource("CylinderMesh_7lb1q")
-surface_material_override/0 = SubResource("StandardMaterial3D_hrawn")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyActivityZone2/Area3D"]
-shape = SubResource("CylinderShape3D_8lfgu")
-
-[node name="EnemyActivityZone3" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.8292, 0, -11.055)
-script = ExtResource("11_wq24e")
-
-[node name="Area3D" type="Area3D" parent="EnemyActivityZone3"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EnemyActivityZone3/Area3D"]
-mesh = SubResource("CylinderMesh_7lb1q")
-surface_material_override/0 = SubResource("StandardMaterial3D_hrawn")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyActivityZone3/Area3D"]
-shape = SubResource("CylinderShape3D_8lfgu")
-
-[node name="EnemyActivityZone4" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.253, 0, -32.7277)
-script = ExtResource("11_wq24e")
-
-[node name="Area3D" type="Area3D" parent="EnemyActivityZone4"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EnemyActivityZone4/Area3D"]
-mesh = SubResource("CylinderMesh_7lb1q")
-surface_material_override/0 = SubResource("StandardMaterial3D_hrawn")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyActivityZone4/Area3D"]
-shape = SubResource("CylinderShape3D_8lfgu")
+[node name="EnemyActivityZone4" parent="ActivityZones" instance=ExtResource("11_aeaq5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.829, 0, -11)

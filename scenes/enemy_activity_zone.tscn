@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cg7op0kub40mr"]
+
+[ext_resource type="Script" path="res://scripts/Items/enemy_activity_zone.gd" id="1_wfgc8"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7lb1q"]
+top_radius = 10.0
+bottom_radius = 10.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hrawn"]
+albedo_color = Color(0.129412, 0.470588, 0, 0.372549)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_8lfgu"]
+radius = 10.0
+
+[node name="EnemyActivityZone" type="Node3D"]
+script = ExtResource("1_wfgc8")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Area3D"]
+mesh = SubResource("CylinderMesh_7lb1q")
+surface_material_override/0 = SubResource("StandardMaterial3D_hrawn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CylinderShape3D_8lfgu")

@@ -14,6 +14,9 @@ loot flowers, then consider the action completed.
 @onready var debug_mesh: MeshInstance3D = $Area3D/MeshInstance3D
 @onready var collision_shape: CollisionShape3D = $Area3D/CollisionShape3D
 
+## The interaction_animation must NOT loop.
+@export var interaction_animation: Animations.Human = Animations.Human.JUMP;
+
 func _ready() -> void:
 	add_to_group(GroupMap.enemy_activity)
 	_setup_collisions();
@@ -21,7 +24,7 @@ func _ready() -> void:
 	_setup_signals();
 
 func get_interaction_animation() -> String:
-	return "people_locomotion_pack/jump"
+	return Animations.get_human_animation_name(interaction_animation);
 
 func spawn_rectangle(location: Vector3) -> void:
 	# Create a new MeshInstance

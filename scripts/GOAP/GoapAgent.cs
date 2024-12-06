@@ -7,6 +7,10 @@ using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP
 {
+    /// <summary>
+    /// The AgentState isn't necessarily a direct mapping to all Goals/Actions effects.
+    /// We are only using it to keep track of things like if the Agent is hungry, scared, etc.
+    /// </summary>
     public class AgentState
     {
         private readonly ConditionDict state = new();
