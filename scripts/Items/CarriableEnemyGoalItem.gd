@@ -11,7 +11,7 @@ extends RigidBody3D
 var holder: PhysicsBody3D = null;
 
 func _ready() -> void:
-	add_to_group(GroupMap.temp_item)
+	add_to_group(GroupMap.carriable_item)
 	set_collisions();
 	# When item is interacted with
 	interactible_area.set_interact_fn(player_interact)

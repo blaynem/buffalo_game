@@ -18,6 +18,15 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
             return 1;
         }
 
+        private bool relic_viewed = false;
+
+        public void CompleteGoal() {
+            relic_viewed = true;
+        }
+        public bool IsCompleted() {
+            return relic_viewed;
+        }
+
         public Node3D target_relic {get; private set;} = null;
         public ViewRelic(Node3D _target_relic) {
             target_relic = _target_relic;
@@ -25,8 +34,8 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
 
         public override bool IsValid(GoapAgent agent)
         {
-            // If we've matched these conditions, then the goal is no longer valid.
-            return !agent.State.MatchesCondition(Condition.ViewedRelic, true);
+            // If relic hasn't been viewed yet, it's valid.
+            return !relic_viewed;
         }
     }
 }

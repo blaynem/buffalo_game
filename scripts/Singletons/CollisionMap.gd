@@ -26,6 +26,7 @@ var enemy: int = 4;
 var item_interactable: int = 5;
 var bones: int = 6;
 var relic: int = 7;
+var activity_area: int = 8;
 
 # Clears the default collision layers / masks.
 func _clear_collisions(entity: CollisionObject3D) -> void:

@@ -23,5 +23,6 @@ namespace Buffalobuffalo.scripts.GOAP
         HasItemInHand,
         ViewedRelic,
         CompletedHike,
+        CompleteActivity,
     }
 }

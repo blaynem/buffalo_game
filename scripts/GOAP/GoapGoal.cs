@@ -23,10 +23,7 @@ namespace Buffalobuffalo.scripts.GOAP
         /// Should be >= 1.
         /// </summary>
         // TODO: May need to add the blackboard back in for the priority calc.
-        public virtual int GetPriority(GoapAgent agent)
-        {
-            return 1;
-        }
+        public abstract int GetPriority(GoapAgent agent);
 
         /// <summary>
         /// Returns the goals name.

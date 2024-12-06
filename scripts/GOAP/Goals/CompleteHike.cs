@@ -7,6 +7,11 @@ namespace Buffalobuffalo.scripts.GOAP.Goals {
             {Condition.CompletedHike, true}
         };
 
+        public override int GetPriority(GoapAgent agent)
+        {
+            return 1;
+        }
+
         public override bool IsValid(GoapAgent agent)
         {
             // If we've matched these conditions, then the goal is no longer valid.

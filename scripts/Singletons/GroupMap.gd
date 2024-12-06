@@ -4,7 +4,8 @@ extends Node
 
 var player := "Player"
 var relic := "Relic"
-var temp_item := "TempItem";
+var enemy_activity := "EnemyActivity";
+var carriable_item := "CarriableItem";
 
 func get_player_from_scene() -> Player:
 	return get_tree().get_first_node_in_group(player)

@@ -133,9 +133,11 @@ func _physics_process(delta: float) -> void:
 			_go_to_desired_location(delta, target_location);
 	
 	_handle_animations(delta)
-	# TODO: Depending on the animation, we shouldn't allow any movement.
-	if animation_handler.CanMove():
-		move_and_slide()
+	# If they can't move, we want to get rid of the x/z velocity.
+	if not animation_handler.CanMove():
+		velocity.x = 0;
+		velocity.z = 0;
+	move_and_slide()
 
 # This is the moving the literal Path3DFollower.
 func _handle_path_movement(_delta: float) -> void:
