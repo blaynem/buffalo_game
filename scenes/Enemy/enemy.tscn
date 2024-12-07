@@ -1,8 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://bj76d5gx1dthn"]
+[gd_scene load_steps=14 format=3 uid="uid://bj76d5gx1dthn"]
 
 [ext_resource type="Script" path="res://scripts/Enemy/enemy.gd" id="1_g7dug"]
 [ext_resource type="Script" path="res://scripts/nameplates.gd" id="2_lsxn7"]
+[ext_resource type="Script" path="res://scripts/Enemy/vision_area.gd" id="7_4b6xw"]
 [ext_resource type="Script" path="res://scripts/Enemy/PathDebugger.gd" id="7_56rp8"]
+[ext_resource type="PackedScene" uid="uid://cb14jagfpjv0f" path="res://assets/cone.tscn" id="7_jwt7f"]
 [ext_resource type="PackedScene" uid="uid://ckxi86nbcosmn" path="res://scenes/Enemy/BoneMan.tscn" id="8_3qhcl"]
 [ext_resource type="Script" path="res://scripts/Enemy/enemy_ragdoll_handler.gd" id="9_uswoj"]
 [ext_resource type="Script" path="res://scripts/GOAP/Agents/HumanAgent.cs" id="10_t1x1k"]
@@ -17,6 +19,9 @@ height = 1.8
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lt6hm"]
 albedo_color = Color(1, 0.0784314, 0, 1)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_5gdm8"]
+points = PackedVector3Array(-0.000195742, 1, -0.000195742, 0.194988, -1, -0.980814, -0.000195742, -1, -1, -0.195184, -1, -0.980814, -0.382733, -1, -0.924041, -0.555599, -1, -0.831637, -0.707126, -1, -0.707126, -0.831637, -1, -0.555599, -0.924041, -1, -0.382733, -0.980814, -1, -0.195184, -1, -1, -0.000195742, -0.980814, -1, 0.194988, -0.924041, -1, 0.382537, -0.831637, -1, 0.555403, -0.707126, -1, 0.70693, -0.555599, -1, 0.831441, -0.382733, -1, 0.923845, -0.195184, -1, 0.980619, -0.000195742, -1, 1, 0.194988, -1, 0.980619, 0.382537, -1, 0.923845, 0.555403, -1, 0.831441, 0.70693, -1, 0.70693, 0.831441, -1, 0.555403, 0.923845, -1, 0.382537, 0.980619, -1, 0.194988, 1, -1, -0.000195742, 0.980619, -1, -0.195184, 0.923845, -1, -0.382733, 0.831441, -1, -0.555599, 0.70693, -1, -0.707126, 0.555403, -1, -0.831637, 0.382537, -1, -0.924041)
 
 [node name="Enemy" type="CharacterBody3D"]
 script = ExtResource("1_g7dug")
@@ -59,5 +64,23 @@ mesh = SubResource("PlaneMesh_erfqn")
 surface_material_override/0 = SubResource("StandardMaterial3D_lt6hm")
 script = ExtResource("7_56rp8")
 
-[node name="Timer" type="Timer" parent="."]
-one_shot = true
+[node name="VisionTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.25
+autostart = true
+
+[node name="VisionArea" type="Area3D" parent="."]
+transform = Transform3D(3, 0, 0, 0, -1.31134e-07, 3, 0, -3, -1.31134e-07, 0, 1.5, 3.051)
+script = ExtResource("7_4b6xw")
+
+[node name="Cone" parent="VisionArea" instance=ExtResource("7_jwt7f")]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VisionArea"]
+shape = SubResource("ConvexPolygonShape3D_5gdm8")
+
+[node name="VisionRaycast" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+target_position = Vector3(0, 0, 100)
+debug_shape_custom_color = Color(1, 0, 0, 1)

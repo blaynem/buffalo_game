@@ -9,7 +9,6 @@ const InventoryManager = preload("res://scripts/Items/InventoryManager.cs")
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var model: EnemyBaseModel = $BoneManModel
 @onready var ragdoll_handler: EnemyRagdollHandler = $RagdollHandler
-@onready var action_timer: Timer = $Timer
 
 ## If true, the enemy can not take any actions.
 @export var is_stunned: bool = true
@@ -30,8 +29,6 @@ var held_item: CarriableEnemyGoalItem = null;
 # If true, is following the path, rather than going towards the target_location (usually their goal)
 var is_following_path: bool = true;
 var agent_path: PathFollow3D;
-# If true, is currently performing an action.
-var performing_action := false;
 
 func set_target_location(location: Vector3) -> void:
 	target_location = location
@@ -54,10 +51,9 @@ func _after_spawn() -> void:
 
 func _setup_signals() -> void:
 	ragdoll_handler.RagdollChange.connect(_handle_ragdoll_change)
-	action_timer.timeout.connect(_action_timer_timeout)
+	SignalBus.VisionAreaSpotsPlayer.connect(_handle_vision_spot_player);
 
-func _action_timer_timeout() -> void:
-	performing_action = false;
+func _handle_vision_spot_player(enemy_id: InternalMode) -> void:
 	pass;
 
 # If is set to true, will follow the path rather than the other objective.

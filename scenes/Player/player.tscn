@@ -50,3 +50,6 @@ script = ExtResource("4_6qpy0")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RagdollZone"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0172978, 1.13947, -0.158343)
 shape = SubResource("BoxShape3D_el64m")
+
+[node name="FacePointer" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51361, -1.83915)

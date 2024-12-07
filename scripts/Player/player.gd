@@ -6,6 +6,8 @@ const InventoryManager = preload("res://scripts/Items/InventoryManager.cs")
 @onready var item_hold_position: Marker3D = $CarryObjetMarker
 @onready var interaction_area: Area3D = $ItemInteractionArea
 @onready var model: BuffaloModel = $buffalo
+@onready var face_pointer: Node3D = $FacePointer
+
 
 @export var WALK_SPEED := 7.0
 @export var RUN_SPEED := 15.0
