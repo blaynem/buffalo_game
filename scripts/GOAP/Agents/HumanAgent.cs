@@ -24,10 +24,8 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             var zones = GetTree().GetNodesInGroup("EnemyActivity");
 
             Random random = new();
-            var relic_amt = relics.Count;
-            var zone_amt = zones.Count;
-            // var relic_amt = random.Next(1, relics.Count);
-            // var zone_amt = random.Next(1, zones.Count);
+            var relic_amt = random.Next(1, relics.Count);
+            var zone_amt = random.Next(1, zones.Count);
 
             // shuffle em and grab the first few items.
             relics.Shuffle();
@@ -73,7 +71,6 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         {
             base._PhysicsProcess(delta);
             
-            GD.Print("----", Brain.current_goal?.GetGoalName());
             if (Brain.current_goal?.GetGoalName() == "CompleteHike") {
                 Enemy.GDUtils.SetFollowPath(Actor, true);
             } else {

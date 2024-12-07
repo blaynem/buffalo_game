@@ -13,7 +13,7 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
             // If within range of the target, let's make this a priority of 2.
             var distance = agent.Actor.GlobalPosition.DistanceSquaredTo(target_relic.GlobalPosition);
             // There is a bug where the actor walks too far away and then this priority gets set back to 1.
-            if (distance <= 230) {
+            if (distance <= 200 || agent.Brain.current_goal == this) {
                 return 2;
             }
             return 1;

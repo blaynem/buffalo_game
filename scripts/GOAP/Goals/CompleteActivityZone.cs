@@ -35,7 +35,7 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
             var distance = agent.Actor.GlobalPosition.DistanceSquaredTo(Activity_zone.GlobalPosition);
             // TODO: Figure out a better way for getting a distance. I believe it's goign to the middle of the circle,
             //       rather than the edge that we need.
-            if (distance <= 200)
+            if (distance <= 200 || agent.Brain.current_goal == this)
             {
                 return 2;
             }
