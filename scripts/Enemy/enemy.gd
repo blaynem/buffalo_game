@@ -38,7 +38,7 @@ func _ready() -> void:
 	
 	inventory_manager.SetupInventory(self)
 	agent.AttachAnimationHandler(model._animation_player)
-	animation_handler = agent.animationHandler;
+	animation_handler = agent.AnimationHandler;
 	_update_nameplate()
 	_set_collisions();
 	_setup_signals();
@@ -53,7 +53,8 @@ func _setup_signals() -> void:
 	SignalBus.VisionAreaSpotsPlayer.connect(_handle_vision_spot_player);
 
 func _handle_vision_spot_player(enemy_id: InternalMode) -> void:
-	pass;
+	if enemy_id == get_instance_id():
+		agent.HandlePlayerSpotted()
 
 # If is set to true, will follow the path rather than the other objective.
 func _follow_path(_should_follow_path: bool) -> void:
@@ -64,7 +65,6 @@ func _setup_personality() -> void:
 
 func _handle_ragdoll_change(is_ragdolled: bool) -> void:
 	# Note: This does make it so we can just run through the enemy
-	var coll: CollisionShape3D = $CollisionShape3D
 	if is_ragdolled:
 		# Need to stop the animation so that we know it's been cancelled
 		animation_handler.Stop()

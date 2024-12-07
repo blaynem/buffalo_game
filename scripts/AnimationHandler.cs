@@ -77,7 +77,8 @@ namespace Buffalobuffalo.scripts.Animation {
         /// <returns></returns>
         public bool CanMove() {
             if (current_animation == null) return true;
-            if (current_animation.name == "people_locomotion_pack/walking") {
+            if (current_animation.name == AnimationMapper.Human.WALK.ToAnimationName() ||
+                current_animation.name == AnimationMapper.Human.RUN.ToAnimationName()) {
                 return true;
             }
             return false;

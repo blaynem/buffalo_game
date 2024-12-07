@@ -27,7 +27,9 @@ namespace Buffalobuffalo.scripts.GOAP.Goals
         {
             // If we have the held item in hand.
             // TODO: When an item is dropped, we need to alter the specific pick up item goal if there was one.
-            if (agent.GetInventoryManager().Held_item == target_item) return false;
+            if (agent is Agents.HumanAgent humanAgent) {
+                if (humanAgent.GetInventoryManager().Held_item == target_item) return false;
+            }
             return true;
             // Or If we've matched these conditions, then the goal is no longer valid.
             // return !agent.State.MatchesCondition(Condition.HasItemInHand, true);

@@ -17,7 +17,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             // So rather than fix it, hehe we have this patch!
             // TODO: Fix this bug.
             Play(AnimationMapper.Human.WALK);
-            Actor.Velocity = Vector3.Forward;
+            Actor.Velocity = Vector3.Forward; // Anything besides Vector3.Zero.
         }
 
         /// <summary>
@@ -25,12 +25,11 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         /// </summary>
         public void HandlePhysicsProcess() {
             if (IsRagdolled()) return;
-            if (Actor.Velocity == Vector3.Zero) {
-                Play(AnimationMapper.Human.IDLE);
-            }
-            // If no animation is currently playing, AND the actor is moving, then we select Walk.
-            // TODO: We almost need a state machine for different animations here.
+            // If no animation is playing, we fall back to these basics.
             if (!IsAnimationPlaying()) {
+                if (Actor.Velocity == Vector3.Zero) {
+                    Play(AnimationMapper.Human.IDLE);
+                }
                 Play(AnimationMapper.Human.WALK);
             }
         }

@@ -16,7 +16,9 @@ namespace Buffalobuffalo.scripts.GOAP
         }
     }
     /// <summary>
-    /// Possible conditions, or states, that can be applied to an Agent.<br/><br/>
+    /// Possible conditions, or states, that can be applied to an Agents States.<br/><br/>
+    /// 
+    /// These are used for creating the GOAP Goals / Actions pipeline.
     /// </summary>
     public enum Condition
     {
@@ -24,5 +26,10 @@ namespace Buffalobuffalo.scripts.GOAP
         ViewedRelic,
         CompletedHike,
         CompleteActivity,
+        IsScared,
+        /// <summary>
+        /// Safe Distance from the Player
+        /// </summary>
+        IsSafeDistance,
     }
 }

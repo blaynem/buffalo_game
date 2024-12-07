@@ -9,15 +9,28 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
     // TODO: Maybe alter the potential actions depending on the personality.
     public partial class HumanAgent : GoapAgent
     {
-        public HumanAnimationHandler animationHandler;
+        public HumanAnimationHandler AnimationHandler;
         public HumanAgent() {}
         public override void _Ready()
         {
-             AvailableActions = new(){
+            // Ensure we set up the goals and actions before calling the base ready.
+            SetupActionsAndGoals();
+            base._Ready();
+        }
+
+        private void SetupActionsAndGoals() {
+            AvailableActions = new(){
+                new Actions.FindSafety(FindSafetyCb),
+                new Actions.CalmDown(CalmDownCb),
                 new Actions.PickUpItem(PickUpItemCb),
                 new Actions.CompleteHike(CompleteHikeCb),
                 new Actions.ViewRelic(ViewRelicCb),
                 new Actions.CompleteActivityZone(CompleteActivityZoneCb),
+            };
+
+            var availableGoals = new List<GoapGoal>(){
+                new Goals.CompleteHike(),
+                new Goals.StaySafe()
             };
 
             var relics = GetTree().GetNodesInGroup("Relic");
@@ -30,10 +43,6 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             // shuffle em and grab the first few items.
             relics.Shuffle();
             zones.Shuffle();
-
-            var availableGoals = new List<GoapGoal>(){
-                new Goals.CompleteHike()
-            };
             
             var relic_to_visit = relics.Take(relic_amt);
             var zones_to_visit = zones.Take(zone_amt);
@@ -52,7 +61,14 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         }
 
         public void AttachAnimationHandler(AnimationPlayer animationPlayer) {
-            animationHandler = new(animationPlayer, Actor);
+            AnimationHandler = new(animationPlayer, Actor);
+        }
+
+        /// <summary>
+        /// When a player is spotted, we will do some things!
+        /// </summary>
+        public void HandlePlayerSpotted() {
+            State.UpdateState(Condition.IsScared, true);
         }
 
         // Each agent kinda needs to create their own build that maps the action to the callback.
@@ -70,7 +86,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         public override void _PhysicsProcess(double delta)
         {
             base._PhysicsProcess(delta);
-            animationHandler.HandlePhysicsProcess();
+            AnimationHandler.HandlePhysicsProcess();
             
             if (Brain.current_goal?.GetGoalName() == "CompleteHike") {
                 Enemy.GDUtils.SetFollowPath(Actor, true);
@@ -87,6 +103,33 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             // ApplyEffectsToState(Actions.CompleteHike.StaticEffects);
         }
 
+        private bool CalmDownCb(double delta)
+        {
+            // Calm themselves down once within safety range.
+            State.UpdateState(Condition.IsScared, false);
+            // TODO: Fire a different animation here that doesn't loop, then remove the `Stop` call.
+            AnimationHandler.Stop(); // Stop the animation so it's them walking again.
+            return false;
+        }
+
+        private bool FindSafetyCb(double delta)
+        {
+            var player = (CharacterBody3D) GetTree().GetFirstNodeInGroup("Player");
+            var distance = Actor.GlobalPosition.DistanceSquaredTo(player.GlobalPosition);
+            // If they're out of range, the saftey is true.
+            if (distance >= 130) {
+                return true;
+            }
+
+            // We want them to run for their lives!
+            if (AnimationHandler.current_animation.name != AnimationMapper.Human.RUN.ToAnimationName()) {
+                AnimationHandler.Play(AnimationMapper.Human.RUN);
+            }
+            // TODO: Figure out better target, also adjust the movement speed.
+            SetTargetLocation(new Vector3(10, 0, 10));
+            return false;
+        }
+
         private bool CompleteActivityZoneCb(double delta)
         {
             if (Brain.current_goal is not Goals.CompleteActivityZone activityZone) {
@@ -97,8 +140,8 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             var distance = Actor.GlobalPosition.DistanceSquaredTo(activityZone.target_location);
             if (distance <= 1) {
                 var animation_name = activityZone.interaction_animation;
-                if (animationHandler.current_animation.name != animation_name) {
-                    animationHandler.PlayWithCallback(animation_name, () => {
+                if (AnimationHandler.current_animation.name != animation_name) {
+                    AnimationHandler.PlayWithCallback(animation_name, () => {
                         activityZone.CompleteGoal();
                     });
                 }
@@ -120,8 +163,8 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             if (distance <= 1) {
                 // TODO: Edit this to be some sort of alternate than just turning lol
                 var animation_name = "people_locomotion_pack/left_turn_180";
-                if (animationHandler.current_animation.name != animation_name) {
-                    animationHandler.PlayWithCallback(animation_name, () => {
+                if (AnimationHandler.current_animation.name != animation_name) {
+                    AnimationHandler.PlayWithCallback(animation_name, () => {
                         viewRelicGoal.CompleteGoal();
                     });
                 }
@@ -145,8 +188,8 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             var distance = Actor.GlobalPosition.DistanceSquaredTo(target.GlobalPosition);
             if (distance <= 1) {
                 var animation_name = "people_locomotion_pack/jump";
-                if (animationHandler.current_animation.name != animation_name) {
-                    animationHandler.PlayWithCallback(animation_name, () => {
+                if (AnimationHandler.current_animation.name != animation_name) {
+                    AnimationHandler.PlayWithCallback(animation_name, () => {
                         // Probably need an animation timer 
                         // Attempt to pick up the item
                         Items.CarriableEnemyGoalItem.EnemyInteract(target, Actor);
@@ -163,6 +206,16 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             SetTargetLocation(target.GlobalPosition);
 
             return item_pickedup;
+        }
+
+        public Items.InventoryManager GetInventoryManager()
+        {
+            return Enemy.GDUtils.GetInventoryManager(Actor);
+        }
+
+        protected void SetTargetLocation(Vector3 location)
+        {
+            Enemy.GDUtils.SetTargetLocation(Actor, location);
         }
     }
 }

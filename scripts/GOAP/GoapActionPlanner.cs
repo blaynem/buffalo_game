@@ -38,7 +38,6 @@ namespace Buffalobuffalo.scripts.GOAP
         {
             // First we need to build a list of plans to complete the initial goal.
             // Then we find the cheapest plan.
-
             var root_goal = new TaskAccomplisher(goal, required_state);
 
             // BuildPlan does alter the `root_goal` action list.
@@ -204,9 +203,9 @@ namespace Buffalobuffalo.scripts.GOAP
                 if (action.GetEffects().TryGetValue(state_name, out var effect_change))
                 {
                     // If the effect is the same as the desired state, we can remove it.
-                    if (effect_change is bool && state_val.Equals(effect_change))
+                    if (effect_change is bool)
                     {
-                        return true;
+                        return state_val.Equals(effect_change);
                     }
                     else
                     {

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Buffalobuffalo.scripts.Items;
 using Godot;
 
 /// The base action that all GoapActions will inherit from.
@@ -75,17 +74,6 @@ namespace Buffalobuffalo.scripts.GOAP
         {
             AvailableActions = _new_actions.ToList();
             Brain.UpdateAvailableActions();
-        }
-
-
-        public InventoryManager GetInventoryManager()
-        {
-            return Enemy.GDUtils.GetInventoryManager(Actor);
-        }
-
-        protected void SetTargetLocation(Vector3 location)
-        {
-            Enemy.GDUtils.SetTargetLocation(Actor, location);
         }
     }
 };
