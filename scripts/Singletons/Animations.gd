@@ -1,4 +1,12 @@
 extends Node
+
+"""
+We have two separate lists that we need to keep track of, i'll figure it out later.
+We have the Animations global singleton here, meant for interacting with GDScript.
+
+Then we have the AnimationMapper in C# land.
+"""
+
 # List of available animations in the Farming pack
 
 # Enum to represent each animation

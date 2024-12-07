@@ -13,7 +13,6 @@ const InventoryManager = preload("res://scripts/Items/InventoryManager.cs")
 ## If true, the enemy can not take any actions.
 @export var is_stunned: bool = true
 @export var personality: EnemyPersonality;
-@export var default_animation: Animations.Human = Animations.Human.T_POSE
 
 const HumanAgent = preload("res://scripts/GOAP/Agents/HumanAgent.cs");
 const AnimationHandler = preload("res://scripts/AnimationHandler.cs")
@@ -93,17 +92,6 @@ func _set_collisions() -> void:
 		CollisionMap.item_interactable, # allow clicking interactable items
 	])
 
-func _handle_animations(_delta: float) -> void:
-	if ragdoll_handler.is_ragdolled:
-		return;
-	if velocity == Vector3.ZERO:
-		var _anim := Animations.get_human_animation_name(Animations.Human.IDLE)
-		animation_handler.Play(_anim, false)
-		return;
-	if not animation_handler.IsAnimationPlaying():
-		var _anim := Animations.get_human_animation_name(Animations.Human.WALK)
-		animation_handler.Play(_anim, false)
-
 
 # Used for the c# layer to get the inventory manager
 func _get_inventory_manager() -> InventoryManager:
@@ -128,7 +116,6 @@ func _physics_process(delta: float) -> void:
 		else:
 			_go_to_desired_location(delta, target_location);
 	
-	_handle_animations(delta)
 	# If they can't move, we want to get rid of the x/z velocity.
 	if not animation_handler.CanMove():
 		velocity.x = 0;

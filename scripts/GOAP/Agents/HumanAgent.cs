@@ -9,7 +9,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
     // TODO: Maybe alter the potential actions depending on the personality.
     public partial class HumanAgent : GoapAgent
     {
-        public AnimationHandler animationHandler;
+        public HumanAnimationHandler animationHandler;
         public HumanAgent() {}
         public override void _Ready()
         {
@@ -52,7 +52,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         }
 
         public void AttachAnimationHandler(AnimationPlayer animationPlayer) {
-            animationHandler = new(animationPlayer);
+            animationHandler = new(animationPlayer, Actor);
         }
 
         // Each agent kinda needs to create their own build that maps the action to the callback.
@@ -70,6 +70,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
         public override void _PhysicsProcess(double delta)
         {
             base._PhysicsProcess(delta);
+            animationHandler.HandlePhysicsProcess();
             
             if (Brain.current_goal?.GetGoalName() == "CompleteHike") {
                 Enemy.GDUtils.SetFollowPath(Actor, true);

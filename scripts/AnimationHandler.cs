@@ -24,7 +24,7 @@ namespace Buffalobuffalo.scripts.Animation {
     public partial class AnimationHandler : Resource{
         public Animation last_animation = null;
         public Animation current_animation = null;
-        private readonly AnimationPlayer animationPlayer;
+        protected AnimationPlayer animationPlayer;
 
         public AnimationHandler(AnimationPlayer anim_player) {
             animationPlayer = anim_player;
@@ -87,8 +87,33 @@ namespace Buffalobuffalo.scripts.Animation {
             return current_animation.state == AnimationState.Started;
         }
 
+        /// <summary>
+        /// Play that is available to call from the GDScript side.
+        /// </summary>
         public void Play(string animation_name, bool force_stop = false) {
             PlayWithCallback(animation_name, null, force_stop);
+        }
+
+        /// <summary>
+        /// Override of Play that allows passing in an AnimationMapper enum
+        /// </summary>
+        public void Play<T>(T animation, bool force_stop = false) where T : Enum {
+            var animationName = animation.ToAnimationName();
+            if (string.IsNullOrEmpty(animationName)) {
+                throw new ArgumentException($"Invalid animation type: {animation}");
+            }
+            PlayWithCallback(animationName, null, force_stop);
+        }
+
+        /// <summary>
+        /// Override of PlayWithCallback that allows passing in an AnimationMapper enum
+        /// </summary>
+        public void PlayWithCallback<T>(T animation, Action callback, bool force_stop = false) where T : Enum {
+            var animationName = animation.ToAnimationName();
+            if (string.IsNullOrEmpty(animationName)) {
+                throw new ArgumentException($"Invalid animation type: {animation}");
+            }
+            PlayWithCallback(animationName, callback, force_stop);
         }
 
         public void PlayWithCallback(string animation_name, Action callback, bool force_stop = false) {

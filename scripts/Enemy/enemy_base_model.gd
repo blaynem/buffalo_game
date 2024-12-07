@@ -1,8 +1,6 @@
 class_name EnemyBaseModel
 extends Node
 
-@export var default_animation := Animations.Human.IDLE
-
 @onready var bones: BoneManSetup = $Armature
 @onready var _animation_player: AnimationPlayer = $AnimationPlayer
 
@@ -13,10 +11,3 @@ func _ready() -> void:
 	if find_child("PhysicalBoneSimulator3D"):
 		can_ragdoll = true;
 		bone_sim = $Armature/Skeleton3D/PhysicalBoneSimulator3D
-	play_human_animation(default_animation)
-
-func play_human_animation(anim: Animations.Human) -> void:
-	if find_child("AnimationPlayer"):
-		var _animation_player: AnimationPlayer = $AnimationPlayer
-		var _anim := Animations.get_human_animation_name(anim)
-		_animation_player.play(_anim)
