@@ -27,6 +27,13 @@ namespace Buffalobuffalo.scripts.Enemy {
         public static NavigationAgent3D GetNavAgent(CharacterBody3D _actor) {
             return (NavigationAgent3D) _actor.Get("nav_agent");
         }
+
+        /// <summary>
+        /// Sets the `is_running` variable on the actor.
+        /// </summary>
+        public static void SetIsRunning(CharacterBody3D _actor, bool is_running) {
+            _actor.Set("is_running", is_running);
+        }
     }
 
     /// <summary>

@@ -24,6 +24,7 @@ var display_status: String;
 var inventory_manager := InventoryManager.new();
 var target_location: Vector3;
 var held_item: CarriableEnemyGoalItem = null;
+var is_running := false;
 
 # If true, is following the path, rather than going towards the target_location (usually their goal)
 var is_following_path: bool = true;
@@ -129,7 +130,8 @@ func _handle_path_movement(_delta: float) -> void:
 	var distance := global_position.distance_to(agent_path.global_position)
 	# If they are within like 2m we should consider it "progress"
 	if distance < 5:
-		agent_path.progress += _delta * personality.move_speed * 2; # lil speed boost multiplier
+		var move_speed := personality.run_speed if is_running else personality.move_speed;
+		agent_path.progress += _delta * move_speed * 2; # lil speed boost multiplier
 
 # When we want the agent to Enemy to follow the NavAgent
 func _go_to_desired_location(_delta: float, desired_position: Vector3) -> void:
@@ -146,7 +148,8 @@ func _go_to_desired_location(_delta: float, desired_position: Vector3) -> void:
 		next_path_pos.y -= map_height_offset;
 		
 		direction = (next_path_pos - global_position).normalized()
-		velocity = velocity.lerp(direction * personality.move_speed, personality.acceleration * _delta)
+		var move_speed := personality.run_speed if is_running else personality.move_speed;
+		velocity = velocity.lerp(direction * move_speed, personality.acceleration * _delta)
 		
 		# Rotate to face the movement direction
 		if direction != Vector3.ZERO:

@@ -31,6 +31,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
                     Play(AnimationMapper.Human.IDLE);
                 }
                 Play(AnimationMapper.Human.WALK);
+                Enemy.GDUtils.SetIsRunning(Actor, false);
             }
         }
 

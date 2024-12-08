@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Buffalobuffalo.scripts.Animation;
-using Buffalobuffalo.scripts.Enemy;
 using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP.Agents
@@ -111,6 +110,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             State.UpdateState(Condition.IsScared, false);
             // TODO: Fire a different animation here that doesn't loop, then remove the `Stop` call.
             AnimationHandler.Stop(); // Stop the animation so it's them walking again.
+            Enemy.GDUtils.SetIsRunning(Actor, false);
             return false;
         }
 
@@ -128,13 +128,13 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             // We want them to run for their lives!
             if (AnimationHandler.current_animation.name != AnimationMapper.Human.RUN.ToAnimationName()) {
                 AnimationHandler.Play(AnimationMapper.Human.RUN);
+                Enemy.GDUtils.SetIsRunning(Actor, true);
             }
 
             if (findSafetyCooldown <= 0) {
                 // Only find a new cd every 1s.
                 findSafetyCooldown = 1;
-                var target_location = AgentUtils.GetEscapeLocation(this, player);
-                // TODO: adjust the movement speed.
+                var target_location = Enemy.AgentUtils.GetEscapeLocation(this, player);
                 SetTargetLocation(target_location);
             }
 
