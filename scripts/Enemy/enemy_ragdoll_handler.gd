@@ -8,7 +8,6 @@ signal RagdollChange(status: bool)
 
 var is_ragdolled := false;
 
-# TODO: Do we need to disable certain collisions
 func enable_ragdoll() -> void:
 	if model.can_ragdoll && !is_ragdolled:
 		is_ragdolled = true;

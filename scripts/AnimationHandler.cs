@@ -62,8 +62,8 @@ namespace Buffalobuffalo.scripts.Animation {
         }
 
         // Fired when the animation is set, and when `.stop` is called on the player.
+        // `.stop` returns an empty animation name.
         private void OnAnimationChanged(string animName) {
-            // TODO: Determine if on change is even needed?
             GD.Print("--OnAnimationChanged: ", animName);
             // Note: If animName is empty, then the animation was interrupted.
             if (animName == "") {
