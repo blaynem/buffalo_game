@@ -73,3 +73,7 @@ Helpful tips:
 Gotcha:
 - Need to run the `physical_bones_start_simulation()` on PhysicalBoneSumulator3d instead
 - Bones shouldn't have enemy mask, otherwise they get REAL weird.
+
+## Help with Math
+
+I should have paid better attention to maths! (This)[https://allenchou.net/2019/08/trigonometry-basics-sine-cosine/] tutorial is helpful.

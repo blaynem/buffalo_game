@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Buffalobuffalo.scripts.Animation;
+using Buffalobuffalo.scripts.Enemy;
 using Godot;
 
 namespace Buffalobuffalo.scripts.GOAP.Agents
@@ -11,6 +12,7 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
     {
         public HumanAnimationHandler AnimationHandler;
         public HumanAgent() {}
+        private float findSafetyCooldown = 0;
         public override void _Ready()
         {
             // Ensure we set up the goals and actions before calling the base ready.
@@ -114,10 +116,12 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
 
         private bool FindSafetyCb(double delta)
         {
+            findSafetyCooldown -= (float) delta;
             var player = (CharacterBody3D) GetTree().GetFirstNodeInGroup("Player");
             var distance = Actor.GlobalPosition.DistanceSquaredTo(player.GlobalPosition);
             // If they're out of range, the saftey is true.
             if (distance >= 130) {
+                findSafetyCooldown = 0; // clear cd
                 return true;
             }
 
@@ -125,8 +129,15 @@ namespace Buffalobuffalo.scripts.GOAP.Agents
             if (AnimationHandler.current_animation.name != AnimationMapper.Human.RUN.ToAnimationName()) {
                 AnimationHandler.Play(AnimationMapper.Human.RUN);
             }
-            // TODO: Figure out better target, also adjust the movement speed.
-            SetTargetLocation(new Vector3(10, 0, 10));
+
+            if (findSafetyCooldown <= 0) {
+                // Only find a new cd every 1s.
+                findSafetyCooldown = 1;
+                var target_location = AgentUtils.GetEscapeLocation(this, player);
+                // TODO: adjust the movement speed.
+                SetTargetLocation(target_location);
+            }
+
             return false;
         }
 

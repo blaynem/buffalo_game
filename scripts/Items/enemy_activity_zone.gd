@@ -26,27 +26,11 @@ func _ready() -> void:
 func get_interaction_animation() -> String:
 	return Animations.get_human_animation_name(interaction_animation);
 
-func spawn_rectangle(location: Vector3) -> void:
-	# Create a new MeshInstance
-	var rectangle := MeshInstance3D.new()
-
-	# Assign a cube mesh (used as the rectangle)
-	var mesh := BoxMesh.new()
-	mesh.size = Vector3(0.25, 20, 0.25)  # Set the dimensions
-	rectangle.mesh = mesh
-
-	# Set the rectangle's position
-	var stuff := rectangle;
-	rectangle.transform.origin = location
-
-	# Add it to the current scene
-	add_child(rectangle)
-
 func get_target_location() -> Vector3:
 	var random_point := _get_random_point_in_shape();
-	spawn_rectangle(random_point);
 	# After we have the random point inside the shape, we need to get the position globally.
 	var location := global_position + random_point;
+	DebugSpawner.spawn_rectangle(location);
 	return location;
 
 func _get_random_point_in_shape() -> Vector3:

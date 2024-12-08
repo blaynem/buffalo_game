@@ -18,9 +18,9 @@ func _ready() -> void:
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if Input.is_action_pressed(KeyMap.minus):
-		Engine.time_scale -= 1
+		Engine.time_scale -= .25
 	if Input.is_action_pressed(KeyMap.jump):
-		Engine.time_scale = 1
+		Engine.time_scale += .5
 	if Input.is_action_pressed(KeyMap.plus):
 		Engine.time_scale += 1
 	if event.is_action_pressed(KeyMap.action_1):

@@ -4,6 +4,7 @@ extends Node
 
 var player := "Player"
 var relic := "Relic"
+var enemy := "Enemy"
 var enemy_activity := "EnemyActivity";
 var carriable_item := "CarriableItem";
 

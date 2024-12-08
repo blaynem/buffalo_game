@@ -33,6 +33,7 @@ func set_target_location(location: Vector3) -> void:
 	target_location = location
 
 func _ready() -> void:
+	add_to_group(GroupMap.enemy)
 	# Set personality before everything.
 	_setup_personality()
 	

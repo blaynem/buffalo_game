@@ -23,6 +23,7 @@ KeyMap="*res://scripts/Singletons/KeyMap.gd"
 CollisionMap="*res://scripts/Singletons/CollisionMap.gd"
 InteractionManager="*res://scenes/Singletons/interaction_manager.tscn"
 Animations="*res://scripts/Singletons/Animations.gd"
+DebugSpawner="*res://scripts/Singletons/DebugSpawner.gd"
 
 [debug]
 
